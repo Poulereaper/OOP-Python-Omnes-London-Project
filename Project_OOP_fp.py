@@ -23,8 +23,7 @@ class MyGUI:
         #Creat a list box of the days of the week
         self.label = tk.Label(self.main_window, text="Select your favorite day")
         self.listbox = tk.Listbox(self.main_window, height=0, width=0)
-        self.listbox.pack(padx=10, pady=10)
-
+        self.listbox.pack()
         day=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
         for item in day:
