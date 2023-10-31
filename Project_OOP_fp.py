@@ -1,4 +1,5 @@
 #First Page of the Project test repository
+import pymysql
 import tkinter as tk
 import tkinter.messagebox
 
