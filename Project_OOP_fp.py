@@ -2,55 +2,129 @@
 import pymysql
 import tkinter as tk
 import tkinter.messagebox
+#import Classes_Screen as CS
 
-
-class MyGUI:
-    def __init__(self):
-        # Create the main window widget.
-        self.main_window = tk.Tk()
-        self.main_window.title("Home Page")
-        self.main_window.geometry("900x500")
+#---------------------## ALL THE CLASSES ##---------------------#
+class Home_Page():
+    def __init__(self, main_window):
         # Create a frame at the top for buttons
-        self.top_frame = tk.Frame(self.main_window)
-        
+        self.top_frame = tk.Frame(main_window)
+        self.left_frame = tk.Frame(main_window)
+        self.right_frame = tk.Frame(main_window)
+
+        #Title
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20))
+
         # Create buttons
-        self.my_button_Log = tk.Button(self.top_frame, text='Sign In or Sign Up', command=self.do_something_one)
-        self.my_button_Search = tk.Button(self.top_frame, text='Advanced Search', command=self.do_something_two)
+        self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Lunch_LogIn_Page)
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Lunch_Menu_Page)
+        self.Buy_Now_Button = tk.Button(self.left_frame, text='Buy Now', command=Lunch_LogIn_Page)
 
-        
-
-        #Creat a list box of the days of the week
-        self.label = tk.Label(self.main_window, text="Select your favorite day")
-        self.listbox = tk.Listbox(self.main_window, height=0, width=0)
-        
-        day=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
-        for item in day:
-            self.listbox.insert(tk.END, item) 
-        #I want to select one ittem in the list by using the selectmode
-         
-        #Now I want to create a button that will print the selected item in the listbox
-         #self.my_button = tkinter.Button(self.main_window, text='Click Me!', command=self.do_something)
-        
-
-    def display(self):
+        # Pack all wigets
+        #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
+        self.left_frame.pack(side=tk.LEFT, fill=tk.X)
+        self.right_frame.pack(side=tk.RIGHT, fill=tk.X)
         # Pack the 'Sign In or Sign Up' button to the left (west)
-        self.my_button_Log.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=10, pady=10)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
         # Pack the 'Advanced Search' button to the right (east)
-        self.my_button_Search.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=10, pady=10)
-        self.listbox.pack()
-        tk.mainloop()
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        #Display the title
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=10, pady=10)
+        #Display the Buy Now Button
+        self.Buy_Now_Button.pack(ipadx=5, ipady=5, padx=200, pady=10)
+        #Display the tex
+
+class LogIn_Page():
+    def __init__(self, main_window):
+        # Create a frame at the top for buttons
+        self.top_frame = tk.Frame(main_window)
+        self.middle_frame = tk.Frame(main_window)
+        
+        #Title
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20))
+        self.SignIn_Title = tk.Label(self.middle_frame, text="Sign In", font=("Arial", 15))
+        self.Email_Title = tk.Label(self.middle_frame, text="Email", font=("Arial", 10))
+        self.Password_Title = tk.Label(self.middle_frame, text="Password", font=("Arial", 10))
+
+        #Input
+
+        # Create buttons
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Lunch_Menu_Page)
+        self.Log_Button = tk.Button(self.middle_frame, text='Log In', command=Lunch_LogIn_Page)
+
+        # Pack all widgets
+        #Frame
+        self.top_frame.pack(side=tk.TOP, fill=tk.X)
+        self.middle_frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Pack the 'Menu' button to the right
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=10, pady=10)
+        #Display the title
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=10, pady=10)
+        #Display the Sign In Title
+        self.SignIn_Title.pack(ipadx=5, ipady=5, padx=200, pady=35)
+        #Display the Email Title
+        self.Email_Title.pack(ipadx=5, ipady=5, padx=10, pady=10)
+        #Display the Password Title
+        self.Password_Title.pack(ipadx=5, ipady=5, padx=10, pady=10)
+        # Pack the 'Log' button 
+        self.Log_Button.pack(ipadx=5, ipady=5, padx=10, pady=10)
+
+class Menu_Page():
+    def __init__(self, main_window):
+        # Create a frame at the top for buttons
+        self.top_frame = tk.Frame(main_window)
+        self.middle_frame = tk.Frame(main_window)
+        
+        #Title
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20))
+        self.Menu_Title = tk.Label(self.middle_frame, text="Menu", font=("Arial", 15))
+
+        # Create buttons
+        self.Home_Button = tk.Button(self.middle_frame, text='    Home     ', command=Lunch_Home_Page)
+        self.My_Account = tk.Button(self.middle_frame, text='My Account', command=Lunch_LogIn_Page)
+        self.Purchase = tk.Button(self.middle_frame, text='   Purchase   ', command=Lunch_LogIn_Page)
+        self.CLose = tk.Button(self.middle_frame, text='      Close       ', command=Lunch_LogIn_Page)
+
+        # Pack all widgets
+        #Frame
+        self.top_frame.pack(side=tk.TOP, fill=tk.X)
+        self.middle_frame.pack(fill=tk.BOTH, expand=True)
+        #Display the title
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=10, pady=10)
+        #Display the Sign In Title
+        self.Menu_Title.pack(ipadx=5, ipady=5, padx=200, pady=35)
+        #Display the Home Button
+        self.Home_Button.pack(ipadx=15, ipady=7, padx=10, pady=10)
+        #Display the My Account Button
+        self.My_Account.pack(ipadx=15, ipady=7, padx=10, pady=10)
+        #Display the Purchase Button
+        self.Purchase.pack(ipadx=15, ipady=7, padx=10, pady=10)
+        #Display the Close Button
+        self.CLose.pack(ipadx=15, ipady=7, padx=10, pady=10)
+
+#---------------------## ALL THE FUNCTIONS ##---------------------#
+
+## Opennig Pages ##
+def Lunch_LogIn_Page():
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    LogIn_Page(main_window)
+
+def Lunch_Home_Page():
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    Home_Page(main_window)
+
+def Lunch_Menu_Page():
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    Menu_Page(main_window)
 
 
-    def do_something_one(self):
-        tk.messagebox.showinfo('Response', 'Thanks for clicking the button.')
-        #print("You clicked the button!")
-    def do_something_two(self):
-        tk.messagebox.showinfo('Response', 'Thanks for clicking the button.')
-        #print("You clicked the button!")
-
-# Create an instance of the MyGUI class.
-if __name__ == '__main__':
-    my_gui = MyGUI()
-    my_gui.display()
+main_window = tk.Tk()
+main_window.title("Home Page")
+main_window.geometry("900x500")
+Home_Page(main_window)
+tk.mainloop()
