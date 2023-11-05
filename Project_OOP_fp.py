@@ -18,7 +18,7 @@ class Home_Page():
         # Create buttons
         self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Lunch_LogIn_Page)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Lunch_Menu_Page)
-        self.Buy_Now_Button = tk.Button(self.left_frame, text='Buy Now', command=Lunch_LogIn_Page)
+        self.Buy_Now_Button = tk.Button(self.left_frame, text='Buy Now', command=Lunch_Purchase_Page)
 
         # Pack all wigets
         #Frame
@@ -26,14 +26,14 @@ class Home_Page():
         self.left_frame.pack(side=tk.LEFT, fill=tk.X)
         self.right_frame.pack(side=tk.RIGHT, fill=tk.X)
         # Pack the 'Sign In or Sign Up' button to the left (west)
-        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         # Pack the 'Advanced Search' button to the right (east)
-        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
         #Display the title
         self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=10, pady=10)
         #Display the Buy Now Button
         self.Buy_Now_Button.pack(ipadx=5, ipady=5, padx=200, pady=10)
-        #Display the tex
+        #Display the text
 
 class LogIn_Page():
     def __init__(self, main_window):
@@ -104,6 +104,34 @@ class Menu_Page():
         #Display the Close Button
         self.CLose.pack(ipadx=15, ipady=7, padx=10, pady=10)
 
+class Purchase_Page():
+    def __init__(self, main_window):
+        # Create a frame at the top for buttons
+        self.top_frame = tk.Frame(main_window)
+        self.second_top_frame = tk.Frame(main_window)
+
+        #Title
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20))
+
+        # Create buttons
+        self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Lunch_LogIn_Page)
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Lunch_Menu_Page)
+        self.Search_Button = tk.Button(self.second_top_frame, text='Search', command=Lunch_LogIn_Page)
+
+        # Pack all wigets
+        #Frame
+        self.top_frame.pack(side=tk.TOP, fill=tk.X)
+        self.second_top_frame.pack(side=tk.TOP, fill=tk.X)
+        # Pack the 'Sign In or Sign Up' button to the left (west)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        # Pack the 'Advanced Search' button to the right (east)
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
+        #Display the title
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=10, pady=10)
+        #Display the Buy Now Button
+        self.Search_Button.pack(ipadx=5, ipady=5, padx=200, pady=10)
+        #Display the text
+
 #---------------------## ALL THE FUNCTIONS ##---------------------#
 
 ## Opennig Pages ##
@@ -121,6 +149,11 @@ def Lunch_Menu_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
     Menu_Page(main_window)
+
+def Lunch_Purchase_Page():
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    Purchase_Page(main_window)
 
 
 main_window = tk.Tk()
