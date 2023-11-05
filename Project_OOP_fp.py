@@ -124,7 +124,7 @@ def Lunch_Menu_Page():
 
 
 main_window = tk.Tk()
-main_window.title("Home Page")
+main_window.title("OOP Air Line")
 main_window.geometry("900x500")
 Home_Page(main_window)
 tk.mainloop()
