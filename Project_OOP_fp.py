@@ -148,6 +148,7 @@ class SignUp_First_Page():
         self.Email_Input = tk.Entry(self.middle_frame)
         self.Password_Input = tk.Entry(self.middle_frame)
         self.Password_Confirm_Input = tk.Entry(self.middle_frame)
+        slef.Password_Input.config(show="*")
         #self.Password_Input.config(show="*")
 
         # Create buttons
@@ -190,12 +191,17 @@ class SignUp_First_Page():
         self.Email=self.Email_Input.get()
         self.Password=self.Password_Input.get()
         self.Password_Confirm=self.Password_Confirm_Input.get()
-        if (self.Password==self.Password_Confirm) & (self.Email!='') & (self.Password!='') & (self.Password_Confirm!=''):
-            Lunch_SignUp_Second_Page(self.Email, self.Password)
-        elif (self.Email=='') or (self.Password=='') or (self.Password_Confirm==''):
-            tk.messagebox.showinfo('Error', 'Please fill in all the information')
-        else:
-            tk.messagebox.showinfo('Error', 'Password does not match')
+
+        if not re.match(r'^[\w\.-]+@[\w\.-]+$', self.Email):
+            # Invalid email format, show an error message
+            tk.messagebox.showinfo('Error', 'Invalid email format')
+        else :
+            if (self.Password==self.Password_Confirm) & (self.Email!='') & (self.Password!='') & (self.Password_Confirm!=''):
+                Lunch_SignUp_Second_Page(self.Email, self.Password)
+            elif (self.Email=='') or (self.Password=='') or (self.Password_Confirm==''):
+                tk.messagebox.showinfo('Error', 'Please fill in all the information')
+            else:
+                tk.messagebox.showinfo('Error', 'Password does not match')
 
 class SignUp_Second_Page():
     def __init__(self, main_window, Email, Password):
