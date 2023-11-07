@@ -108,7 +108,7 @@ class LogIn_Page():
         # Create a cursor object to interact with the database
         cursor = conn.cursor()
         # Perform a SELECT query to check if the email and password match in the database
-        query = "SELECT * FROM users WHERE email = %s AND password = %s"
+        query = "SELECT * FROM customer WHERE Email = %s AND Password = %s"
         cursor.execute(query, (self.Email, self.Password))
         result = cursor.fetchone()
         # Close the database connection
