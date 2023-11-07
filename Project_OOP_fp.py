@@ -3,6 +3,7 @@ import pymysql
 import tkinter as tk
 import tkinter.messagebox
 import dbconnect
+import re
 #import Classes_Screen as CS
 
 #---------------------## ALL THE CLASSES ##---------------------#
@@ -50,6 +51,7 @@ class Home_Page():
 
 class LogIn_Page():
     def __init__(self, main_window):
+        self.db=dbconnect.DBHelper()
         # Create a frame at the top for buttons
         self.top_frame = tk.Frame(main_window)
         self.middle_frame = tk.Frame(main_window)
@@ -104,38 +106,29 @@ class LogIn_Page():
         self.bottom_frame.columnconfigure(1, weight=1)
         self.bottom_frame.columnconfigure(2, weight=1)
         self.bottom_frame.columnconfigure(3, weight=1)
+
     
     def Log_check(self):
         #get the input
         self.Email=self.Email_Input.get()
         self.Password=self.Password_Input.get()
-        #check if the email and password are in the database
-        #conn = pymysql.connect(
-        #host='localhost',
-        #user='root',
-        #password="",
-        #db='oop-project',
-        #)
-        self.db=DBHelper()
-        self.db.connection()
-        # Create a cursor object to interact with the database
-        #cursor = conn.cursor()
-        # Perform a SELECT query to check if the email and password match in the database
-        query = "SELECT * FROM customer WHERE Email = %s AND Password = %s"
-        #cursor.execute(query, (self.Email, self.Password))
-        #result = cursor.fetchone()
-        # Close the database connection
-        #conn.close()
-        if result:
-            # Login successful, show the home page
-            Lunch_Home_Page()
-        else:
-            # Login failed, show an error message
-            # You can display an error message using a messagebox or a label
-            tk.messagebox.showinfo('Error', 'Invalid email or password')
-            # For example, you can create a label to display the error message.
-            #error_label = tk.Label(self.middle_frame, text="Invalid email or password", font=("Arial", 10), fg="red")
-            #error_label.pack()
+        # Check if the email is a valid email address using a regular expression
+        if not re.match(r'^[\w\.-]+@[\w\.-]+$', self.Email):
+            # Invalid email format, show an error message
+            tk.messagebox.showinfo('Error', 'Invalid email format')
+        else :
+            query = "SELECT * FROM customer WHERE Email = '{}' AND Password = '{}'".format(self.Email, self.Password) 
+            result=self.db.fetch(query)
+            if result:
+                # Login successful, show the home page
+                Lunch_Home_Page()
+            else:
+                # Login failed, show an error message
+                # You can display an error message using a messagebox or a label
+                tk.messagebox.showinfo('Error', 'Invalid email or password')
+                # For example, you can create a label to display the error message.
+                #error_label = tk.Label(self.middle_frame, text="Invalid email or password", font=("Arial", 10), fg="red")
+                #error_label.pack()
 
 class SignUp_First_Page():
     def __init__(self, main_window):
