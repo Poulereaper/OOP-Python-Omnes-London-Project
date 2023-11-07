@@ -2,9 +2,20 @@
 import pymysql
 import tkinter as tk
 import tkinter.messagebox
+import dbconnect
 #import Classes_Screen as CS
 
 #---------------------## ALL THE CLASSES ##---------------------#
+
+class Actual_Customer():
+    def __init__(self, Email, Password, FirstName, LastName, UserName, Phone):
+        self.Email = Email
+        self.Password = Password
+        self.FirstName = FirstName
+        self.LastName = LastName
+        self.UserName = UserName
+        self.Phone = Phone
+
 class Home_Page():
     def __init__(self, main_window):
         background_color = '#0d3562'
@@ -99,20 +110,22 @@ class LogIn_Page():
         self.Email=self.Email_Input.get()
         self.Password=self.Password_Input.get()
         #check if the email and password are in the database
-        conn = pymysql.connect(
-        host='localhost',
-        user='root',
-        password="",
-        db='oop-project',
-        )
+        #conn = pymysql.connect(
+        #host='localhost',
+        #user='root',
+        #password="",
+        #db='oop-project',
+        #)
+        self.db=DBHelper()
+        self.db.connection()
         # Create a cursor object to interact with the database
-        cursor = conn.cursor()
+        #cursor = conn.cursor()
         # Perform a SELECT query to check if the email and password match in the database
         query = "SELECT * FROM customer WHERE Email = %s AND Password = %s"
-        cursor.execute(query, (self.Email, self.Password))
-        result = cursor.fetchone()
+        #cursor.execute(query, (self.Email, self.Password))
+        #result = cursor.fetchone()
         # Close the database connection
-        conn.close()
+        #conn.close()
         if result:
             # Login successful, show the home page
             Lunch_Home_Page()
@@ -338,6 +351,7 @@ class Purchase_Page():
 def Lunch_Home_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
+    #main_window['bg']="#0d3562"
     Home_Page(main_window)
 
 def Lunch_LogIn_Page():
