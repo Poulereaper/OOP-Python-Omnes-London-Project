@@ -3,19 +3,11 @@ import pymysql
 import tkinter as tk
 import tkinter.messagebox
 import dbconnect
+import Actual_Customer as AC
 import re
 #import Classes_Screen as CS
 
 #---------------------## ALL THE CLASSES ##---------------------#
-
-class Actual_Customer():
-    def __init__(self, Email, Password, FirstName, LastName, UserName, Phone):
-        self.Email = Email
-        self.Password = Password
-        self.FirstName = FirstName
-        self.LastName = LastName
-        self.UserName = UserName
-        self.Phone = Phone
 
 class Home_Page():
     def __init__(self, main_window):
@@ -28,8 +20,11 @@ class Home_Page():
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg='#14539a')
 
-        # Create buttons
-        self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Lunch_LogIn_Page, bg='#0d3562')
+        # Create 
+        if Actual_Customer.LogOrNot == False:
+            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Lunch_LogIn_Page, bg='#0d3562')
+        else :
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Lunch_LogIn_Page, bg='#0d3562')
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Lunch_Menu_Page, bg='#0d3562')
         self.Buy_Now_Button = tk.Button(self.left_frame, text='Buy Now', command=Lunch_Purchase_Page, font=("Arial", 17), bg='#14539a')
         self.Buy_Now_Button.config(height=1, width=10)
@@ -120,13 +115,14 @@ class LogIn_Page():
             query = "SELECT * FROM customer WHERE Email = '{}' AND Password = '{}'".format(self.Email, self.Password) 
             result=self.db.fetch(query)
             if result:
+                # Copy the result to the Actual_Customer
+                Actual_Customer.Copy_To_Actual_Customer(result)
                 # Login successful, show the home page
                 Lunch_Home_Page()
             else:
                 # Login failed, show an error message
                 # You can display an error message using a messagebox or a label
                 tk.messagebox.showinfo('Error', 'Invalid email or password')
-                # For example, you can create a label to display the error message.
                 #error_label = tk.Label(self.middle_frame, text="Invalid email or password", font=("Arial", 10), fg="red")
                 #error_label.pack()
 
@@ -378,5 +374,7 @@ def Lunch_Purchase_Page():
 main_window = tk.Tk()
 main_window.title("OOP Air Line")
 main_window.geometry("1100x600")
+Actual_Customer = AC.Actual_Customer()
+Actual_Customer.LogOrNot = False
 Home_Page(main_window)
 tk.mainloop()

@@ -24,7 +24,7 @@ class DBHelper:
         self.connection()
         row_cnt=self.cur.execute(sql)
 
-        result = self.cur.fetchall()
+        result = self.cur.fetchall()    
 
         self.disconnect()
         return result
