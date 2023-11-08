@@ -331,7 +331,10 @@ class Menu_Page():
 
         # Create buttons
         self.Home_Button = tk.Button(self.middle_frame, text='    Home     ', command=Launch_Home_Page)
-        self.My_Account = tk.Button(self.middle_frame, text='My Account', command=Launch_LogIn_Page)
+        if Actual_Customer.LogOrNot == False:
+            self.LogIn_Button = tk.Button(self.middle_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page)
+        else :
+            self.LogIn_Button = tk.Button(self.middle_frame, text='My Account', command=Launch_LogIn_Page)
         self.Purchase = tk.Button(self.middle_frame, text='   Purchase   ', command=Launch_Purchase_Page)
         self.CLose = tk.Button(self.middle_frame, text='      Close       ', command=Launch_LogIn_Page)
 
@@ -349,13 +352,13 @@ class Menu_Page():
         #Display the Sign In Title
         self.Menu_Title.pack(ipadx=5, ipady=5, padx=200, pady=35)
         #Display the Home Button
-        self.Home_Button.pack(ipadx=15, ipady=7, padx=10, pady=10)
+        self.Home_Button.pack(ipadx=24, ipady=7, padx=10, pady=15)
         #Display the My Account Button
-        self.My_Account.pack(ipadx=15, ipady=7, padx=10, pady=10)
+        self.LogIn_Button.pack(ipadx=8, ipady=7, padx=10, pady=15)
         #Display the Purchase Button
-        self.Purchase.pack(ipadx=15, ipady=7, padx=10, pady=10)
+        self.Purchase.pack(ipadx=24, ipady=7, padx=10, pady=15)
         #Display the Close Button
-        self.CLose.pack(ipadx=15, ipady=7, padx=10, pady=10)
+        self.CLose.pack(ipadx=24, ipady=7, padx=10, pady=15)
 
 class Purchase_Page():
     def __init__(self, main_window):
