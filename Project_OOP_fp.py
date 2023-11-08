@@ -336,7 +336,7 @@ class Menu_Page():
         else :
             self.LogIn_Button = tk.Button(self.middle_frame, text='My Account', command=Launch_LogIn_Page)
         self.Purchase = tk.Button(self.middle_frame, text='   Purchase   ', command=Launch_Purchase_Page)
-        self.CLose = tk.Button(self.middle_frame, text='      Close       ', command=Launch_LogIn_Page)
+        self.CLose = tk.Button(self.middle_frame, text='      Close       ', command=self.Close)
 
         # Pack all widgets
         #Frame
@@ -362,6 +362,9 @@ class Menu_Page():
         self.Purchase.pack(ipadx=24, ipady=7, padx=10, pady=15)
         #Display the Close Button
         self.CLose.pack(ipadx=24, ipady=7, padx=10, pady=15)
+
+    def Close(self):
+        main_window.destroy()
 
 class Purchase_Page():
     def __init__(self, main_window):
@@ -473,8 +476,8 @@ class Purchase_Page():
         self.To=self.To_Input.get()
         self.Departure=self.Departure_Input.get()
         self.Return=self.Return_Input.get()
-        self.Passengers=self.Passengers_Input.get()
-        self.Class=self.Class_Input.get()
+        self.Passengers=int(self.Passengers_Input.get())
+        self.Class=int(self.Class_Input.get())
         # Check if the email is a valid
         if (self.From=='') or (self.To=='') or (self.Departure=='') or (self.Passengers=='') or (self.Class==''):
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
@@ -492,6 +495,8 @@ class Purchase_Page():
                         tk.messagebox.showinfo('Error', 'Return date must be after departure date')
                     else :
                         print("Search Flight")
+                        print(departure_date)
+                        print(self.Departure)
                     # Dates are valid
                     # Now you can use departure_date and return_date as datetime objects
                     # for further processing.
