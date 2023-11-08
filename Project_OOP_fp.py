@@ -44,9 +44,9 @@ class Home_Page():
         #self.right_frame.pack(side=tk.RIGHT, fill=tk.X)
         self.right_frame.place(x=535, y=220, relwidth=0.35, relheight=0.45)
         # Pack the 'Sign In or Sign Up' button to the left (west)
-        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
         # Pack the 'Advanced Search' button to the right (east)
-        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         #Display the title
         self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=10, pady=10)
         #Display the Buy Now Button
