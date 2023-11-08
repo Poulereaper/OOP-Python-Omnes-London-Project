@@ -332,7 +332,7 @@ class Menu_Page():
         # Create buttons
         self.Home_Button = tk.Button(self.middle_frame, text='    Home     ', command=Launch_Home_Page)
         self.My_Account = tk.Button(self.middle_frame, text='My Account', command=Launch_LogIn_Page)
-        self.Purchase = tk.Button(self.middle_frame, text='   Purchase   ', command=Launch_LogIn_Page)
+        self.Purchase = tk.Button(self.middle_frame, text='   Purchase   ', command=Launch_Purchase_Page)
         self.CLose = tk.Button(self.middle_frame, text='      Close       ', command=Launch_LogIn_Page)
 
         # Pack all widgets
