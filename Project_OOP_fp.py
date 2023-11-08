@@ -354,7 +354,10 @@ class Menu_Page():
         #Display the Home Button
         self.Home_Button.pack(ipadx=24, ipady=7, padx=10, pady=15)
         #Display the My Account Button
-        self.LogIn_Button.pack(ipadx=8, ipady=7, padx=10, pady=15)
+        if Actual_Customer.LogOrNot == False:
+            self.LogIn_Button.pack(ipadx=8, ipady=7, padx=10, pady=15)
+        else :
+            self.LogIn_Button.pack(ipadx=24, ipady=7, padx=10, pady=15)
         #Display the Purchase Button
         self.Purchase.pack(ipadx=24, ipady=7, padx=10, pady=15)
         #Display the Close Button
