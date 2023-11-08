@@ -17,11 +17,19 @@ class Home_Page():
         # Create a frame at the top for buttons
         self.top_frame = tk.Frame(main_window)
         self.left_frame = tk.Frame(main_window)
-        self.right_frame = tk.Frame(main_window, bg='#14539a')
+        self.right_frame = tk.Frame(main_window)
+        bg_image_one = Image.open("./images/avion.png")
+        bg_photo_one = ImageTk.PhotoImage(bg_image_one)
+        # Créer un canevas pour afficher l'image de fond
+        canvas = tk.Canvas(self.right_frame, width=bg_image_one.width, height=bg_image_one.height)
+        canvas.pack()
+        canvas.create_image(0, 0, anchor=tk.NW, image=bg_photo_one)
+        canvas.image = bg_photo_one
 
+    
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20))
-        self.Pres_OOPAirLine = tk.Label(self.right_frame, text="Welcome to OOP Air Line", font=("Arial", 15), bg='#14539a')
+        self.Pres_OOPAirLine = tk.Label(self.right_frame, text="Welcome to OOP Air Line", font=("Arial", 15))
 
         # Create 
         if Actual_Customer.LogOrNot == False:
@@ -64,6 +72,7 @@ class LogIn_Page():
         
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20))
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
         self.SignIn_Title = tk.Label(self.middle_frame, text="Sign In", font=("Arial", 15))
         self.Email_Title = tk.Label(self.middle_frame, text="Email", font=("Arial", 10))
         self.Password_Title = tk.Label(self.middle_frame, text="Password", font=("Arial", 10))
@@ -117,6 +126,9 @@ class LogIn_Page():
         self.bottom_frame.columnconfigure(2, weight=1)
         self.bottom_frame.columnconfigure(3, weight=1)
 
+    def Hide_Button(self, empty):
+        Launch_Home_Page()
+
     
     def Log_check(self):
         #get the input
@@ -150,6 +162,7 @@ class SignUp_First_Page():
         
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20))
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
         self.SignUp_Title = tk.Label(self.middle_frame, text="Sign Up", font=("Arial", 15))
         self.information_Title = tk.Label(self.middle_frame, text="Please enter your information to creat a new account", font=("Arial", 10))
         self.Email_Title = tk.Label(self.middle_frame, text="Email", font=("Arial", 10))
@@ -223,6 +236,9 @@ class SignUp_First_Page():
             else:
                 tk.messagebox.showinfo('Error', 'Password does not match')
 
+    def Hide_Button(self, empty):
+        Launch_Home_Page()
+
 class SignUp_Second_Page():
     def __init__(self, main_window, Email, Password):
         # Create a frame at the top for buttons
@@ -241,6 +257,7 @@ class SignUp_Second_Page():
         
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20))
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
         self.SignUp_Title = tk.Label(self.second_top_frame, text="Sign Up", font=("Arial", 15))
         self.FirstName_Title = tk.Label(self.third_top_frame, text="First Name", font=("Arial", 10))
         self.LastName_Title = tk.Label(self.third_top_frame, text="Last Name *", font=("Arial", 10))
@@ -317,6 +334,9 @@ class SignUp_Second_Page():
             Actual_Customer.Complet_Actual_Customer(self.Email, self.Password, self.FirstName, self.LastName, self.UserName, self.Phone)
             Actual_Customer.Creat_Actual_Customer()
             Launch_Home_Page()
+    
+    def Hide_Button(self, empty):
+        Launch_Home_Page()
 
 
 class Menu_Page():
@@ -327,6 +347,7 @@ class Menu_Page():
         
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20))
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
         self.Menu_Title = tk.Label(self.middle_frame, text="Menu", font=("Arial", 15))
 
         # Create buttons
@@ -366,6 +387,9 @@ class Menu_Page():
     def Close(self):
         main_window.destroy()
 
+    def Hide_Button(self, empty):
+        Launch_Home_Page()
+
 class Purchase_Page():
     def __init__(self, main_window):
         # Create a frame at the top for buttons
@@ -385,6 +409,7 @@ class Purchase_Page():
 
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20))
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
         self.Space_Title = tk.Label(self.second_top_frame, text=" ", font=("Arial", 10))
         self.From_Title = tk.Label(self.second_top_frame, text="From", font=("Arial", 10))
         self.To_Title = tk.Label(self.second_top_frame, text="To", font=("Arial", 10))
@@ -430,9 +455,9 @@ class Purchase_Page():
         self.fourth_top_frame.pack(side=tk.TOP, fill=tk.X)
         self.bottom_frame.pack(side=tk.BOTTOM, fill=tk.X)
         # Pack the 'Sign In or Sign Up' button to the left (west)
-        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
         # Pack the 'Advanced Search' button to the right (east)
-        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         #Display the title
         self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=10, pady=10)
         #Display the Space Title
@@ -465,8 +490,8 @@ class Purchase_Page():
         self.Class_Input.grid(row=1, column=2, padx=10, pady=3, ipadx=5, ipady=5)
         #Display the Third Space Title
         self.Third_Space_Title.grid(row=2, column=0, padx=10, pady=20, ipadx=5, ipady=0)
-        #Display the Search Button
-        self.Search_Button.pack(ipadx=15, ipady=5, padx=10, pady=10)
+        # Pack the 'Search' button
+        self.Search_Button.pack(ipadx=10, ipady=5, padx=10, pady=10)
         #Display the Info
         self.Info.pack(side=tk.RIGHT, ipadx=5, ipady=0, padx=10, pady=3)
 
@@ -502,7 +527,7 @@ class Purchase_Page():
                     # for further processing.
                 except ValueError:
                     # Invalid date format
-                    tk.messagebox.showinfo('Error', 'Invalid date format for Departure or Return')
+                    tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
             else :
                 try :
                     departure_date = datetime.datetime.strptime(self.Departure, '%m/%d/%y')
@@ -516,7 +541,7 @@ class Purchase_Page():
                     print("Search Flight")
                 except ValueError:
                     # Invalid date format
-                    tk.messagebox.showinfo('Error', 'Invalid date format for Departure')
+                    tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
                 
             #print(self.From)
             #print(self.To)
@@ -524,6 +549,9 @@ class Purchase_Page():
             #print(self.Return)
             #print(self.Passengers)
             #print(self.Class)
+
+    def Hide_Button(self, empty):
+        Launch_Home_Page()
 
 #---------------------## ALL THE FUNCTIONS ##---------------------#
 
