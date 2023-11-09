@@ -462,8 +462,8 @@ class Purchase_Page():
         self.To_Input = tk.Entry(self.second_top_frame)
         self.From_Input.insert(0, "London")
         self.To_Input.insert(0, "New York")
-        self.Departure_Input = DateEntry(self.second_top_frame)
-        self.Return_Input = DateEntry(self.second_top_frame)
+        self.Departure_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
+        self.Return_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
         self.Passengers_Input = tk.Spinbox(self.third_top_frame, from_=1, to=10)
         self.Class_Input = tk.Spinbox(self.third_top_frame, from_=1, to=3)
 
@@ -536,22 +536,22 @@ class Purchase_Page():
         else :
             if self.Return!='':
                 try :
-                    departure_date = datetime.datetime.strptime(self.Departure, '%m/%d/%y')
-                    return_date = datetime.datetime.strptime(self.Return, '%m/%d/%y')
-                    (self.Passengers == int(self.Passengers)) & (self.Passengers > 0) & (self.Passengers < 11)
-                    (self.Class == int(self.Class)) & (self.Class > 0) & (self.Class < 4)
-                    (self.From == str(self.From)) & (self.To == str(self.To))
-                    if return_date < departure_date:
+                    #departure_date = datetime.datetime.strptime(self.Departure, '%y-%m-%d')
+                    #return_date = datetime.datetime.strptime(self.Return, '%y-%m-%d')
+                    if self.Departure < self.Return:
                         tk.messagebox.showinfo('Error', 'Return date must be after departure date')
                     else :
-                        print("Search Flight")
-                        print(departure_date)
-                        print(self.Departure)
-                        # Dates are valid
-                        # Now you can use departure_date and return_date as datetime objects
-                        # for further processing.
-                        Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
-                        Actual_Search.Search()
+                        if (self.Passengers == int(self.Passengers)) & (self.Passengers > 0) & (self.Passengers < 11):
+                            if (self.Class == int(self.Class)) & (self.Class > 0) & (self.Class < 4):
+                                if (self.From == str(self.From)) & (self.To == str(self.To)):
+                                    print("Search Flight")
+                                    # Dates are valid
+                                    Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                    Actual_Search.Search()
+                            else:
+                                tk.messagebox.showinfo('Error', 'Invalid Class')
+                        else:
+                            tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
                 except ValueError:
                     # Invalid date format
                     tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
