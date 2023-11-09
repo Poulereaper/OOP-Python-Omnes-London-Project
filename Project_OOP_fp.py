@@ -5,6 +5,7 @@ import tkinter.messagebox
 from tkcalendar import DateEntry
 import dbconnect
 import Actual_Customer as AC
+import Actual_Search as AS
 import re
 from PIL import Image, ImageTk
 import datetime
@@ -139,8 +140,8 @@ class LogIn_Page():
             # Invalid email format, show an error message
             tk.messagebox.showinfo('Error', 'Invalid email format')
         else :
-            query = "SELECT * FROM customer WHERE Email = '{}' AND Password = '{}'".format(self.Email, self.Password) 
-            result=self.db.fetch(query)
+            sql = "SELECT * FROM customer WHERE Email = '{}' AND Password = '{}'".format(self.Email, self.Password) 
+            result=self.db.fetch(sql)
             if result:
                 # Copy the result to the Actual_Customer
                 Actual_Customer.Copy_To_Actual_Customer(result)
@@ -162,8 +163,10 @@ class SignUp_First_Page():
         
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg='#fff7ea', fg='#3f171f')
-        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
         self.SignUp_Title = tk.Label(self.middle_frame, text="Sign Up", font=("Arial", 15), bg='#fff7ea', fg='#3f171f')
+        self.GoBack_Title = tk.Label(self.middle_frame, text="<", font=("Arial", 20), bg='#fff7ea')
+        self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
         self.information_Title = tk.Label(self.middle_frame, text="Please enter your information to creat a new account", font=("Arial", 10), bg='#fff7ea', fg='#3f171f')
         self.Email_Title = tk.Label(self.middle_frame, text="Email", font=("Arial", 10), bg='#fff7ea')
         self.Password_Title = tk.Label(self.middle_frame, text="Password", font=("Arial", 10), bg='#fff7ea')
@@ -199,6 +202,8 @@ class SignUp_First_Page():
         self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=10, pady=10)
         #Display the Sign In Title
         self.SignUp_Title.pack(ipadx=5, ipady=5, padx=200, pady=20)
+        #Display the Go Back Title
+        self.GoBack_Title.place(x=22, y=15)
         #Display the information Title
         self.information_Title.pack(ipadx=5, ipady=0, padx=10, pady=0)
         self.Space_Title1.pack(ipadx=5, ipady=0, padx=10, pady=5)
@@ -236,8 +241,11 @@ class SignUp_First_Page():
             else:
                 tk.messagebox.showinfo('Error', 'Password does not match')
 
-    def Hide_Button(self, empty):
+    def Hide_Button_1(self, empty):
         Launch_Home_Page()
+    
+    def Hide_Button_2(self, empty):
+        Launch_LogIn_Page()
 
 class SignUp_Second_Page():
     def __init__(self, main_window, Email, Password):
@@ -257,7 +265,9 @@ class SignUp_Second_Page():
         
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg='#fff7ea', fg='#3f171f')
-        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
+        self.GoBack_Title = tk.Label(self.second_top_frame, text="<", font=("Arial", 20), bg='#fff7ea')
+        self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
         self.SignUp_Title = tk.Label(self.second_top_frame, text="Sign Up", font=("Arial", 15), bg='#fff7ea', fg='#3f171f')
         self.FirstName_Title = tk.Label(self.third_top_frame, text="First Name", font=("Arial", 10), bg='#fff7ea')
         self.LastName_Title = tk.Label(self.third_top_frame, text="Last Name *", font=("Arial", 10), bg='#fff7ea')
@@ -297,6 +307,8 @@ class SignUp_Second_Page():
         self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=10, pady=10)
         #Display the Sign In Title
         self.SignUp_Title.pack(ipadx=5, ipady=5, padx=200, pady=35)
+        #Display the Go Back Title
+        self.GoBack_Title.place(x=22, y=15)
         #Display the First Name Title
         self.FirstName_Title.grid(row=0, column=1, padx=10, pady=3, ipadx=5, ipady=0)
         #Display the First Name Input
@@ -335,9 +347,11 @@ class SignUp_Second_Page():
             Actual_Customer.Creat_Actual_Customer()
             Launch_Home_Page()
     
-    def Hide_Button(self, empty):
+    def Hide_Button_1(self, empty):
         Launch_Home_Page()
-
+    
+    def Hide_Button_2(self, empty):
+        Launch_SignUp_First_Page()
 
 class Menu_Page():
     def __init__(self, main_window):
@@ -525,6 +539,8 @@ class Purchase_Page():
                     # Dates are valid
                     # Now you can use departure_date and return_date as datetime objects
                     # for further processing.
+                    Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                    Actual_Search.Search()
                 except ValueError:
                     # Invalid date format
                     tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
@@ -602,5 +618,6 @@ main_window.configure(bg='#fff7ea')
 
 Actual_Customer = AC.Actual_Customer()
 Actual_Customer.LogOrNot = False
+Actual_Search = AS.Actual_Search()
 Home_Page(main_window)
 tk.mainloop()
