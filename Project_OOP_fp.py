@@ -463,6 +463,7 @@ class Purchase_Page():
         self.From_Input.insert(0, "London")
         self.To_Input.insert(0, "New York")
         self.Departure_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
+        #self.Return_Input_Radio = tk.Radiobutton(self.second_top_frame, text="Return", value=0)
         self.Return_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
         self.Passengers_Input = tk.Spinbox(self.third_top_frame, from_=1, to=10)
         self.Class_Input = tk.Spinbox(self.third_top_frame, from_=1, to=3)
@@ -502,6 +503,8 @@ class Purchase_Page():
         self.Departure_Input.grid(row=2, column=2, padx=10, pady=3, ipadx=5, ipady=5)
         #Display the Return Title
         self.Return_Title.grid(row=1, column=3, padx=10, pady=3, ipadx=5, ipady=0)
+        #Display The Radio Button
+        #self.Return_Input_Radio.grid(row=2, column=3, padx=10, pady=3, ipadx=5, ipady=0)
         #Display the Return Input
         self.Return_Input.grid(row=2, column=3, padx=10, pady=3, ipadx=5, ipady=5)
         #Display the Second Space Title

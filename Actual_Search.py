@@ -47,4 +47,5 @@ class Actual_Search():
                 print("No Flight")
             else:
                 print("Search Succeed")
+                print(self.From,self.To,self.Departure_Date,self.Return_Date,self.Class,self.Passengers)
             return result1,result2
