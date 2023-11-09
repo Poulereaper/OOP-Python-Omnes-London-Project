@@ -29,7 +29,7 @@ class Actual_Search():
             print("Complet Actual Search Failed")
 
     def Search(self):
-        sql="SELECT * FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureTime='{}' AND ArriveTime='{}' AND Class='{}' AND SeatsAvaible>='{}'".format(self.From,self.To,self.Departure_Date,self.Return_Date, self.Class,self.Passengers)
+        sql="SELECT * FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureDate='{}' AND ArrivalDate='{}' AND Class='{}' AND SeatsAvaible>='{}'".format(self.From,self.To,self.Departure_Date,self.Return_Date, self.Class,self.Passengers)
         result = dbconnect.DBHelper().fetch(sql)
         print(result)
         return result
