@@ -339,13 +339,25 @@ class SignUp_Second_Page():
         self.LastName=self.LastName_Input.get()
         self.UserName=self.UserName_Input.get()
         self.Phone=self.Phone_Input.get()
-        # Check if the email is a valid
+        # Check if the phone is a valid one
         if (self.FirstName=='') or (self.LastName=='') or (self.UserName=='') or (self.Phone==''):
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        elif not re.match(r'^[0-9]*$', self.Phone):
+            # Invalid phone format, show an error message
+            tk.messagebox.showinfo('Error', 'Invalid phone format')
         else :
             Actual_Customer.Complet_Actual_Customer(self.Email, self.Password, self.FirstName, self.LastName, self.UserName, self.Phone)
-            Actual_Customer.Creat_Actual_Customer()
-            Launch_Home_Page()
+            Creat=Actual_Customer.Creat_Actual_Customer()
+            if Creat=="Email":
+                tk.messagebox.showinfo('Error', 'This Email has already been used')
+            elif Creat=="Phone":
+                tk.messagebox.showinfo('Error', 'This Phone has already been used')
+            elif Creat=="UserName":
+                tk.messagebox.showinfo('Error', 'This UserName has already been used')
+            elif Creat=="Succeed":
+                Launch_Home_Page()
+            else:
+                tk.messagebox.showinfo('Error', 'Creat Failed')
     
     def Hide_Button_1(self, empty):
         Launch_Home_Page()
@@ -528,19 +540,18 @@ class Purchase_Page():
                     return_date = datetime.datetime.strptime(self.Return, '%m/%d/%y')
                     (self.Passengers == int(self.Passengers)) & (self.Passengers > 0) & (self.Passengers < 11)
                     (self.Class == int(self.Class)) & (self.Class > 0) & (self.Class < 4)
-                    self.From = str(self.From)
-                    self.To = str(self.To)
+                    (self.From == str(self.From)) & (self.To == str(self.To))
                     if return_date < departure_date:
                         tk.messagebox.showinfo('Error', 'Return date must be after departure date')
                     else :
                         print("Search Flight")
                         print(departure_date)
                         print(self.Departure)
-                    # Dates are valid
-                    # Now you can use departure_date and return_date as datetime objects
-                    # for further processing.
-                    Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
-                    Actual_Search.Search()
+                        # Dates are valid
+                        # Now you can use departure_date and return_date as datetime objects
+                        # for further processing.
+                        Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                        Actual_Search.Search()
                 except ValueError:
                     # Invalid date format
                     tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
