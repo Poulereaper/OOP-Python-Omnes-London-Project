@@ -1,6 +1,7 @@
 #First Page of the Project test repository
 import pymysql
 import tkinter as tk
+from tkinter import ttk
 import tkinter.messagebox
 from tkcalendar import DateEntry
 import dbconnect
@@ -16,8 +17,8 @@ import datetime
 class Home_Page():
     def __init__(self, main_window):
         # Create a frame at the top for buttons
-        self.top_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.left_frame = tk.Frame(main_window, bg='#fff7ea')
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.left_frame = tk.Frame(main_window, bg=main_color)
         self.right_frame = tk.Frame(main_window)
         bg_image_one = Image.open("./images/degrado.jpg")
         bg_photo_one = ImageTk.PhotoImage(bg_image_one)
@@ -29,26 +30,27 @@ class Home_Page():
 
     
         #Title
-        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg='#fff7ea', fg='#3f171f')
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Pres_OOPAirLine = tk.Label(self.right_frame, text="Welcome to OOP Air Line", font=("Arial", 15))
 
         # Create 
         if Actual_Customer.LogOrNot == False:
-            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg='#722a39')
+            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
-            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg='#722a39')
-        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg='#722a39')
-        self.Buy_Now_Button = tk.Button(self.left_frame, text='Buy Now', command=Launch_Purchase_Page, font=("Arial", 17), bg='#375c4f', fg='#fff7ea')
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        self.Buy_Now_Button = tk.Button(self.left_frame, text='Buy Now', command=Launch_Purchase_Page, font=("Arial", 17), bg=third_color, fg=main_color)
         self.Buy_Now_Button.config(height=1, width=10)
 
         # Pack all wigets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
         # Add a Canvas widget for drawing the line
-        self.line_canvas = tk.Canvas(main_window, height=2, bg='#722a39')
+        self.line_canvas = tk.Canvas(main_window, height=3, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
         self.line_canvas.pack(fill=tk.X)
         # Create a line under top_frame
-        self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill='#722a39')
+        self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
         self.left_frame.pack(side=tk.LEFT, fill=tk.X)
         #self.right_frame.pack(side=tk.RIGHT, fill=tk.X)
         self.right_frame.place(x=520, y=200, relwidth=0.36, relheight=0.50)
@@ -67,18 +69,18 @@ class LogIn_Page():
     def __init__(self, main_window):
         self.db=dbconnect.DBHelper()
         # Create a frame at the top for buttons
-        self.top_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.middle_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.bottom_frame = tk.Frame(main_window, bg='#fff7ea')
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.middle_frame = tk.Frame(main_window, bg=main_color)
+        self.bottom_frame = tk.Frame(main_window, bg=main_color)
         
         #Title
-        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg='#fff7ea', fg='#3f171f')
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
-        self.SignIn_Title = tk.Label(self.middle_frame, text="Sign In", font=("Arial", 15), bg='#fff7ea', fg='#3f171f')
-        self.Email_Title = tk.Label(self.middle_frame, text="Email", font=("Arial", 10), bg='#fff7ea')
-        self.Password_Title = tk.Label(self.middle_frame, text="Password", font=("Arial", 10), bg='#fff7ea')
-        self.Space_Title1 = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg='#fff7ea')
-        self.NewAccount_Title = tk.Label(self.bottom_frame, text="Don't have an account?", font=("Arial", 10), bg='#fff7ea')
+        self.SignIn_Title = tk.Label(self.middle_frame, text="Sign In", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.Email_Title = tk.Label(self.middle_frame, text="Email", font=("Arial", 10), bg=main_color)
+        self.Password_Title = tk.Label(self.middle_frame, text="Password", font=("Arial", 10), bg=main_color)
+        self.Space_Title1 = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.NewAccount_Title = tk.Label(self.bottom_frame, text="Don't have an account?", font=("Arial", 10), bg=main_color)
 
         #Input
         self.Email_Input = tk.Entry(self.middle_frame)
@@ -86,18 +88,19 @@ class LogIn_Page():
         self.Password_Input.config(show="*")
 
         # Create buttons
-        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg='#722a39')
-        self.Log_Button = tk.Button(self.middle_frame, text='Log In', command=self.Log_check, bg='#375c4f', fg='#fff7ea')
-        self.NewAccount_Button = tk.Button(self.bottom_frame, text='Sign Up', command=Launch_SignUp_First_Page, bg='#375c4f', fg='#fff7ea')
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        self.Log_Button = tk.Button(self.middle_frame, text='Log In', command=self.Log_check, bg=third_color, fg=main_color)
+        self.NewAccount_Button = tk.Button(self.bottom_frame, text='Sign Up', command=Launch_SignUp_First_Page, bg=third_color, fg=main_color)
 
         # Pack all widgets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
         # Add a Canvas widget for drawing the line
-        self.line_canvas = tk.Canvas(main_window, height=2, bg='#722a39')
+        self.line_canvas = tk.Canvas(main_window, height=2, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
         self.line_canvas.pack(fill=tk.X)
         # Create a line under top_frame
-        self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill='#722a39')
+        self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
         self.middle_frame.pack(fill=tk.BOTH, expand=True)
         self.bottom_frame.pack(side=tk.BOTTOM, fill=tk.X)               
         
@@ -157,23 +160,23 @@ class LogIn_Page():
 class SignUp_First_Page():
     def __init__(self, main_window):
         # Create a frame at the top for buttons
-        self.top_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.middle_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.bottom_frame = tk.Frame(main_window, bg='#fff7ea')
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.middle_frame = tk.Frame(main_window, bg=main_color)
+        self.bottom_frame = tk.Frame(main_window, bg=main_color)
         
         #Title
-        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg='#fff7ea', fg='#3f171f')
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
-        self.SignUp_Title = tk.Label(self.middle_frame, text="Sign Up", font=("Arial", 15), bg='#fff7ea', fg='#3f171f')
-        self.GoBack_Title = tk.Label(self.middle_frame, text="<", font=("Arial", 20), bg='#fff7ea')
+        self.SignUp_Title = tk.Label(self.middle_frame, text="Sign Up", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.GoBack_Title = tk.Label(self.middle_frame, text="<", font=("Arial", 20), bg=main_color)
         self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
-        self.information_Title = tk.Label(self.middle_frame, text="Please enter your information to creat a new account", font=("Arial", 10), bg='#fff7ea', fg='#3f171f')
-        self.Email_Title = tk.Label(self.middle_frame, text="Email", font=("Arial", 10), bg='#fff7ea')
-        self.Password_Title = tk.Label(self.middle_frame, text="Password", font=("Arial", 10), bg='#fff7ea')
-        self.Password_Confirm_Title = tk.Label(self.middle_frame, text="Confirm Password", font=("Arial", 10), bg='#fff7ea')
-        self.Space_Title1 = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg='#fff7ea')
-        self.Space_Title2 = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg='#fff7ea')
-        self.Space_Title3 = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg='#fff7ea')
+        self.information_Title = tk.Label(self.middle_frame, text="Please enter your information to creat a new account", font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.Email_Title = tk.Label(self.middle_frame, text="Email", font=("Arial", 10), bg=main_color)
+        self.Password_Title = tk.Label(self.middle_frame, text="Password", font=("Arial", 10), bg=main_color)
+        self.Password_Confirm_Title = tk.Label(self.middle_frame, text="Confirm Password", font=("Arial", 10), bg=main_color)
+        self.Space_Title1 = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title2 = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title3 = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg=main_color)
 
         #Input
         self.Email_Input = tk.Entry(self.middle_frame)
@@ -183,17 +186,18 @@ class SignUp_First_Page():
         #self.Password_Input.config(show="*")
 
         # Create buttons
-        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg='#722a39')
-        self.Continue_Button = tk.Button(self.middle_frame, text='Continue', command=self.Continue_test, bg='#375c4f', fg='#fff7ea')
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        self.Continue_Button = tk.Button(self.middle_frame, text='Continue', command=self.Continue_test, bg=third_color, fg=main_color)
 
         # Pack all widgets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
         # Add a Canvas widget for drawing the line
-        self.line_canvas = tk.Canvas(main_window, height=2, bg='#722a39')
+        self.line_canvas = tk.Canvas(main_window, height=2, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
         self.line_canvas.pack(fill=tk.X)
         # Create a line under top_frame
-        self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill='#722a39')
+        self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
         self.middle_frame.pack(fill=tk.BOTH, expand=True)              
         
         # Pack the 'Menu' button to the right
@@ -252,30 +256,30 @@ class SignUp_Second_Page():
         # Create a frame at the top for buttons
         self.Email = Email
         self.Password = Password
-        self.top_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.middle_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.second_top_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.third_top_frame = tk.Frame(main_window, bg='#fff7ea')
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.middle_frame = tk.Frame(main_window, bg=main_color)
+        self.second_top_frame = tk.Frame(main_window, bg=main_color)
+        self.third_top_frame = tk.Frame(main_window, bg=main_color)
         self.third_top_frame.columnconfigure(0, weight=1)
         self.third_top_frame.columnconfigure(1, weight=1)
         self.third_top_frame.columnconfigure(2, weight=1)
         self.third_top_frame.columnconfigure(3, weight=1)
         self.third_top_frame.columnconfigure(4, weight=1)
-        self.bottom_frame = tk.Frame(main_window, bg='#fff7ea')
+        self.bottom_frame = tk.Frame(main_window, bg=main_color)
         
         #Title
-        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg='#fff7ea', fg='#3f171f')
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
-        self.GoBack_Title = tk.Label(self.second_top_frame, text="<", font=("Arial", 20), bg='#fff7ea')
+        self.GoBack_Title = tk.Label(self.second_top_frame, text="<", font=("Arial", 20), bg=main_color)
         self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
-        self.SignUp_Title = tk.Label(self.second_top_frame, text="Sign Up", font=("Arial", 15), bg='#fff7ea', fg='#3f171f')
-        self.FirstName_Title = tk.Label(self.third_top_frame, text="First Name", font=("Arial", 10), bg='#fff7ea')
-        self.LastName_Title = tk.Label(self.third_top_frame, text="Last Name *", font=("Arial", 10), bg='#fff7ea')
-        self.UserName_Title = tk.Label(self.third_top_frame, text="User Name", font=("Arial", 10), bg='#fff7ea')
-        self.Space_Title = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg='#fff7ea')
-        self.Phone_Title = tk.Label(self.middle_frame, text="Phone *", font=("Arial", 10), bg='#fff7ea')
-        self.information_Optional_Title = tk.Label(self.bottom_frame, text="* Optional", font=("Arial", 10), bg='#fff7ea')
-        self.information_Data_Title = tk.Label(self.bottom_frame, text="We'll only use your phone number to notify you about your flight", font=("Arial", 10), bg='#fff7ea')
+        self.SignUp_Title = tk.Label(self.second_top_frame, text="Sign Up", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.FirstName_Title = tk.Label(self.third_top_frame, text="First Name", font=("Arial", 10), bg=main_color)
+        self.LastName_Title = tk.Label(self.third_top_frame, text="Last Name *", font=("Arial", 10), bg=main_color)
+        self.UserName_Title = tk.Label(self.third_top_frame, text="User Name", font=("Arial", 10), bg=main_color)
+        self.Space_Title = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Phone_Title = tk.Label(self.middle_frame, text="Phone *", font=("Arial", 10), bg=main_color)
+        self.information_Optional_Title = tk.Label(self.bottom_frame, text="* Optional", font=("Arial", 10), bg=main_color)
+        self.information_Data_Title = tk.Label(self.bottom_frame, text="We'll only use your phone number to notify you about your flight", font=("Arial", 10), bg=main_color)
 
         #Input
         self.FirstName_Input = tk.Entry(self.third_top_frame)
@@ -285,17 +289,18 @@ class SignUp_Second_Page():
         print(Email)
 
         # Create buttons
-        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg='#722a39')
-        self.SignUp_Button = tk.Button(self.middle_frame, text='Sign Up', command=self.Sign_Up, bg='#375c4f', fg='#fff7ea')
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        self.SignUp_Button = tk.Button(self.middle_frame, text='Sign Up', command=self.Sign_Up, bg=third_color, fg=main_color)
 
         # Pack all widgets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
         # Add a Canvas widget for drawing the line
-        self.line_canvas = tk.Canvas(main_window, height=2, bg='#722a39')
+        self.line_canvas = tk.Canvas(main_window, height=2, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
         self.line_canvas.pack(fill=tk.X)
         # Create a line under top_frame
-        self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill='#722a39')
+        self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
         self.second_top_frame.pack(side=tk.TOP, fill=tk.X)
         self.third_top_frame.pack(side=tk.TOP, fill=tk.X)
         self.middle_frame.pack(fill=tk.BOTH, expand=True)
@@ -368,31 +373,36 @@ class SignUp_Second_Page():
 class Menu_Page():
     def __init__(self, main_window):
         # Create a frame at the top for buttons
-        self.top_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.middle_frame = tk.Frame(main_window, bg='#fff7ea')
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.middle_frame = tk.Frame(main_window, bg=main_color)
         
         #Title
-        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg='#fff7ea', fg='#3f171f')
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
-        self.Menu_Title = tk.Label(self.middle_frame, text="Menu", font=("Arial", 15), bg='#fff7ea', fg='#3f171f')
+        self.Menu_Title = tk.Label(self.middle_frame, text="Menu", font=("Arial", 15), bg=main_color, fg=fourth_color)
 
         # Create buttons
-        self.Home_Button = tk.Button(self.middle_frame, text='    Home     ', command=Launch_Home_Page, bg='#722a39', fg='#fff7ea')
+        self.Home_Button = tk.Button(self.middle_frame, text='    Home     ', command=Launch_Home_Page, bg=second_color, fg=main_color)
         if Actual_Customer.LogOrNot == False:
-            self.LogIn_Button = tk.Button(self.middle_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg='#722a39', fg='#fff7ea')
+            self.LogIn_Button = tk.Button(self.middle_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
         else :
-            self.LogIn_Button = tk.Button(self.middle_frame, text='My Account', command=Launch_LogIn_Page, bg='#722a39', fg='#fff7ea')
-        self.Purchase = tk.Button(self.middle_frame, text='   Purchase   ', command=Launch_Purchase_Page, bg='#722a39', fg='#fff7ea')
-        self.CLose = tk.Button(self.middle_frame, text='      Close       ', command=self.Close, bg='#722a39', fg='#fff7ea')
+            self.LogIn_Button = tk.Button(self.middle_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
+        self.Purchase = tk.Button(self.middle_frame, text='   Purchase   ', command=Launch_Purchase_Page, bg=second_color, fg=main_color)
+        self.CLose = tk.Button(self.middle_frame, text='      Close       ', command=self.Close, bg=second_color, fg=main_color)
+        if main_color==main_color_light:
+            self.Change_Theme = tk.Button(self.middle_frame, text='Dark Theme', command=Change_Theme, bg=second_color, fg=main_color)
+        else:
+            self.Change_Theme = tk.Button(self.middle_frame, text='Light Theme', command=Change_Theme, bg=second_color, fg=main_color)
 
         # Pack all widgets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
         # Add a Canvas widget for drawing the line
-        self.line_canvas = tk.Canvas(main_window, height=2, bg='#722a39')
+        self.line_canvas = tk.Canvas(main_window, height=2, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
         self.line_canvas.pack(fill=tk.X)
         # Create a line under top_frame
-        self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill='#722a39')
+        self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
         self.middle_frame.pack(fill=tk.BOTH, expand=True)
         #Display the title
         self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=10, pady=10)
@@ -409,6 +419,8 @@ class Menu_Page():
         self.Purchase.pack(ipadx=24, ipady=7, padx=10, pady=15)
         #Display the Close Button
         self.CLose.pack(ipadx=24, ipady=7, padx=10, pady=15)
+        #Display the Change Theme Button
+        self.Change_Theme.pack(ipadx=24, ipady=7, padx=10, pady=15)
 
     def Close(self):
         main_window.destroy()
@@ -419,42 +431,42 @@ class Menu_Page():
 class Purchase_Page():
     def __init__(self, main_window):
         # Create a frame at the top for buttons
-        self.top_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.second_top_frame = tk.Frame(main_window, bg='#fff7ea')
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.second_top_frame = tk.Frame(main_window, bg=main_color)
         self.second_top_frame.columnconfigure(0, weight=1)
         self.second_top_frame.columnconfigure(1, weight=1)
         self.second_top_frame.columnconfigure(2, weight=1)
         self.second_top_frame.columnconfigure(3, weight=1)
-        self.third_top_frame = tk.Frame(main_window, bg='#fff7ea')
+        self.third_top_frame = tk.Frame(main_window, bg=main_color)
         self.third_top_frame.columnconfigure(0, weight=1)
         self.third_top_frame.columnconfigure(1, weight=1)
         self.third_top_frame.columnconfigure(2, weight=1)
         self.third_top_frame.columnconfigure(3, weight=1)
-        self.fourth_top_frame = tk.Frame(main_window, bg='#fff7ea')
-        self.bottom_frame = tk.Frame(main_window, bg='#fff7ea')
+        self.fourth_top_frame = tk.Frame(main_window, bg=main_color)
+        self.bottom_frame = tk.Frame(main_window, bg=main_color)
 
         #Title
-        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg='#fff7ea', fg='#3f171f')
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
-        self.Space_Title = tk.Label(self.second_top_frame, text=" ", font=("Arial", 10), bg='#fff7ea')
-        self.From_Title = tk.Label(self.second_top_frame, text="From", font=("Arial", 10), bg='#fff7ea')
-        self.To_Title = tk.Label(self.second_top_frame, text="To", font=("Arial", 10), bg='#fff7ea')
-        self.Departure_Title = tk.Label(self.second_top_frame, text="Departure", font=("Arial", 10), bg='#fff7ea')
-        self.Return_Title = tk.Label(self.second_top_frame, text="Return *", font=("Arial", 10), bg='#fff7ea')
-        self.Second_Space_Title = tk.Label(self.second_top_frame, text=" ", font=("Arial", 10), bg='#fff7ea')
-        self.Passengers_Title = tk.Label(self.third_top_frame, text="Passengers", font=("Arial", 10), bg='#fff7ea')
-        self.Class_Title = tk.Label(self.third_top_frame, text="Class", font=("Arial", 10), bg='#fff7ea')
-        self.Third_Space_Title = tk.Label(self.third_top_frame, text=" ", font=("Arial", 10), bg='#fff7ea')
-        self.Info = tk.Label(self.bottom_frame, text="* Optional", font=("Arial", 10), bg='#fff7ea')
+        self.Space_Title = tk.Label(self.second_top_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.From_Title = tk.Label(self.second_top_frame, text="From", font=("Arial", 10), bg=main_color)
+        self.To_Title = tk.Label(self.second_top_frame, text="To", font=("Arial", 10), bg=main_color)
+        self.Departure_Title = tk.Label(self.second_top_frame, text="Departure", font=("Arial", 10), bg=main_color)
+        self.Return_Title = tk.Label(self.second_top_frame, text="Return *", font=("Arial", 10), bg=main_color)
+        self.Second_Space_Title = tk.Label(self.second_top_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Passengers_Title = tk.Label(self.third_top_frame, text="Passengers", font=("Arial", 10), bg=main_color)
+        self.Class_Title = tk.Label(self.third_top_frame, text="Class", font=("Arial", 10), bg=main_color)
+        self.Third_Space_Title = tk.Label(self.third_top_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Info = tk.Label(self.bottom_frame, text="* Optional", font=("Arial", 10), bg=main_color)
 
 
         # Create buttons
         if Actual_Customer.LogOrNot == False:
-            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg='#722a39')
+            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
-            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg='#722a39')
-        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg='#722a39')
-        self.Search_Button = tk.Button(self.fourth_top_frame, text='Search', command=self.Search_Flight, font=("Arial", 15), bg='#375c4f', fg='#fff7ea')
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        self.Search_Button = tk.Button(self.fourth_top_frame, text='Search', command=self.Search_Flight, font=("Arial", 15), bg=third_color, fg=main_color)
         self.Search_Button.config(height=1, width=10)
 
         #Input
@@ -463,20 +475,21 @@ class Purchase_Page():
         self.From_Input.insert(0, "London")
         self.To_Input.insert(0, "New York")
         self.Departure_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
-        #self.Return_Input_Radio = tk.Radiobutton(self.second_top_frame, text="Return", value=0)
+        #self.Return_Input_Radio = tk.Radiobutton(self.second_top_frame, text="Return", value=1)
         self.Return_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
         self.Passengers_Input = tk.Spinbox(self.third_top_frame, from_=1, to=10)
-        self.Class_Input = tk.Spinbox(self.third_top_frame, from_=1, to=3)
+        self.Class_Input = ttk.Combobox(self.third_top_frame, values=["Economy", "Business", "First Class"])
 
 
         # Pack all wigets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
         # Add a Canvas widget for drawing the line
-        self.line_canvas = tk.Canvas(main_window, height=2, bg='#722a39')
+        self.line_canvas = tk.Canvas(main_window, height=2, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
         self.line_canvas.pack(fill=tk.X)
         # Create a line under top_frame
-        self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill='#722a39')
+        self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
         self.second_top_frame.pack(side=tk.TOP, fill=tk.X)
         self.third_top_frame.pack(side=tk.TOP, fill=tk.X)
         self.fourth_top_frame.pack(side=tk.TOP, fill=tk.X)
@@ -531,7 +544,7 @@ class Purchase_Page():
         self.Departure=self.Departure_Input.get()
         self.Return=self.Return_Input.get()
         self.Passengers=int(self.Passengers_Input.get())
-        self.Class=int(self.Class_Input.get())
+        self.Class=self.Class_Input.get()
         # Check if the email is a valid
         if (self.From=='') or (self.To=='') or (self.Departure=='') or (self.Passengers=='') or (self.Class==''):
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
@@ -541,11 +554,11 @@ class Purchase_Page():
                 try :
                     #departure_date = datetime.datetime.strptime(self.Departure, '%y-%m-%d')
                     #return_date = datetime.datetime.strptime(self.Return, '%y-%m-%d')
-                    if self.Departure < self.Return:
+                    if self.Departure > self.Return:
                         tk.messagebox.showinfo('Error', 'Return date must be after departure date')
                     else :
                         if (self.Passengers == int(self.Passengers)) & (self.Passengers > 0) & (self.Passengers < 11):
-                            if (self.Class == int(self.Class)) & (self.Class > 0) & (self.Class < 4):
+                            if (self.Class == "Economy") or (self.Class == "Business") or (self.Class =="First Class"):
                                 if (self.From == str(self.From)) & (self.To == str(self.To)):
                                     print("Search Flight")
                                     # Dates are valid
@@ -620,6 +633,36 @@ def Launch_Purchase_Page():
         widget.destroy()
     Purchase_Page(main_window)
 
+def Change_Theme():
+    global main_color
+    global second_color
+    global third_color
+    global fourth_color
+    global main_color_light
+    global second_color_light
+    global third_color_light
+    global fourth_color_light
+    global main_color_dark
+    global second_color_dark
+    global third_color_dark
+    global fourth_color_dark
+    
+    if main_color==main_color_light:
+        main_color=main_color_dark
+        second_color=second_color_dark
+        third_color=third_color_dark
+        fourth_color=fourth_color_dark
+    else:
+        main_color=main_color_light
+        second_color=second_color_light
+        third_color=third_color_light
+        fourth_color=fourth_color_light
+
+    main_window.configure(bg=main_color)
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    Menu_Page(main_window)
+
 
 main_window = tk.Tk()
 main_window.title("OOP Air Line")
@@ -627,11 +670,29 @@ main_window.geometry("1100x600")
 main_window.style = tk.ttk.Style()
 main_window.style.theme_use("clam")
 #main_window.iconbitmap("./images/avion.ico")
-main_window.configure(bg='#fff7ea')
+
 
 
 Actual_Customer = AC.Actual_Customer()
 Actual_Customer.LogOrNot = False
 Actual_Search = AS.Actual_Search()
+#Light Theme
+main_color_light="#fff7ea"
+second_color_light="#722a39"
+third_color_light="#375c4f"
+fourth_color_light="#3f171f"
+#Dark Theme
+main_color_dark='#292929'
+second_color_dark="#9c4c5b"
+third_color_dark="#017368"
+fourth_color_dark="#cf6679"
+
+#Theme
+main_color=main_color_light
+second_color=second_color_light
+third_color=third_color_light
+fourth_color=fourth_color_light
+main_window.configure(bg=main_color)
+
 Home_Page(main_window)
 tk.mainloop()
