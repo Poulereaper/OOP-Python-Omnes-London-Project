@@ -548,24 +548,25 @@ class Purchase_Page():
         # Check if the email is a valid
         if (self.From=='') or (self.To=='') or (self.Departure=='') or (self.Passengers=='') or (self.Class==''):
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
-            
         else :
             if self.Return!='':
                 try :
-                    #departure_date = datetime.datetime.strptime(self.Departure, '%y-%m-%d')
-                    #return_date = datetime.datetime.strptime(self.Return, '%y-%m-%d')
                     if self.Departure > self.Return:
                         tk.messagebox.showinfo('Error', 'Return date must be after departure date')
                     else :
-                        if (self.Passengers == int(self.Passengers)) & (self.Passengers > 0) & (self.Passengers < 11):
+                        if (self.Passengers == int(self.Passengers)) & (self.Passengers > 1) & (self.Passengers < 11):
                             if (self.Class == "Economy") or (self.Class == "Business") or (self.Class =="First Class"):
                                 if (self.From == str(self.From)) & (self.To == str(self.To)):
                                     print("Search Flight")
                                     # Dates are valid
                                     Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
                                     Actual_Search.Search()
+                                    Launch_Info_Passengers()
+
                             else:
                                 tk.messagebox.showinfo('Error', 'Invalid Class')
+                        elif self.Passengers == 1 :
+                            pass
                         else:
                             tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
                 except ValueError:
@@ -585,16 +586,104 @@ class Purchase_Page():
                 except ValueError:
                     # Invalid date format
                     tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
-                
-            #print(self.From)
-            #print(self.To)
-            #print(self.Departure)
-            #print(self.Return)
-            #print(self.Passengers)
-            #print(self.Class)
 
     def Hide_Button(self, empty):
         Launch_Home_Page()
+
+class Info_Passengers():
+    # Create a frame at the top for buttons
+    def __init__(self, main_window):
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.middle_frame = tk.Frame(main_window, bg=main_color)
+
+        self.scroll_canva = tk.Canvas(self.middle_frame, bg=main_color)
+        self.scroll_canva.config(highlightthickness=0, borderwidth=0)
+        self.display_frame = tk.Frame(self.scroll_canva, bg=main_color)
+
+        #Title
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
+        self.Page_Title= tk.Label(self.display_frame, text=" Your Passengers", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.Info_passengers = tk.Label(self.display_frame, text="Please enter your information", font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.Space_Title_1 = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title_2 = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
+
+        # Create 
+        if Actual_Customer.LogOrNot == False:
+            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
+        else :
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        self.Submit_Button = tk.Button(self.display_frame, text='Submit', command=self.Submit, font=("Arial", 15), bg=third_color, fg=main_color)
+
+        # Pack all wigets
+        #Frame
+        self.top_frame.pack(side=tk.TOP, fill=tk.X)
+        # Add a Canvas widget for drawing the line
+        self.line_canvas = tk.Canvas(main_window, height=3, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
+        self.line_canvas.pack(fill=tk.X)
+        # Create a line under top_frame
+        self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
+        self.middle_frame.pack(fill=tk.BOTH, expand=True)
+        self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.yscrollbar = tk.Scrollbar(self.middle_frame, orient="vertical", command=self.scroll_canva.yview)
+        self.yscrollbar.pack(side=tk.RIGHT, fill='y')
+        self.scroll_canva.configure(yscrollcommand=self.yscrollbar.set)
+        self.scroll_canva.bind('<Configure>', lambda e: self.scroll_canva.configure(scrollregion = self.scroll_canva.bbox("all")))
+        self.display_frame.pack(fill=tk.BOTH, expand=True)
+        self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
+        # Pack the 'Sign In or Sign Up' button to the left (west)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
+        # Pack the 'Advanced Search' button to the right (east)
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        #Display the title
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=10)
+        #Display the Page Title
+        self.Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=30)
+        #Display the Info Title
+        self.Info_passengers.pack(ipadx=5, ipady=5, padx=490, pady=0)
+        #Display the Space Title
+        self.Space_Title_1.pack(ipadx=5, ipady=5, padx=10, pady=10)
+        #Number of Passengers
+        self.p=Actual_Search.Passengers
+        self.pass_type = [None] * self.p
+        #for i in range(self.p):
+            #self.pass_type.append(tk.StringVar())
+            
+        for i in range(self.p):
+            self.pass_type[i] = tk.StringVar()  # Create a StringVar for each Combobox
+            self.Passsenger_Title = tk.Label(self.display_frame, text="Passenger "+str(i+1), font=("Arial", 10), bg=main_color)
+            self.Passsenger_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
+            self.Passenger_Type = ttk.Combobox(self.display_frame, values=["Adult", "Child", "Senior", "Student"], textvariable=self.pass_type[i])
+            self.Passenger_Type.pack(ipadx=5, ipady=5, padx=490, pady=3)
+        self.Space_Title_2.pack(ipadx=5, ipady=5, padx=10, pady=10)
+        #Display the Buy Now Button
+        self.Submit_Button.pack(ipadx=5, ipady=5, padx=490, pady=10)
+
+    def Submit(self):
+        good=True
+        for i in range(self.p):
+            if self.pass_type[i].get() == "":
+                tk.messagebox.showinfo('Error', 'Please fill in all the information')
+                good=False
+                break
+        if good:
+            for i in range(self.p):
+                #print(self.pass_type[i].get())
+                Actual_Search.Passengers_Type[i]=self.pass_type[i].get()
+                if self.pass_type[i].get() == "Adult":
+                    Actual_Search.Passengers_Type_Number[i]=1
+                elif self.pass_type[i].get() == "Child":
+                    Actual_Search.Passengers_Type_Number[i]=0.60
+                elif self.pass_type[i].get() == "Senior":
+                    Actual_Search.Passengers_Type_Number[i]=0.80
+                elif self.pass_type[i].get() == "Student":
+                    Actual_Search.Passengers_Type_Number[i]=0.75
+            print(Actual_Search.Passengers_Type)
+            print(Actual_Search.Passengers_Type_Number)
+
+
+
 
 #---------------------## ALL THE FUNCTIONS ##---------------------#
 
@@ -620,8 +709,6 @@ def Launch_SignUp_Second_Page(Email, Password):
     for widget in main_window.winfo_children():
         widget.destroy()
     SignUp_Second_Page(main_window, Email, Password)
-    #print(Email)
-    #print(Password)
 
 def Launch_Menu_Page():
     for widget in main_window.winfo_children():
@@ -632,6 +719,11 @@ def Launch_Purchase_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
     Purchase_Page(main_window)
+
+def Launch_Info_Passengers():
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    Info_Passengers(main_window)
 
 def Change_Theme():
     global main_color
