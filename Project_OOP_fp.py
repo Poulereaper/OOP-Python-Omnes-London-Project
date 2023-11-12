@@ -560,13 +560,15 @@ class Purchase_Page():
                                     print("Search Flight")
                                     # Dates are valid
                                     Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
-                                    Actual_Search.Search()
                                     Launch_Info_Passengers()
 
                             else:
                                 tk.messagebox.showinfo('Error', 'Invalid Class')
                         elif self.Passengers == 1 :
-                            pass
+                            print("Search Flight")
+                            # Dates are valid
+                            Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                            Launch_Purchase_Results_Page()
                         else:
                             tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
                 except ValueError:
@@ -686,6 +688,7 @@ class Info_Passengers():
                     Actual_Search.Passengers_Type_Number[i]=0.75
             print(Actual_Search.Passengers_Type)
             print(Actual_Search.Passengers_Type_Number)
+            Launch_Purchase_Results_Page()
 
     def Hide_Button_1(self, empty):
         Launch_Home_Page()
@@ -812,8 +815,26 @@ class Purchase_Results_Page():
         #Display the Go Back Title
         self.GoBack_Title.place(x=22, y=47)
 
+        #Make the request for search
+        self.Search_Results_Outbound = [None] * 5
+        
         for i in range(5):
-            pass
+            self.Search_Results_Outbound[i] = Actual_Search.Search_Outbound()
+            print(self.Search_Results_Outbound[i])
+            self.Flight_Title = tk.Label(self.display_frame, text="Flight "+str(i+1), font=("Arial", 10), bg=main_color)
+            self.Flight_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
+            self.Flight_Number = tk.Label(self.display_frame, text="Flight Number: "+str(self.Search_Results_Outbound[i]), font=("Arial", 10), bg=main_color)
+            self.Flight_Number.pack(ipadx=5, ipady=5, padx=490, pady=3)
+            #self.Departure = tk.Label(self.display_frame, text="Departure: "+str(self.Search_Results_Outbound[i].Departure), font=("Arial", 10), bg=main_color)
+            #self.Departure.pack(ipadx=5, ipady=5, padx=490, pady=3)
+            #self.Arrival = tk.Label(self.display_frame, text="Arrival: "+str(self.Search_Results_Outbound[i].Arrival), font=("Arial", 10), bg=main_color)
+            #self.Arrival.pack(ipadx=5, ipady=5, padx=490, pady=3)
+            #self.Duration = tk.Label(self.display_frame, text="Duration: "+str(self.Search_Results_Outbound[i].Duration), font=("Arial", 10), bg=main_color)
+            #self.Duration.pack(ipadx=5, ipady=5, padx=490, pady=3)
+            #self.Price = tk.Label(self.display_frame, text="Price: "+str(self.Search_Results_Outbound[i].Price), font=("Arial", 10), bg=main_color)
+            #self.Price.pack(ipadx=5, ipady=5, padx=490, pady=3)
+            #self.Space = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
+            #self.Space.pack(ipadx=5, ipady=5, padx=490, pady=3)
     
     def Hide_Button_1(self, empty):
             Launch_Home_Page()
@@ -863,6 +884,11 @@ def Launch_Info_Passengers():
     for widget in main_window.winfo_children():
         widget.destroy()
     Info_Passengers(main_window)
+
+def Launch_Purchase_Results_Page():
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    Purchase_Results_Page(main_window)
 
 def Change_Theme():
     global main_color
@@ -925,5 +951,5 @@ third_color=third_color_light
 fourth_color=fourth_color_light
 main_window.configure(bg=main_color)
 
-Purchase_Results_Page(main_window)
+Home_Page(main_window)
 tk.mainloop()

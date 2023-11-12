@@ -31,25 +31,22 @@ class Actual_Search():
         else :
             print("Complet Actual Search Failed")
 
-    def Search(self):
-        if self.Return_Date=="": # One Way
-            sql="SELECT * FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureDate='{}' AND SeatsAvailable>='{}'".format(self.From,self.To,self.Departure_Date,self.Passengers)
-            result = dbconnect.DBHelper().fetch(sql)
-            if len(result)==0:
-                print("No Flight")
-            else:
-                print("Search Succeed")
-            return result
-        else: # Round Trip
-            sql1="SELECT * FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureDate='{}' AND SeatsAvailable>='{}'".format(self.From,self.To,self.Departure_Date,self.Passengers)
-            result1 = dbconnect.DBHelper().fetch(sql1)
-            sql2="SELECT * FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureDate='{}' AND SeatsAvailable>='{}'".format(self.To,self.From,self.Return_Date,self.Passengers)
-            result2 = dbconnect.DBHelper().fetch(sql2)
-            if (len(result1)==0) & (len(result2)==0):
-                print("No Flight")
-            else:
-                print("Search Succeed")
-                #print(self.From,self.To,self.Departure_Date,self.Return_Date,self.Class,self.Passengers)
-                print(result1)
-                print(result2)
-            return result1,result2
+    def Search_Outbound(self):
+
+        sql="SELECT * FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureDate='{}' AND SeatsAvailable>='{}'".format(self.From,self.To,self.Departure_Date,self.Passengers)
+        result = dbconnect.DBHelper().fetch(sql)
+        if len(result)==0:
+            print("No Flight")
+        else:
+            print("Search Succeed")
+        return result
+
+    def Search_Inbound(self):
+        sql="SELECT * FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureDate='{}' AND SeatsAvailable>='{}'".format(self.To,self.From,self.Return_Date,self.Passengers)
+        result = dbconnect.DBHelper().fetch(sql)
+        if len(result1)==0:
+            print("No Flight")
+        else:
+            print("Search Succeed")
+            print(result)
+        return result
