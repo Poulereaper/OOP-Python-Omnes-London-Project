@@ -576,15 +576,23 @@ class Purchase_Page():
                     tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
             else :
                 try :
-                    departure_date = datetime.datetime.strptime(self.Departure, '%m/%d/%y')
-                    (self.Passengers == int(self.Passengers)) & (self.Passengers > 0) & (self.Passengers < 11)
-                    (self.Class == int(self.Class)) & (self.Class > 0) & (self.Class < 4)
-                    self.From = str(self.From)
-                    self.To = str(self.To)
-                    # Dates are valid
-                    # Now you can use departure_date and return_date as datetime objects
-                    # for further processing.
-                    print("Search Flight")
+                    if (self.Passengers == int(self.Passengers)) & (self.Passengers > 1) & (self.Passengers < 11):
+                        if (self.Class == "Economy") or (self.Class == "Business") or (self.Class =="First Class"):
+                            if (self.From == str(self.From)) & (self.To == str(self.To)):
+                                print("Search Flight")
+                                # Dates are valid
+                                Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                Launch_Info_Passengers()
+
+                        else:
+                            tk.messagebox.showinfo('Error', 'Invalid Class')
+                    elif self.Passengers == 1 :
+                        print("Search Flight")
+                        # Dates are valid
+                        Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                        Launch_Purchase_Results_Page()
+                    else:
+                        tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
                 except ValueError:
                     # Invalid date format
                     tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
