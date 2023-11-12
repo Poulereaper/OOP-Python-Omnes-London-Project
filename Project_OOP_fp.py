@@ -602,6 +602,7 @@ class Info_Passengers():
 
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
         self.Page_Title= tk.Label(self.display_frame, text=" Your Passengers", font=("Arial", 15), bg=main_color, fg=fourth_color)
         self.Info_passengers = tk.Label(self.display_frame, text="Please enter your information", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.GoBack_Title = tk.Label(self.middle_frame, text="<", font=("Arial", 20), bg=main_color)
@@ -686,8 +687,12 @@ class Info_Passengers():
             print(Actual_Search.Passengers_Type)
             print(Actual_Search.Passengers_Type_Number)
 
+    def Hide_Button_1(self, empty):
+        Launch_Home_Page()
+
     def Hide_Button_2(self, empty):
         Launch_Purchase_Page()
+
 
 class Purchase_Results_Page():
     def __init__(self, main_window):
@@ -709,6 +714,7 @@ class Purchase_Results_Page():
 
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
         self.Page_Title= tk.Label(self.display_frame, text=" Your Passengers", font=("Arial", 15), bg=main_color, fg=fourth_color)
         self.GoBack_Title = tk.Label(self.second_top_frame, text="<", font=("Arial", 20), bg=main_color)
         self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
@@ -808,6 +814,9 @@ class Purchase_Results_Page():
 
         for i in range(5):
             pass
+    
+    def Hide_Button_1(self, empty):
+            Launch_Home_Page()
 
     def Hide_Button_2(self, empty):
             Launch_Purchase_Page()
