@@ -851,7 +851,66 @@ class Purchase_Results_Page():
             Launch_Purchase_Page()
     
     def ReSearch_Flight(self):
-        print("Re-Search")
+        #get the input
+        self.From=self.From_Input.get()
+        self.To=self.To_Input.get()
+        self.Departure=self.Departure_Input.get()
+        self.Return=self.Return_Input.get()
+        self.Passengers=Actual_Search.Passengers
+        self.Class=self.Class_Input.get()
+        print(self.From)
+        print(self.To)
+        # Check if the email is a valid
+        if (self.From=='') or (self.To=='') or (self.Departure=='') or (self.Passengers=='') or (self.Class==''):
+            tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        else :
+            if self.Return!='':
+                try :
+                    if self.Departure > self.Return:
+                        tk.messagebox.showinfo('Error', 'Return date must be after departure date')
+                    else :
+                        if (self.Passengers == int(self.Passengers)) & (self.Passengers > 1) & (self.Passengers < 11):
+                            if (self.Class == "Economy") or (self.Class == "Business") or (self.Class =="First Class"):
+                                if (self.From == str(self.From)) & (self.To == str(self.To)):
+                                    print("Search Flight")
+                                    # Dates are valid
+                                    Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                    Launch_Info_Passengers()
+
+                            else:
+                                tk.messagebox.showinfo('Error', 'Invalid Class')
+                        elif self.Passengers == 1 :
+                            print("Search Flight")
+                            # Dates are valid
+                            Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                            Launch_Purchase_Results_Page()
+                        else:
+                            tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
+                except ValueError:
+                    # Invalid date format
+                    tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
+            else :
+                try :
+                    if (self.Passengers == int(self.Passengers)) & (self.Passengers > 1) & (self.Passengers < 11):
+                        if (self.Class == "Economy") or (self.Class == "Business") or (self.Class =="First Class"):
+                            if (self.From == str(self.From)) & (self.To == str(self.To)):
+                                print("Search Flight")
+                                # Dates are valid
+                                Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                Launch_Info_Passengers()
+
+                        else:
+                            tk.messagebox.showinfo('Error', 'Invalid Class')
+                    elif self.Passengers == 1 :
+                        print("Search Flight")
+                        # Dates are valid
+                        Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                        Launch_Purchase_Results_Page()
+                    else:
+                        tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
+                except ValueError:
+                    # Invalid date format
+                    tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
 
 #---------------------## ALL THE FUNCTIONS ##---------------------#
 

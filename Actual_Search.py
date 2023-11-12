@@ -30,6 +30,17 @@ class Actual_Search():
             self.Passengers=Passengers
         else :
             print("Complet Actual Search Failed")
+    
+    def Change_Actual_Search(self,From,To,Departure_Date,Return_Date,Class,Passengers):
+        if self.CompleteAccept():
+            print("Actual Search is empty for the moment")
+        else :
+            self.From=From
+            self.To=To
+            self.Departure_Date=Departure_Date
+            self.Return_Date=Return_Date
+            self.Class=Class
+            self.Passengers=Passengers
 
     def Search_Outbound(self):
 
