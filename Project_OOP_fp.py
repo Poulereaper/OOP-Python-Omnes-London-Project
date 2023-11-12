@@ -639,7 +639,7 @@ class Info_Passengers():
         # Pack the 'Advanced Search' button to the right (east)
         self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         #Display the title
-        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=10)
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=10)
         #Display the Page Title
         self.Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=30)
         #Display the Go Back Title
@@ -689,6 +689,131 @@ class Info_Passengers():
     def Hide_Button_2(self, empty):
         Launch_Purchase_Page()
 
+class Purchase_Results_Page():
+    def __init__(self, main_window):
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.second_top_frame = tk.Frame(main_window, bg=main_color)
+        self.second_top_frame.columnconfigure(0, weight=1)
+        self.second_top_frame.columnconfigure(1, weight=1)
+        self.second_top_frame.columnconfigure(2, weight=1)
+        self.second_top_frame.columnconfigure(3, weight=1)
+        self.second_top_frame.columnconfigure(4, weight=1)
+        self.second_top_frame.columnconfigure(5, weight=1)
+        self.second_top_frame.columnconfigure(6, weight=1)
+        self.second_top_frame.columnconfigure(7, weight=1)
+        self.middle_frame = tk.Frame(main_window, bg=main_color)
+
+        self.scroll_canva = tk.Canvas(self.middle_frame, bg=main_color)
+        self.scroll_canva.config(highlightthickness=0, borderwidth=0)
+        self.display_frame = tk.Frame(self.scroll_canva, bg=main_color)
+
+        #Title
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
+        self.Page_Title= tk.Label(self.display_frame, text=" Your Passengers", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.GoBack_Title = tk.Label(self.second_top_frame, text="<", font=("Arial", 20), bg=main_color)
+        self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
+        self.Space_Title_1 = tk.Label(self.second_top_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title_2 = tk.Label(self.second_top_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.From_Title = tk.Label(self.second_top_frame, text="From", font=("Arial", 10), bg=main_color)
+        self.To_Title = tk.Label(self.second_top_frame, text="To", font=("Arial", 10), bg=main_color)
+        self.Departure_Title = tk.Label(self.second_top_frame, text="Departure", font=("Arial", 10), bg=main_color)
+        self.Return_Title = tk.Label(self.second_top_frame, text="Return *", font=("Arial", 10), bg=main_color)
+        self.Class_Title = tk.Label(self.second_top_frame, text="Class", font=("Arial", 10), bg=main_color)
+
+
+        #Input
+        self.From_Input = tk.Entry(self.second_top_frame)
+        self.To_Input = tk.Entry(self.second_top_frame)
+        self.From_Input.insert(0, Actual_Search.From)
+        self.To_Input.insert(0, Actual_Search.To)
+        self.Departure_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
+        self.Departure_Input.insert(0, Actual_Search.Departure_Date)
+        self.Return_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
+        self.Return_Input.insert(0, Actual_Search.Return_Date)
+        self.Class_Input = ttk.Combobox(self.second_top_frame, values=["Economy", "Business", "First Class"])
+        self.Class_Input.insert(0, Actual_Search.Class)
+
+        # Button
+        if Actual_Customer.LogOrNot == False:
+            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
+        else :
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        self.ReSearch_Button = tk.Button(self.second_top_frame, text='Re-Search', command=self.ReSearch_Flight, font=("Arial", 10), bg=third_color, fg=main_color)
+
+
+        # Pack all wigets
+        #Frame
+        self.top_frame.pack(side=tk.TOP, fill=tk.X)
+        # Add a Canvas widget for drawing the line
+        self.line_canvas = tk.Canvas(main_window, height=3, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
+        self.line_canvas.pack(fill=tk.X)
+        # Create a line under top_frame
+        self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
+        # Pack the 'Sign In or Sign Up' button to the left (west)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
+        # Pack the 'Advanced Search' button to the right (east)
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        #Display the title
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=10)
+
+        self.second_top_frame.pack(side=tk.TOP, fill=tk.X)
+        # Add a Canvas widget for drawing the line
+        self.line_canvas = tk.Canvas(main_window, height=3, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
+        self.line_canvas.pack(fill=tk.X)
+        # Create a line under second_top_frame
+        self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
+        #Display the Space Title
+        self.Space_Title_1.grid(row=0, column=0, padx=10, pady=0, ipadx=5, ipady=0)
+        #From Title
+        self.From_Title.grid(row=1, column=1, padx=10, pady=3, ipadx=5, ipady=0)
+        #From Input
+        self.From_Input.grid(row=2, column=1, padx=10, pady=0, ipadx=5, ipady=5)
+        #To Title
+        self.To_Title.grid(row=1, column=2, padx=10, pady=3, ipadx=5, ipady=0)
+        #To Input
+        self.To_Input.grid(row=2, column=2, padx=10, pady=0, ipadx=5, ipady=5)
+        #Departure Title
+        self.Departure_Title.grid(row=1, column=3, padx=10, pady=3, ipadx=5, ipady=0)
+        #Departure Input
+        self.Departure_Input.grid(row=2, column=3, padx=10, pady=0, ipadx=5, ipady=5)
+        #Return Title
+        self.Return_Title.grid(row=1, column=4, padx=10, pady=3, ipadx=5, ipady=0)
+        #Return Input
+        self.Return_Input.grid(row=2, column=4, padx=10, pady=0, ipadx=5, ipady=5)
+        #Class Title
+        self.Class_Title.grid(row=1, column=5, padx=10, pady=3, ipadx=5, ipady=0)
+        #Class Input
+        self.Class_Input.grid(row=2, column=5, padx=10, pady=0, ipadx=5, ipady=5)
+        #Re-Search Button
+        self.ReSearch_Button.grid(row=2, column=6, padx=5, pady=0, ipadx=5, ipady=5)
+        #Display the Space Title
+        self.Space_Title_2.grid(row=3, column=0, padx=10, pady=0, ipadx=5, ipady=0)
+
+        self.middle_frame.pack(fill=tk.BOTH, expand=True)
+        self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.yscrollbar = tk.Scrollbar(self.middle_frame, orient="vertical", command=self.scroll_canva.yview)
+        self.yscrollbar.pack(side=tk.RIGHT, fill='y')
+        self.scroll_canva.configure(yscrollcommand=self.yscrollbar.set)
+        self.scroll_canva.bind('<Configure>', lambda e: self.scroll_canva.configure(scrollregion = self.scroll_canva.bbox("all")))
+        self.display_frame.pack(fill=tk.BOTH, expand=True)
+        self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
+
+        #Display the Page Title
+        self.Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=30)
+        #Display the Go Back Title
+        self.GoBack_Title.place(x=22, y=47)
+
+        for i in range(5):
+            pass
+
+    def Hide_Button_2(self, empty):
+            Launch_Purchase_Page()
+    
+    def ReSearch_Flight(self):
+        print("Re-Search")
 
 #---------------------## ALL THE FUNCTIONS ##---------------------#
 
@@ -791,5 +916,5 @@ third_color=third_color_light
 fourth_color=fourth_color_light
 main_window.configure(bg=main_color)
 
-Home_Page(main_window)
+Purchase_Results_Page(main_window)
 tk.mainloop()
