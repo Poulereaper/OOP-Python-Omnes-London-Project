@@ -604,6 +604,8 @@ class Info_Passengers():
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Page_Title= tk.Label(self.display_frame, text=" Your Passengers", font=("Arial", 15), bg=main_color, fg=fourth_color)
         self.Info_passengers = tk.Label(self.display_frame, text="Please enter your information", font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.GoBack_Title = tk.Label(self.middle_frame, text="<", font=("Arial", 20), bg=main_color)
+        self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
         self.Space_Title_1 = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
         self.Space_Title_2 = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
 
@@ -640,6 +642,8 @@ class Info_Passengers():
         self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=10)
         #Display the Page Title
         self.Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=30)
+        #Display the Go Back Title
+        self.GoBack_Title.place(x=22, y=15)
         #Display the Info Title
         self.Info_passengers.pack(ipadx=5, ipady=5, padx=490, pady=0)
         #Display the Space Title
@@ -682,7 +686,8 @@ class Info_Passengers():
             print(Actual_Search.Passengers_Type)
             print(Actual_Search.Passengers_Type_Number)
 
-
+    def Hide_Button_2(self, empty):
+        Launch_Purchase_Page()
 
 
 #---------------------## ALL THE FUNCTIONS ##---------------------#
