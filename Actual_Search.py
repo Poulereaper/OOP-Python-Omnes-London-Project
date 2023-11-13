@@ -50,6 +50,7 @@ class Actual_Search():
             print("No Flight")
         else:
             print("Search Succeed")
+            print(result[0]['FlightID'])
         return result
 
     def Search_Inbound(self):
