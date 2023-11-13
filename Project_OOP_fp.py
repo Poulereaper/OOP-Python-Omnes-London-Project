@@ -472,13 +472,25 @@ class Purchase_Page():
         #Input
         self.From_Input = tk.Entry(self.second_top_frame)
         self.To_Input = tk.Entry(self.second_top_frame)
-        self.From_Input.insert(0, "London")
-        self.To_Input.insert(0, "New York")
         self.Departure_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
         #self.Return_Input_Radio = tk.Radiobutton(self.second_top_frame, text="Return", value=1)
         self.Return_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
         self.Passengers_Input = tk.Spinbox(self.third_top_frame, from_=1, to=10)
         self.Class_Input = ttk.Combobox(self.third_top_frame, values=["Economy", "Business", "First Class"])
+        if Actual_Search.CompleteAccept():
+            self.From_Input.insert(0, "London")
+            self.To_Input.insert(0, "New York")
+        else :
+            self.From_Input.insert(1, Actual_Search.From)
+            self.To_Input.insert(0, Actual_Search.To)
+            self.Departure_Input.delete(0, tk.END)
+            self.Departure_Input.insert(0, Actual_Search.Departure_Date)
+            self.Return_Input.delete(0, tk.END)
+            self.Return_Input.insert(0, Actual_Search.Return_Date)
+            self.Passengers_Input.delete(0, tk.END)
+            self.Passengers_Input.insert(0, Actual_Search.Passengers)
+            self.Class_Input.delete(0, tk.END)
+            self.Class_Input.insert(0, Actual_Search.Class)
 
 
         # Pack all wigets
@@ -559,16 +571,23 @@ class Purchase_Page():
                                 if (self.From == str(self.From)) & (self.To == str(self.To)):
                                     print("Search Flight")
                                     # Dates are valid
-                                    Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
-                                    Launch_Info_Passengers()
-
+                                    if Actual_Search.CompleteAccept():
+                                        Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                        Launch_Info_Passengers()
+                                    else :
+                                        Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                        Launch_Info_Passengers()
                             else:
                                 tk.messagebox.showinfo('Error', 'Invalid Class')
                         elif self.Passengers == 1 :
                             print("Search Flight")
                             # Dates are valid
-                            Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
-                            Launch_Purchase_Results_Page()
+                            if Actual_Search.CompleteAccept():
+                                Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                Launch_Purchase_Results_Page()
+                            else : 
+                                Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                Launch_Purchase_Results_Page()
                         else:
                             tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
                 except ValueError:
@@ -580,17 +599,24 @@ class Purchase_Page():
                         if (self.Class == "Economy") or (self.Class == "Business") or (self.Class =="First Class"):
                             if (self.From == str(self.From)) & (self.To == str(self.To)):
                                 print("Search Flight")
-                                # Dates are valid
-                                Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
-                                Launch_Info_Passengers()
+                                if Actual_Search.CompleteAccept():
+                                        Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                        Launch_Info_Passengers()
+                                else :
+                                    Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                    Launch_Info_Passengers()
 
                         else:
                             tk.messagebox.showinfo('Error', 'Invalid Class')
                     elif self.Passengers == 1 :
                         print("Search Flight")
                         # Dates are valid
-                        Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
-                        Launch_Purchase_Results_Page()
+                        if Actual_Search.CompleteAccept():
+                                Actual_Search.Complet_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                                Launch_Purchase_Results_Page()
+                        else : 
+                            Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
+                            Launch_Purchase_Results_Page()
                     else:
                         tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
                 except ValueError:
@@ -670,6 +696,8 @@ class Info_Passengers():
             self.Passsenger_Title = tk.Label(self.display_frame, text="Passenger "+str(i+1), font=("Arial", 10), bg=main_color)
             self.Passsenger_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
             self.Passenger_Type = ttk.Combobox(self.display_frame, values=["Adult", "Child", "Senior", "Student"], textvariable=self.pass_type[i])
+            if Actual_Search.Passengers_Type[i] != None:
+                self.Passenger_Type.insert(0, Actual_Search.Passengers_Type[i])
             self.Passenger_Type.pack(ipadx=5, ipady=5, padx=490, pady=3)
         self.Space_Title_2.pack(ipadx=5, ipady=5, padx=10, pady=10)
         #Display the Buy Now Button
@@ -744,8 +772,10 @@ class Purchase_Results_Page():
         self.From_Input.insert(0, Actual_Search.From)
         self.To_Input.insert(0, Actual_Search.To)
         self.Departure_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
+        self.Departure_Input.delete(0, tk.END)
         self.Departure_Input.insert(0, Actual_Search.Departure_Date)
         self.Return_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
+        self.Return_Input.delete(0, tk.END)
         self.Return_Input.insert(0, Actual_Search.Return_Date)
         self.Class_Input = ttk.Combobox(self.second_top_frame, values=["Economy", "Business", "First Class"])
         self.Class_Input.insert(0, Actual_Search.Class)
