@@ -858,21 +858,25 @@ class Purchase_Results_Page():
         
         for i in range(5):
             self.Search_Results_Outbound[i] = Actual_Search.Search_Outbound()
-            print(self.Search_Results_Outbound[i])
+            #print(self.Search_Results_Outbound[i])
+            
             self.Flight_Title = tk.Label(self.display_frame, text="Flight "+str(i+1), font=("Arial", 10), bg=main_color)
             self.Flight_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
-            self.Flight_Number = tk.Label(self.display_frame, text="Flight Number: "+str(self.Search_Results_Outbound[i]), font=("Arial", 10), bg=main_color)
-            self.Flight_Number.pack(ipadx=5, ipady=5, padx=490, pady=3)
-            #self.Departure = tk.Label(self.display_frame, text="Departure: "+str(self.Search_Results_Outbound[i].Departure), font=("Arial", 10), bg=main_color)
-            #self.Departure.pack(ipadx=5, ipady=5, padx=490, pady=3)
-            #self.Arrival = tk.Label(self.display_frame, text="Arrival: "+str(self.Search_Results_Outbound[i].Arrival), font=("Arial", 10), bg=main_color)
-            #self.Arrival.pack(ipadx=5, ipady=5, padx=490, pady=3)
-            #self.Duration = tk.Label(self.display_frame, text="Duration: "+str(self.Search_Results_Outbound[i].Duration), font=("Arial", 10), bg=main_color)
-            #self.Duration.pack(ipadx=5, ipady=5, padx=490, pady=3)
-            #self.Price = tk.Label(self.display_frame, text="Price: "+str(self.Search_Results_Outbound[i].Price), font=("Arial", 10), bg=main_color)
-            #self.Price.pack(ipadx=5, ipady=5, padx=490, pady=3)
-            #self.Space = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
-            #self.Space.pack(ipadx=5, ipady=5, padx=490, pady=3)
+            
+            # Create a canvas widget
+            self.canvas = tk.Canvas(self.display_frame, width=1000, height=150, bg=main_color, highlightthickness=0, borderwidth=0)
+            self.canvas.bind("<Button-1>", self.Hide_Button_1)
+            self.canvas.pack()
+            
+            # Draw a rectangle on the canvas
+            self.canvas.create_rectangle(10, 10, 950, 140, outline='black', width=2)
+            
+            # Print information in the rectangle
+            #self.canvas.create_text(20, 20, anchor='nw', text="Flight Number: "+str(self.Search_Results_Outbound[i]), font=("Arial", 10))
+            self.canvas.create_text(20, 40, anchor='nw', text="Departure: "+str(self.Search_Results_Outbound[i][0]['FlightNumber']), font=("Arial", 10))
+            self.canvas.create_text(20, 60, anchor='nw', text="Arrival: "+str(self.Search_Results_Outbound[i][0]['Departure']), font=("Arial", 10))
+            self.canvas.create_text(20, 80, anchor='nw', text="Duration: "+str(self.Search_Results_Outbound[i][0]['Arrival']), font=("Arial", 10))
+            self.canvas.create_text(400, 20, anchor='ne', text="Price: "+str(self.Search_Results_Outbound[i][0]['Price']), font=("Arial", 10))
     
     def Hide_Button_1(self, empty):
             Launch_Home_Page()
@@ -941,6 +945,9 @@ class Purchase_Results_Page():
                 except ValueError:
                     # Invalid date format
                     tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
+
+    def Hide_Button_1(self, empty):
+        Launch_Home_Page()
 
 #---------------------## ALL THE FUNCTIONS ##---------------------#
 
