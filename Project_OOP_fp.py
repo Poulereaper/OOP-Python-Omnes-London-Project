@@ -478,8 +478,8 @@ class Purchase_Page():
         self.Passengers_Input = tk.Spinbox(self.third_top_frame, from_=1, to=10)
         self.Class_Input = ttk.Combobox(self.third_top_frame, values=["Economy", "Business", "First Class"])
         if Actual_Search.CompleteAccept():
-            self.From_Input.insert(0, "London")
-            self.To_Input.insert(0, "New York")
+            self.From_Input.insert(0, "New York")
+            self.To_Input.insert(0, "Los Angeles")
         else :
             self.From_Input.insert(1, Actual_Search.From)
             self.To_Input.insert(0, Actual_Search.To)
@@ -735,6 +735,9 @@ class Info_Passengers():
 
 class Purchase_Results_Page():
     def __init__(self, main_window):
+        self.Price_display=0
+        self.Total_Price_display=0
+
         self.top_frame = tk.Frame(main_window, bg=main_color)
         self.second_top_frame = tk.Frame(main_window, bg=main_color)
         self.second_top_frame.columnconfigure(0, weight=1)
@@ -855,34 +858,56 @@ class Purchase_Results_Page():
 
         #Make the request for search
         self.Search_Results_Outbound = [None] * 5
+
+        fly_image = Image.open("./images/avion_res.png")
+        #fly_photo = ImageTk.PhotoImage(fly_image)
+        fly_photo=[None]*5
         
         for i in range(5):
+            self.Price_display=0
+            self.Total_Price_display=0
+            fly_photo[i] = ImageTk.PhotoImage(fly_image)
             self.Search_Results_Outbound[i] = Actual_Search.Search_Outbound()
+            self.TimeToPass=self.Search_Results_Outbound[i][0]['DepartureTime']
             #print(self.Search_Results_Outbound[i])
-            
-            self.Flight_Title = tk.Label(self.display_frame, text="Flight "+str(i+1), font=("Arial", 10), bg=main_color)
-            self.Flight_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
+            #self.Flight_Title = tk.Label(self.display_frame, text="Flight "+str(i+1), font=("Arial", 10), bg=main_color)
+            #self.Flight_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
             
             # Create a canvas widget
-            self.canvas = tk.Canvas(self.display_frame, width=1000, height=150, bg=main_color, highlightthickness=0, borderwidth=0)
-            self.canvas.bind("<Button-1>", self.Hide_Button_1)
-            self.canvas.pack()
-            
+            self.canvas = tk.Canvas(self.display_frame, width=950, height=200, bg=main_color, highlightthickness=0, borderwidth=0)
+            self.canvas.bind("<Button-1>", lambda event, param=self.TimeToPass: self.FLight_Select(event, param))
+            self.canvas.pack(pady=15)
             # Draw a rectangle on the canvas
-            self.canvas.create_rectangle(10, 10, 950, 140, outline='black', width=2)
+            self.canvas.create_rectangle(0, 0, 950, 200, outline='black', width=2)
             
             # Print information in the rectangle
             #self.canvas.create_text(20, 20, anchor='nw', text="Flight Number: "+str(self.Search_Results_Outbound[i]), font=("Arial", 10))
-            self.canvas.create_text(20, 40, anchor='nw', text="Departure: "+str(self.Search_Results_Outbound[i][0]['FlightNumber']), font=("Arial", 10))
-            self.canvas.create_text(20, 60, anchor='nw', text="Arrival: "+str(self.Search_Results_Outbound[i][0]['Departure']), font=("Arial", 10))
-            self.canvas.create_text(20, 80, anchor='nw', text="Duration: "+str(self.Search_Results_Outbound[i][0]['Arrival']), font=("Arial", 10))
-            self.canvas.create_text(400, 20, anchor='ne', text="Price: "+str(self.Search_Results_Outbound[i][0]['Price']), font=("Arial", 10))
-    
+            self.canvas.create_image(10, 10, anchor='nw', image=fly_photo[i], tags=("fly"+str(i)))
+            self.canvas.create_text(380, 40, anchor='nw', text="Flight Number: "+str(self.Search_Results_Outbound[i][0]['FlightNumber']), font=("Arial", 10))
+            self.canvas.create_text(380, 60, anchor='nw', text="Departure: "+str(self.Search_Results_Outbound[i][0]['Departure']), font=("Arial", 10))
+            self.canvas.create_text(380, 80, anchor='nw', text="Arrival: "+str(self.Search_Results_Outbound[i][0]['Arrival']), font=("Arial", 10))
+            if Actual_Search.Passengers == 1:
+                self.Total_Price_display=float(self.Search_Results_Outbound[i][0]['Price'])*Actual_Search.Class_Type
+            else :
+                for j in range(Actual_Search.Passengers):
+                    self.Total_Price_display+=(float(self.Search_Results_Outbound[i][0]['Price'])*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type
+            self.Price_display=round(self.Price_display, 2)
+            self.canvas.create_text(760, 40, anchor='ne', text=str(self.Total_Price_display)+"£", font=("Arial", 15))
+            self.Price_display=round(float(self.Search_Results_Outbound[i][0]['Price'])*Actual_Search.Class_Type,2)
+            self.canvas.create_text(760, 70, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
+            self.canvas.create_text(380, 120, anchor='nw', text="Departure Time: "+str(self.Search_Results_Outbound[i][0]['DepartureTime']), font=("Arial", 10))
+            self.canvas.create_text(580, 120, anchor='nw', text="Arrival Time: "+str(self.Search_Results_Outbound[i][0]['ArrivalTime']), font=("Arial", 10))
+
     def Hide_Button_1(self, empty):
-            Launch_Home_Page()
+        Launch_Home_Page()
 
     def Hide_Button_2(self, empty):
-            Launch_Purchase_Page()
+        Launch_Purchase_Page()
+    
+    def FLight_Select(self, event, DepartureTime):
+        print("Time "+str(DepartureTime)+" Selected")
+        #Actual_Search.Flight_Selected_Outbound=self.Search_Results_Outbound[param]
+        Launch_Flight_Results_Page(param)
     
     def ReSearch_Flight(self):
         #get the input
@@ -946,9 +971,48 @@ class Purchase_Results_Page():
                     # Invalid date format
                     tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
 
+
+class Flight_Results_Page():
+    def __init__(self, main_window):
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.middle_frame = tk.Frame(main_window, bg=main_color)
+
+        self.scroll_canva = tk.Canvas(self.middle_frame, bg=main_color)
+        self.scroll_canva.config(highlightthickness=0, borderwidth=0)
+        self.display_frame = tk.Frame(self.scroll_canva, bg=main_color)
+
+        #Title
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
+        self.Page_Title= tk.Label(self.display_frame, text=" Your Passengers", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.Info_passengers = tk.Label(self.display_frame, text="Please enter your information", font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.GoBack_Title = tk.Label(self.middle_frame, text="<", font=("Arial", 20), bg=main_color)
+        self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
+        self.Space_Title_1 = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title_2 = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
+
+        # Create 
+        if Actual_Customer.LogOrNot == False:
+            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
+        else :
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        self.AddBasket_Button = tk.Button(self.display_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
+
+        # Pack all wigets
+        #Frame
+        self.top_frame.pack(side=tk.TOP, fill=tk.X)
+        # Add a Canvas widget for drawing the line
+        self.line_canvas = tk.Canvas(main_window, height=3, bg=second_color)
+    
     def Hide_Button_1(self, empty):
         Launch_Home_Page()
+    
+    def Hide_Button_2(self, empty):
+        Launch_Purchase_Results_Page()
 
+    def AddBasket(self):
+        print("okok")
 #---------------------## ALL THE FUNCTIONS ##---------------------#
 
 ## Opennig Pages ##
@@ -993,6 +1057,12 @@ def Launch_Purchase_Results_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
     Purchase_Results_Page(main_window)
+
+def Launch_Flight_Results_Page(Timepls):
+    print("eeeeh mon num c'est ca : ",Timepls)
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    Flight_Results_Page(main_window)
 
 def Change_Theme():
     global main_color

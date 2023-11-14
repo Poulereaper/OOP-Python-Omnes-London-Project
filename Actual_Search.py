@@ -8,13 +8,14 @@ class Actual_Search():
         self.To=""
         self.Departure_Date=""
         self.Return_Date=""
-        self.Class=0
+        self.Class=""
+        self.Class_Type = 0
         self.Passengers=0
         self.Passengers_Type = [None]*11
         self.Passengers_Type_Number=[None]*11
 
     def CompleteAccept(self):
-        if (self.From=="") & (self.To=="") & (self.Departure_Date=="") & (self.Return_Date=="") & (self.Class==0) & (self.Passengers==0):
+        if (self.From=="") & (self.To=="") & (self.Departure_Date=="") & (self.Return_Date=="") & (self.Class=="") & (self.Passengers==0):
             return True
         else:
             return False
@@ -27,6 +28,12 @@ class Actual_Search():
             self.Departure_Date=Departure_Date
             self.Return_Date=Return_Date
             self.Class=Class
+            if Class=="Economy":
+                self.Class_Type=1
+            elif Class=="Business":
+                self.Class_Type=1.3
+            elif Class=="First Class":
+                self.Class_Type=2.5
             self.Passengers=Passengers
         else :
             print("Complet Actual Search Failed")
@@ -40,6 +47,12 @@ class Actual_Search():
             self.Departure_Date=Departure_Date
             self.Return_Date=Return_Date
             self.Class=Class
+            if Class=="Economy":
+                self.Class_Type=1
+            elif Class=="Business":
+                self.Class_Type=1.3
+            elif Class=="First Class":
+                self.Class_Type=2.5
             self.Passengers=Passengers
 
     def Search_Outbound(self):
