@@ -932,9 +932,12 @@ class Purchase_Results_Page():
     def FLight_Select(self, event, param):
         #print("Time "+str(DepartureTime)+" Selected")
         #Actual_Search.Flight_Selected_Outbound=self.Search_Results_Outbound[param]
-        Actual_Outbound_Flight.Complete_Outbound_Flight(param[0]['FlightID'], param[0]['Airline'], param[0]['FlightNumber'], param[0]['Departure'], param[0]['DepartureDate'], param[0]['DepartureTime'], param[0]['Arrival'], param[0]['ArrivalDate'], param[0]['ArrivalTime'], param[0]['Duration'], param[0]['Price'], param[0]['Discount'], param[0]['Seats'], param[0]['SeatsAvailable'], Actual_Search.Class_Type, Actual_Search.Passengers, Actual_Search.Passengers_Type_Number)
+        if Actual_Outbound_Flight.Flight_Number==None:
+            Actual_Outbound_Flight.Complete_Outbound_Flight(param[0]['FlightID'], param[0]['Airline'], param[0]['FlightNumber'], param[0]['Departure'], param[0]['DepartureDate'], param[0]['DepartureTime'], param[0]['Arrival'], param[0]['ArrivalDate'], param[0]['ArrivalTime'], param[0]['Duration'], param[0]['Price'], param[0]['Discount'], param[0]['Seats'], param[0]['SeatsAvailable'], Actual_Search.Class_Type, Actual_Search.Passengers, Actual_Search.Passengers_Type_Number)
+        else:
+            Actual_Inbound_Flight.Complete_Inbound_Flight(param[0]['FlightID'], param[0]['Airline'], param[0]['FlightNumber'], param[0]['Departure'], param[0]['DepartureDate'], param[0]['DepartureTime'], param[0]['Arrival'], param[0]['ArrivalDate'], param[0]['ArrivalTime'], param[0]['Duration'], param[0]['Price'], param[0]['Discount'], param[0]['Seats'], param[0]['SeatsAvailable'], Actual_Search.Class_Type, Actual_Search.Passengers, Actual_Search.Passengers_Type_Number)
         Launch_Flight_Results_Page()
-    
+
     def ReSearch_Flight(self):
         #get the input
         self.From=self.From_Input.get()

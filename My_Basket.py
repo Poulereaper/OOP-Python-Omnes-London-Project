@@ -14,13 +14,13 @@ class Basket():
         self.Inbound_Flight_B = Inbound_Flight
         if self.Inbound_Flight_B.Flight_ID==None:
             if self.Outbound_Flight_B.Passengers==1:
-                self.Basket_Total_Price = self.Outbound_Flight_B.Price*Outbound_Flight.Class_Type
+                self.Basket_Total_Price = float(self.Outbound_Flight_B.Price*Outbound_Flight.Class_Type)
             else:
                 for j in range(Outbound_Flight.Passengers):
                     self.Basket_Total_Price += float(((self.Outbound_Flight_B.Price*Outbound_Flight.Passengers_Type_Number)*Outbound_Flight.Class_Type))
         else:
             if self.Outbound_Flight_B.Passengers==1:
-                self.Basket_Total_Price = self.Outbound_Flight_B.Price*Outbound_Flight.Class_Type[0] + self.Inbound_Flight_B.Price*Inbound_Flight.Class_Type
+                self.Basket_Total_Price = float(self.Outbound_Flight_B.Price*Outbound_Flight.Class_Type + self.Inbound_Flight_B.Price*Inbound_Flight.Class_Type)
             else:
                 for j in range(Outbound_Flight.Passengers):
                     self.Basket_Total_Price += float(((self.Outbound_Flight_B.Price*Outbound_Flight.Passengers_Type_Number)*Outbound_Flight.Class_Type)) + float(((self.Inbound_Flight_B.Flight_Price*Inbound_Flight.Passenger_Type)*Inbound_Flight.Class_Type))

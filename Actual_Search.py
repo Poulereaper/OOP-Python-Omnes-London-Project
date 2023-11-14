@@ -62,7 +62,7 @@ class Actual_Search():
         if len(result)==0:
             print("No Flight")
         else:
-            print("Search Succeed")
+            print("Search Outbound Succeed")
             print(result[0]['FlightID'])
         return result
 
@@ -72,8 +72,8 @@ class Actual_Search():
         if len(result)==0:
             print("No Flight")
         else:
-            print("Search Succeed")
-            print(result)
+            print("Search Return Succeed")
+            print(result[0]['FlightID'])
         return result
 
     def Rest_Search(self):
