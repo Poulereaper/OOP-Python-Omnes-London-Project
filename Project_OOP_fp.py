@@ -1045,7 +1045,6 @@ class Flight_Results_Page():
         self.Total_Price=0
 
         if Actual_Search.Passengers == 1:
-            print()
             self.Total_Price=float(Actual_Outbound_Flight.Price*Actual_Search.Class_Type)
         else :
             for j in range(Actual_Search.Passengers):
@@ -1109,8 +1108,11 @@ class Flight_Results_Page():
         Launch_Purchase_Results_Page()
 
     def AddBasket(self):
+        print("good")
         Actual_Basket.Complete_Basket(Actual_Outbound_Flight, Actual_Inbound_Flight)
+        print("maybe good")
         print(Actual_Basket.Outbound_Flight_B.Flight_Number)
+        print("not good")
         print(Actual_Basket.Inbound_Flight_B.Flight_Number)
         print(Actual_Basket.Basket_Total_Price)
 #---------------------## ALL THE FUNCTIONS ##---------------------#

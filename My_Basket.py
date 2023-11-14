@@ -12,18 +12,19 @@ class Basket():
     def Complete_Basket(self, Outbound_Flight, Inbound_Flight):
         self.Outbound_Flight_B = Outbound_Flight
         self.Inbound_Flight_B = Inbound_Flight
-        if self.Inbound_Flight_B.Flight_ID==None:
+        print("print du test : ", self.Inbound_Flight_B.Flight_Number)
+        if self.Inbound_Flight_B.Flight_Number==None:
             if self.Outbound_Flight_B.Passengers==1:
                 self.Basket_Total_Price = float(self.Outbound_Flight_B.Price*Outbound_Flight.Class_Type)
             else:
                 for j in range(Outbound_Flight.Passengers):
-                    self.Basket_Total_Price += float(((self.Outbound_Flight_B.Price*Outbound_Flight.Passengers_Type_Number)*Outbound_Flight.Class_Type))
+                    self.Basket_Total_Price += float(((self.Outbound_Flight_B.Price*Outbound_Flight.Passengers_Type_Number[j])*Outbound_Flight.Class_Type))
         else:
             if self.Outbound_Flight_B.Passengers==1:
                 self.Basket_Total_Price = float(self.Outbound_Flight_B.Price*Outbound_Flight.Class_Type + self.Inbound_Flight_B.Price*Inbound_Flight.Class_Type)
             else:
                 for j in range(Outbound_Flight.Passengers):
-                    self.Basket_Total_Price += float(((self.Outbound_Flight_B.Price*Outbound_Flight.Passengers_Type_Number)*Outbound_Flight.Class_Type)) + float(((self.Inbound_Flight_B.Flight_Price*Inbound_Flight.Passenger_Type)*Inbound_Flight.Class_Type))
+                    self.Basket_Total_Price += (float(((self.Outbound_Flight_B.Price*Outbound_Flight.Passengers_Type_Number[j])*Outbound_Flight.Class_Type)) + float(((self.Inbound_Flight_B.Price*Inbound_Flight.Passengers_Type_Number[j]))*Inbound_Flight.Class_Type))
         self.Basket_Total_Price = round(self.Basket_Total_Price,2)
         self.Basket_date = datetime.datetime.now()
     
