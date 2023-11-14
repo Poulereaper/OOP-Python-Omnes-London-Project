@@ -8,6 +8,7 @@ import dbconnect
 import Actual_Customer as AC
 import Actual_Search as AS
 import Actual_Flight as AF
+import My_Basket as AB
 import re
 from PIL import Image, ImageTk
 import datetime
@@ -496,8 +497,8 @@ class Purchase_Page():
         self.Passengers_Input = tk.Spinbox(self.third_top_frame, from_=1, to=10)
         self.Class_Input = ttk.Combobox(self.third_top_frame, values=["Economy", "Business", "First Class"])
         if Actual_Search.CompleteAccept():
-            self.From_Input.insert(0, "New York")
-            self.To_Input.insert(0, "Paris")
+            self.From_Input.insert(0, "Paris")
+            self.To_Input.insert(0, "New York")
             #Remove for final version
             self.Class_Input.delete(0, tk.END)
             self.Class_Input.insert(0, "First Class")
@@ -888,7 +889,10 @@ class Purchase_Results_Page():
             self.Price_display=0
             self.Total_Price_display=0
             fly_photo[i] = ImageTk.PhotoImage(fly_image)
-            self.Search_Results_Outbound[i] = Actual_Search.Search_Outbound()
+            if Actual_Outbound_Flight.Flight_Number!=None:
+                self.Search_Results_Outbound[i] = Actual_Search.Search_Inbound()
+            else:
+                self.Search_Results_Outbound[i] = Actual_Search.Search_Outbound()
             #self.TimeToPass=self.Search_Results_Outbound[i][0]['DepartureTime']
             #print(self.Search_Results_Outbound[i])
             #self.Flight_Title = tk.Label(self.display_frame, text="Flight "+str(i+1), font=("Arial", 10), bg=main_color)
@@ -1018,14 +1022,16 @@ class Flight_Results_Page():
         self.Space_Title_1 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
         self.Space_Title_2 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
 
-        # Create 
+        # BUttonq
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
-        self.AddBasket_Button = tk.Button(self.left_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
+        self.AddBasket_Button = tk.Button(self.right_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
+        self.Chose_Return_Button = tk.Button(self.left_frame, text='Choose Return', command=Launch_Purchase_Results_Page, font=("Arial", 15), bg=third_color, fg=main_color)
 
+        #Info
         self.Flight_Title = tk.Label(self.right_frame, text="Flight Number: "+str(Actual_Outbound_Flight.Flight_Number), font=("Arial", 11), bg=main_color)
         self.Departure_Title = tk.Label(self.right_frame, text="Departure: "+str(Actual_Outbound_Flight.Departure_Airport), font=("Arial", 11), bg=main_color)
         self.Arrival_Title = tk.Label(self.right_frame, text="Arrival: "+str(Actual_Outbound_Flight.Arrival_Airport), font=("Arial", 11), bg=main_color)
@@ -1036,7 +1042,8 @@ class Flight_Results_Page():
         self.Total_Price=0
 
         if Actual_Search.Passengers == 1:
-            self.Total_Price=float(Actual_Outbound_Flight.Price)*Actual_Search.Class_Type
+            print()
+            self.Total_Price=float(Actual_Outbound_Flight.Price*Actual_Search.Class_Type)
         else :
             for j in range(Actual_Search.Passengers):
                 self.Total_Price+=(float(Actual_Outbound_Flight.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type
@@ -1088,7 +1095,9 @@ class Flight_Results_Page():
         #Display the Space Title
         #self.Space_Title_2.pack(ipadx=5, ipady=5, padx=10, pady=10)
         #Display the Add to basket Button
-        self.AddBasket_Button.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.AddBasket_Button.place(x=43, y=280)
+        #Display the Choose Return Button
+        self.Chose_Return_Button.pack(ipadx=5, ipady=5, padx=0, pady=10)
     
     def Hide_Button_1(self, empty):
         Launch_Home_Page()
@@ -1097,7 +1106,10 @@ class Flight_Results_Page():
         Launch_Purchase_Results_Page()
 
     def AddBasket(self):
-        print("okok")
+        Actual_Basket.Complete_Basket(Actual_Outbound_Flight, Actual_Inbound_Flight)
+        print(Actual_Basket.Outbound_Flight_B.Flight_Number)
+        print(Actual_Basket.Inbound_Flight_B.Flight_Number)
+        print(Actual_Basket.Basket_Total_Price)
 #---------------------## ALL THE FUNCTIONS ##---------------------#
 
 ## Opennig Pages ##
@@ -1105,7 +1117,6 @@ class Flight_Results_Page():
 def Launch_Home_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
-    #main_window['bg']="#0d3562"
     Home_Page(main_window)
 
 def Launch_LogIn_Page():
@@ -1194,6 +1205,7 @@ Actual_Customer.LogOrNot = False
 Actual_Search = AS.Actual_Search()
 Actual_Outbound_Flight = AF.Outbound_Flight()
 Actual_Inbound_Flight = AF.Inbound_Flight()
+Actual_Basket = AB.Basket()
 
 #Light Theme
 main_color_light="#fff7ea"

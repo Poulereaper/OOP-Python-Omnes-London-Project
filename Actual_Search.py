@@ -69,9 +69,20 @@ class Actual_Search():
     def Search_Inbound(self):
         sql="SELECT * FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureDate='{}' AND SeatsAvailable>='{}'".format(self.To,self.From,self.Return_Date,self.Passengers)
         result = dbconnect.DBHelper().fetch(sql)
-        if len(result1)==0:
+        if len(result)==0:
             print("No Flight")
         else:
             print("Search Succeed")
             print(result)
         return result
+
+    def Rest_Search(self):
+        self.From=""
+        self.To=""
+        self.Departure_Date=""
+        self.Return_Date=""
+        self.Class=""
+        self.Class_Type = 0
+        self.Passengers=0
+        self.Passengers_Type = [None]*11
+        self.Passengers_Type_Number=[None]*11
