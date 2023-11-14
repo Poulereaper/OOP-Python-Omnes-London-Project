@@ -31,6 +31,14 @@ class Home_Page():
 
     
         #Title
+        bg_image_two = Image.open("./images/photologo.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image de fond
+        canvas = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas.place(x=400,y=-5)
+        canvas.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas.image = bg_photo_two
+
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Pres_OOPAirLine = tk.Label(self.right_frame, text="Welcome to OOP Air Line", font=("Arial", 15))
 
