@@ -7,6 +7,7 @@ from tkcalendar import DateEntry
 import dbconnect
 import Actual_Customer as AC
 import Actual_Search as AS
+import Actual_Flight as AF
 import re
 from PIL import Image, ImageTk
 import datetime
@@ -757,7 +758,7 @@ class Purchase_Results_Page():
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
-        self.Page_Title= tk.Label(self.display_frame, text=" Your Passengers", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.Page_Title= tk.Label(self.display_frame, text=" Choose your Flight Hour", font=("Arial", 15), bg=main_color, fg=fourth_color)
         self.GoBack_Title = tk.Label(self.second_top_frame, text="<", font=("Arial", 20), bg=main_color)
         self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
         self.Space_Title_1 = tk.Label(self.second_top_frame, text=" ", font=("Arial", 10), bg=main_color)
@@ -856,7 +857,7 @@ class Purchase_Results_Page():
         #Display the Go Back Title
         self.GoBack_Title.place(x=22, y=47)
 
-        #Make the request for search
+        #Make search
         self.Search_Results_Outbound = [None] * 5
 
         fly_image = Image.open("./images/avion_res.png")
@@ -868,14 +869,14 @@ class Purchase_Results_Page():
             self.Total_Price_display=0
             fly_photo[i] = ImageTk.PhotoImage(fly_image)
             self.Search_Results_Outbound[i] = Actual_Search.Search_Outbound()
-            self.TimeToPass=self.Search_Results_Outbound[i][0]['DepartureTime']
+            #self.TimeToPass=self.Search_Results_Outbound[i][0]['DepartureTime']
             #print(self.Search_Results_Outbound[i])
             #self.Flight_Title = tk.Label(self.display_frame, text="Flight "+str(i+1), font=("Arial", 10), bg=main_color)
             #self.Flight_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
             
             # Create a canvas widget
             self.canvas = tk.Canvas(self.display_frame, width=950, height=200, bg=main_color, highlightthickness=0, borderwidth=0)
-            self.canvas.bind("<Button-1>", lambda event, param=self.TimeToPass: self.FLight_Select(event, param))
+            self.canvas.bind("<Button-1>", lambda event, param=self.Search_Results_Outbound[i]: self.FLight_Select(event, param))
             self.canvas.pack(pady=15)
             # Draw a rectangle on the canvas
             self.canvas.create_rectangle(0, 0, 950, 200, outline='black', width=2)
@@ -904,10 +905,11 @@ class Purchase_Results_Page():
     def Hide_Button_2(self, empty):
         Launch_Purchase_Page()
     
-    def FLight_Select(self, event, DepartureTime):
-        print("Time "+str(DepartureTime)+" Selected")
+    def FLight_Select(self, event, param):
+        #print("Time "+str(DepartureTime)+" Selected")
         #Actual_Search.Flight_Selected_Outbound=self.Search_Results_Outbound[param]
-        Launch_Flight_Results_Page(param)
+        Actual_Outbound_Flight.Complete_Outbound_Flight(param[0]['FlightID'], param[0]['Airline'], param[0]['FlightNumber'], param[0]['Departure'], param[0]['DepartureDate'], param[0]['DepartureTime'], param[0]['Arrival'], param[0]['ArrivalDate'], param[0]['ArrivalTime'], param[0]['Duration'], param[0]['Price'], param[0]['Discount'], param[0]['Seats'], param[0]['SeatsAvailable'], Actual_Search.Class_Type, Actual_Search.Passengers, Actual_Search.Passengers_Type_Number)
+        Launch_Flight_Results_Page()
     
     def ReSearch_Flight(self):
         #get the input
@@ -984,8 +986,8 @@ class Flight_Results_Page():
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
-        self.Page_Title= tk.Label(self.display_frame, text=" Your Passengers", font=("Arial", 15), bg=main_color, fg=fourth_color)
-        self.Info_passengers = tk.Label(self.display_frame, text="Please enter your information", font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.Page_Title= tk.Label(self.display_frame, text=" Your Outbound Flight Recap", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.Info_passengers = tk.Label(self.display_frame, text="Add To basket and pay after", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.GoBack_Title = tk.Label(self.middle_frame, text="<", font=("Arial", 20), bg=main_color)
         self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
         self.Space_Title_1 = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
@@ -999,11 +1001,57 @@ class Flight_Results_Page():
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.AddBasket_Button = tk.Button(self.display_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
 
+        self.Flight_Title = tk.Label(self.display_frame, text="Flight Number: "+str(Actual_Outbound_Flight.Flight_Number), font=("Arial", 10), bg=main_color)
+        self.Departure_Title = tk.Label(self.display_frame, text="Departure: "+str(Actual_Outbound_Flight.Departure_Airport), font=("Arial", 10), bg=main_color)
+        self.Arrival_Title = tk.Label(self.display_frame, text="Arrival: "+str(Actual_Outbound_Flight.Arrival_Airport), font=("Arial", 10), bg=main_color)
+        self.DepartureTime_Title = tk.Label(self.display_frame, text="Departure Time: "+str(Actual_Outbound_Flight.Departure_Time), font=("Arial", 10), bg=main_color)
+        self.ArrivalTime_Title = tk.Label(self.display_frame, text="Arrival Time: "+str(Actual_Outbound_Flight.Arrival_Time), font=("Arial", 10), bg=main_color)
+
         # Pack all wigets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
         # Add a Canvas widget for drawing the line
         self.line_canvas = tk.Canvas(main_window, height=3, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
+        self.line_canvas.pack(fill=tk.X)
+        # Create a line under top_frame
+        self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
+        self.middle_frame.pack(fill=tk.BOTH, expand=True)
+        self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.yscrollbar = tk.Scrollbar(self.middle_frame, orient="vertical", command=self.scroll_canva.yview)
+        self.yscrollbar.pack(side=tk.RIGHT, fill='y')
+        self.scroll_canva.configure(yscrollcommand=self.yscrollbar.set)
+        self.scroll_canva.bind('<Configure>', lambda e: self.scroll_canva.configure(scrollregion = self.scroll_canva.bbox("all")))
+        self.display_frame.pack(fill=tk.BOTH, expand=True)
+        self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
+        # Pack the 'Sign In or Sign Up' button to the left (west)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
+        # Pack the 'Advanced Search' button to the right (east)
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        #Display the title
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        #Display the Page Title
+        self.Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=30)
+        #Display the Go Back Title
+        self.GoBack_Title.place(x=22, y=15)
+        #Display the Info Title
+        self.Info_passengers.pack(ipadx=5, ipady=5, padx=490, pady=0)
+        #Display the Space Title
+        self.Space_Title_1.pack(ipadx=5, ipady=5, padx=10, pady=10)
+        #Display the Flight Title
+        self.Flight_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
+        #Display the Departure Title
+        self.Departure_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
+        #Display the Arrival Title
+        self.Arrival_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
+        #Display the Departure Time Title
+        self.DepartureTime_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
+        #Display the Arrival Time Title
+        self.ArrivalTime_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
+        #Display the Space Title
+        self.Space_Title_2.pack(ipadx=5, ipady=5, padx=10, pady=10)
+        #Display the Add to basket Button
+        self.AddBasket_Button.pack(ipadx=5, ipady=5, padx=490, pady=10)
     
     def Hide_Button_1(self, empty):
         Launch_Home_Page()
@@ -1058,8 +1106,8 @@ def Launch_Purchase_Results_Page():
         widget.destroy()
     Purchase_Results_Page(main_window)
 
-def Launch_Flight_Results_Page(Timepls):
-    print("eeeeh mon num c'est ca : ",Timepls)
+def Launch_Flight_Results_Page():
+    print(Actual_Outbound_Flight.Flight_Number)
     for widget in main_window.winfo_children():
         widget.destroy()
     Flight_Results_Page(main_window)
@@ -1107,6 +1155,9 @@ main_window.style.theme_use("clam")
 Actual_Customer = AC.Actual_Customer()
 Actual_Customer.LogOrNot = False
 Actual_Search = AS.Actual_Search()
+Actual_Outbound_Flight = AF.Outbound_Flight()
+Actual_Inbound_Flight = AF.Inbound_Flight()
+
 #Light Theme
 main_color_light="#fff7ea"
 second_color_light="#722a39"
