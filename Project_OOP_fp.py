@@ -1032,8 +1032,10 @@ class Flight_Results_Page():
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.AddBasket_Button = tk.Button(self.right_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
-        self.Chose_Return_Button = tk.Button(self.left_frame, text='Choose Return', command=Launch_Purchase_Results_Page, font=("Arial", 15), bg=third_color, fg=main_color)
-
+        if Actual_Inbound_Flight.Flight_Number==None:
+            self.Chose_Return_Button = tk.Button(self.left_frame, text='Choose Return', command=Launch_Purchase_Results_Page, font=("Arial", 15), bg=third_color, fg=main_color)
+        elif (Actual_Inbound_Flight.Flight_Number!=None) & (Actual_Outbound_Flight.Flight_Number!=None):
+            self.Chose_Return_Button = tk.Button(self.left_frame, text='Go to Basket', command=Launch_Basket_Page, font=("Arial", 15), bg=third_color, fg=main_color)
         #Info
         self.Flight_Title = tk.Label(self.right_frame, text="Flight Number: "+str(Actual_Outbound_Flight.Flight_Number), font=("Arial", 11), bg=main_color)
         self.Departure_Title = tk.Label(self.right_frame, text="Departure: "+str(Actual_Outbound_Flight.Departure_Airport), font=("Arial", 11), bg=main_color)
@@ -1108,13 +1110,91 @@ class Flight_Results_Page():
         Launch_Purchase_Results_Page()
 
     def AddBasket(self):
-        print("good")
         Actual_Basket.Complete_Basket(Actual_Outbound_Flight, Actual_Inbound_Flight)
-        print("maybe good")
         print(Actual_Basket.Outbound_Flight_B.Flight_Number)
-        print("not good")
         print(Actual_Basket.Inbound_Flight_B.Flight_Number)
         print(Actual_Basket.Basket_Total_Price)
+
+
+class Basket_Page():
+    def __init__(self, main_window):
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.second_top_frame = tk.Frame(main_window, bg=main_color)
+        self.left_frame = tk.Frame(main_window, bg=main_color)
+        self.right_frame = tk.Frame(main_window, bg=main_color)
+
+        #Title
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
+        self.Page_Title= tk.Label(self.second_top_frame, text=" Your Basket", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.Info_passengers = tk.Label(self.second_top_frame, text="Add To basket and pay after", font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.Space_Title_1 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title_2 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title_3 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title_4 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title_5 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
+
+        self.Flight_Title_O = tk.Label(self.left_frame, text="Flight Number: "+str(Actual_Basket.Outbound_Flight_B.Flight_Number), font=("Arial", 11), bg=main_color)
+        self.Departure_Title_O = tk.Label(self.left_frame, text="Departure: "+str(Actual_Basket.Outbound_Flight_B.Departure_Airport), font=("Arial", 11), bg=main_color)
+        self.Arrival_Title_O = tk.Label(self.left_frame, text="Arrival: "+str(Actual_Basket.Outbound_Flight_B.Arrival_Airport), font=("Arial", 11), bg=main_color)
+
+        self.Flight_Title_R = tk.Label(self.right_frame, text="Flight Number: "+str(Actual_Basket.Inbound_Flight_B.Flight_Number), font=("Arial", 11), bg=main_color)
+        self.Departure_Title_R = tk.Label(self.right_frame, text="Departure: "+str(Actual_Basket.Inbound_Flight_B.Departure_Airport), font=("Arial", 11), bg=main_color)
+        self.Arrival_Title_R = tk.Label(self.right_frame, text="Arrival: "+str(Actual_Basket.Inbound_Flight_B.Arrival_Airport), font=("Arial", 11), bg=main_color)
+
+        # Buttons 
+        if Actual_Customer.LogOrNot == False:
+            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
+        else :
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        self.Pay_Button = tk.Button(self.right_frame, text='Pay', command=self.Pay, font=("Arial", 15), bg=third_color, fg=main_color)
+        self.Delete_Button = tk.Button(self.right_frame, text='Delete', command=self.Delete, font=("Arial", 15), bg=third_color, fg=main_color)
+
+        # Pack all wigets
+        #Frame
+        self.top_frame.pack(side=tk.TOP, fill=tk.X)
+        # Pack the 'Sign In or Sign Up' button to the left (west)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
+        # Pack the 'Advanced Search' button to the right (east)
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        #Display the title
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        # Add a Canvas widget for drawing the line
+        self.line_canvas = tk.Canvas(main_window, height=3, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
+        self.line_canvas.pack(fill=tk.X)
+        # Create a line under top_frame
+        self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
+        self.second_top_frame.pack(side=tk.TOP, fill=tk.X)
+        self.right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+        self.left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        #Display the title
+        #Display the Page Title
+        self.Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=20)
+        #Display the Info Title
+        self.Info_passengers.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        #Display the Space Title
+        self.Space_Title_1.pack(ipadx=5, ipady=5, padx=10, pady=10)
+        #Display the Infos
+        self.Flight_Title_O.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Departure_Title_O.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Arrival_Title_O.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Flight_Title_R.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Departure_Title_R.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Arrival_Title_R.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        
+
+    def Hide_Button_1(self, empty):
+        Launch_Home_Page()
+    
+    def Pay(self):
+        print("Pay")
+        #Launch_Home_Page()
+
+    def Delete(self):
+        print("Delete")
+        #Launch_Home_Page()
 #---------------------## ALL THE FUNCTIONS ##---------------------#
 
 ## Opennig Pages ##
@@ -1164,6 +1244,11 @@ def Launch_Flight_Results_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
     Flight_Results_Page(main_window)
+
+def Launch_Basket_Page():
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    Basket_Page(main_window)
 
 def Change_Theme():
     global main_color
