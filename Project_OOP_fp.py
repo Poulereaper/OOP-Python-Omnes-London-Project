@@ -979,19 +979,15 @@ class Flight_Results_Page():
         self.top_frame = tk.Frame(main_window, bg=main_color)
         self.middle_frame = tk.Frame(main_window, bg=main_color)
 
-        self.scroll_canva = tk.Canvas(self.middle_frame, bg=main_color)
-        self.scroll_canva.config(highlightthickness=0, borderwidth=0)
-        self.display_frame = tk.Frame(self.scroll_canva, bg=main_color)
-
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
-        self.Page_Title= tk.Label(self.display_frame, text=" Your Outbound Flight Recap", font=("Arial", 15), bg=main_color, fg=fourth_color)
-        self.Info_passengers = tk.Label(self.display_frame, text="Add To basket and pay after", font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.Page_Title= tk.Label(self.middle_frame, text=" Your Outbound Flight Recap", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.Info_passengers = tk.Label(self.middle_frame, text="Add To basket and pay after", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.GoBack_Title = tk.Label(self.middle_frame, text="<", font=("Arial", 20), bg=main_color)
         self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
-        self.Space_Title_1 = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
-        self.Space_Title_2 = tk.Label(self.display_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title_1 = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg=main_color)
+        self.Space_Title_2 = tk.Label(self.middle_frame, text=" ", font=("Arial", 10), bg=main_color)
 
         # Create 
         if Actual_Customer.LogOrNot == False:
@@ -999,17 +995,23 @@ class Flight_Results_Page():
         else :
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
-        self.AddBasket_Button = tk.Button(self.display_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
+        self.AddBasket_Button = tk.Button(self.middle_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
 
-        self.Flight_Title = tk.Label(self.display_frame, text="Flight Number: "+str(Actual_Outbound_Flight.Flight_Number), font=("Arial", 10), bg=main_color)
-        self.Departure_Title = tk.Label(self.display_frame, text="Departure: "+str(Actual_Outbound_Flight.Departure_Airport), font=("Arial", 10), bg=main_color)
-        self.Arrival_Title = tk.Label(self.display_frame, text="Arrival: "+str(Actual_Outbound_Flight.Arrival_Airport), font=("Arial", 10), bg=main_color)
-        self.DepartureTime_Title = tk.Label(self.display_frame, text="Departure Time: "+str(Actual_Outbound_Flight.Departure_Time), font=("Arial", 10), bg=main_color)
-        self.ArrivalTime_Title = tk.Label(self.display_frame, text="Arrival Time: "+str(Actual_Outbound_Flight.Arrival_Time), font=("Arial", 10), bg=main_color)
+        self.Flight_Title = tk.Label(self.middle_frame, text="Flight Number: "+str(Actual_Outbound_Flight.Flight_Number), font=("Arial", 10), bg=main_color)
+        self.Departure_Title = tk.Label(self.middle_frame, text="Departure: "+str(Actual_Outbound_Flight.Departure_Airport), font=("Arial", 10), bg=main_color)
+        self.Arrival_Title = tk.Label(self.middle_frame, text="Arrival: "+str(Actual_Outbound_Flight.Arrival_Airport), font=("Arial", 10), bg=main_color)
+        self.DepartureTime_Title = tk.Label(self.middle_frame, text="Departure Time: "+str(Actual_Outbound_Flight.Departure_Time), font=("Arial", 10), bg=main_color)
+        self.ArrivalTime_Title = tk.Label(self.middle_frame, text="Arrival Time: "+str(Actual_Outbound_Flight.Arrival_Time), font=("Arial", 10), bg=main_color)
 
         # Pack all wigets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
+        # Pack the 'Sign In or Sign Up' button to the left (west)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
+        # Pack the 'Advanced Search' button to the right (east)
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        #Display the title
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=10)
         # Add a Canvas widget for drawing the line
         self.line_canvas = tk.Canvas(main_window, height=3, bg=second_color)
         self.line_canvas.config(highlightthickness=0, borderwidth=0)
@@ -1017,19 +1019,7 @@ class Flight_Results_Page():
         # Create a line under top_frame
         self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
         self.middle_frame.pack(fill=tk.BOTH, expand=True)
-        self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self.yscrollbar = tk.Scrollbar(self.middle_frame, orient="vertical", command=self.scroll_canva.yview)
-        self.yscrollbar.pack(side=tk.RIGHT, fill='y')
-        self.scroll_canva.configure(yscrollcommand=self.yscrollbar.set)
-        self.scroll_canva.bind('<Configure>', lambda e: self.scroll_canva.configure(scrollregion = self.scroll_canva.bbox("all")))
-        self.display_frame.pack(fill=tk.BOTH, expand=True)
-        self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
-        # Pack the 'Sign In or Sign Up' button to the left (west)
-        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
-        # Pack the 'Advanced Search' button to the right (east)
-        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         #Display the title
-        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=10)
         #Display the Page Title
         self.Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=30)
         #Display the Go Back Title
