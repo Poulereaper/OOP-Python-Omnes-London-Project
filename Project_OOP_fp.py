@@ -30,10 +30,10 @@ class Home_Page():
         canvas.image = bg_photo_one
 
     
-        #Title
+        #Logo
         bg_image_two = Image.open("./images/photologo.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
-        # Créer un canevas pour afficher l'image de fond
+        # Créer un canevas pour afficher l'image du logo
         canvas = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
         canvas.place(x=400,y=-5)
         canvas.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
@@ -81,7 +81,16 @@ class LogIn_Page():
         self.top_frame = tk.Frame(main_window, bg=main_color)
         self.middle_frame = tk.Frame(main_window, bg=main_color)
         self.bottom_frame = tk.Frame(main_window, bg=main_color)
-        
+
+        # Logo
+        bg_image_two = Image.open("./images/photologo.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image du logo
+        canvas = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0, borderwidth=0)
+        canvas.place(x=0, y=-5)
+        canvas.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas.image = bg_photo_two
+
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
@@ -116,7 +125,7 @@ class LogIn_Page():
         # Pack the 'Menu' button to the right
         self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=10, pady=10)
         #Display the title
-        self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=10, pady=10)
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=95, pady=10)
         #Display the Sign In Title
         self.SignIn_Title.pack(ipadx=5, ipady=5, padx=200, pady=35)
         #Display the Email Title
