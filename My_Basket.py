@@ -14,6 +14,7 @@ class Basket():
         self.Inbound_Flight_B = Inbound_Flight
         print("print du test : ", self.Inbound_Flight_B.Flight_Number)
         if self.Inbound_Flight_B.Flight_Number==None:
+            self.Inbound_Flight_B = None
             if self.Outbound_Flight_B.Passengers==1:
                 self.Basket_Total_Price = float(self.Outbound_Flight_B.Price*Outbound_Flight.Class_Type)
             else:

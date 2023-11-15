@@ -25,20 +25,45 @@ class Home_Page():
         bg_image_one = Image.open("./images/degrado.jpg")
         bg_photo_one = ImageTk.PhotoImage(bg_image_one)
         # Créer un canevas pour afficher l'image de fond
-        canvas = tk.Canvas(self.right_frame, width=bg_image_one.width, height=bg_image_one.height)
-        canvas.pack()
-        canvas.create_image(0, 0, anchor=tk.NW, image=bg_photo_one)
-        canvas.image = bg_photo_one
+        canvas_one = tk.Canvas(self.right_frame, width=bg_image_one.width, height=bg_image_one.height)
+        canvas_one.pack()
+        canvas_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_one)
+        canvas_one.image = bg_photo_one
 
     
         #Logo
         bg_image_two = Image.open("./images/photologo.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
-        canvas = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
-        canvas.place(x=400,y=-5)
-        canvas.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
-        canvas.image = bg_photo_two
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=410,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
+
+        #Basket
+        bg_image_three = Image.open("./images/shopping-cart-res.png")
+        bg_photo_three = ImageTk.PhotoImage(bg_image_three)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_three = tk.Canvas(self.top_frame, width=bg_image_three.width, height=bg_image_three.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_three.place(x=150,y=20)
+        canvas_three.create_image(0, 0, anchor=tk.NW, image=bg_photo_three)
+        canvas_three.image = bg_photo_three
+        canvas_three.bind("<Button-1>", self.Hide_Button_1)
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+            notif_image = Image.open("./images/number-1.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=168,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
+            notif_image = Image.open("./images/number-2.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=168,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        else : pass 
 
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Pres_OOPAirLine = tk.Label(self.right_frame, text="Welcome to OOP Air Line", font=("Arial", 15))
@@ -69,11 +94,14 @@ class Home_Page():
         # Pack the 'Advanced Search' button to the right (east)
         self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         #Display the title
-        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=10, pady=10)
+        self.Home_Page_Title.pack(ipadx=0, ipady=5, padx=10, pady=10)
         #Display the Buy Now Button
         self.Buy_Now_Button.pack(ipadx=5, ipady=5, padx=200, pady=10)
         #Display the text
         self.Pres_OOPAirLine.pack(ipadx=5, ipady=5, padx=20, pady=10)
+
+    def Hide_Button_1(self, empty):
+        Launch_Basket_Page()
 
 class LogIn_Page():
     def __init__(self, main_window):
@@ -83,14 +111,39 @@ class LogIn_Page():
         self.middle_frame = tk.Frame(main_window, bg=main_color)
         self.bottom_frame = tk.Frame(main_window, bg=main_color)
 
-        # Logo
+        #Logo
         bg_image_two = Image.open("./images/photologo.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
-        canvas = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0, borderwidth=0)
-        canvas.place(x=0, y=-5)
-        canvas.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
-        canvas.image = bg_photo_two
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=0,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
+
+        #Basket
+        bg_image_three = Image.open("./images/shopping-cart-res.png")
+        bg_photo_three = ImageTk.PhotoImage(bg_image_three)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_three = tk.Canvas(self.top_frame, width=bg_image_three.width, height=bg_image_three.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_three.place(x=980,y=20)
+        canvas_three.create_image(0, 0, anchor=tk.NW, image=bg_photo_three)
+        canvas_three.image = bg_photo_three
+        canvas_three.bind("<Button-1>", self.Hide_Button_1)
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+            notif_image = Image.open("./images/number-1.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=998,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
+            notif_image = Image.open("./images/number-2.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=998,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        else : pass 
 
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
@@ -148,10 +201,6 @@ class LogIn_Page():
         self.bottom_frame.columnconfigure(1, weight=1)
         self.bottom_frame.columnconfigure(2, weight=1)
         self.bottom_frame.columnconfigure(3, weight=1)
-
-    def Hide_Button(self, empty):
-        Launch_Home_Page()
-
     
     def Log_check(self):
         #get the input
@@ -176,12 +225,27 @@ class LogIn_Page():
                 #error_label = tk.Label(self.middle_frame, text="Invalid email or password", font=("Arial", 10), fg="red")
                 #error_label.pack()
 
+    def Hide_Button_1(self, empty):
+        Launch_Basket_Page()
+    
+    def Hide_Button(self, empty):
+        Launch_Home_Page()
+
 class SignUp_First_Page():
     def __init__(self, main_window):
         # Create a frame at the top for buttons
         self.top_frame = tk.Frame(main_window, bg=main_color)
         self.middle_frame = tk.Frame(main_window, bg=main_color)
         self.bottom_frame = tk.Frame(main_window, bg=main_color)
+
+        #Logo
+        bg_image_two = Image.open("./images/photologo.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=0,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
         
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
@@ -222,7 +286,7 @@ class SignUp_First_Page():
         # Pack the 'Menu' button to the right
         self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=10, pady=10)
         #Display the title
-        self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=10, pady=10)
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=95, pady=10)
         #Display the Sign In Title
         self.SignUp_Title.pack(ipadx=5, ipady=5, padx=200, pady=20)
         #Display the Go Back Title
@@ -285,6 +349,15 @@ class SignUp_Second_Page():
         self.third_top_frame.columnconfigure(3, weight=1)
         self.third_top_frame.columnconfigure(4, weight=1)
         self.bottom_frame = tk.Frame(main_window, bg=main_color)
+
+        #Logo
+        bg_image_two = Image.open("./images/photologo.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=0,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
         
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
@@ -328,7 +401,7 @@ class SignUp_Second_Page():
         # Pack the 'Menu' button to the right
         self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=10, pady=10)
         #Display the title
-        self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=10, pady=10)
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=95, pady=10)
         #Display the Sign In Title
         self.SignUp_Title.pack(ipadx=5, ipady=5, padx=200, pady=35)
         #Display the Go Back Title
@@ -394,6 +467,41 @@ class Menu_Page():
         # Create a frame at the top for buttons
         self.top_frame = tk.Frame(main_window, bg=main_color)
         self.middle_frame = tk.Frame(main_window, bg=main_color)
+
+        #Logo
+        bg_image_two = Image.open("./images/photologo.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=0,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
+
+        #Basket
+        bg_image_three = Image.open("./images/shopping-cart-res.png")
+        bg_photo_three = ImageTk.PhotoImage(bg_image_three)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_three = tk.Canvas(self.top_frame, width=bg_image_three.width, height=bg_image_three.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_three.place(x=980,y=20)
+        canvas_three.create_image(0, 0, anchor=tk.NW, image=bg_photo_three)
+        canvas_three.image = bg_photo_three
+        canvas_three.bind("<Button-1>", self.Hide_Button_1)
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+            notif_image = Image.open("./images/number-1.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=998,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
+            notif_image = Image.open("./images/number-2.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=998,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        else : pass 
+
         
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
@@ -424,7 +532,7 @@ class Menu_Page():
         self.line_canvas.create_line(0, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
         self.middle_frame.pack(fill=tk.BOTH, expand=True)
         #Display the title
-        self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=10, pady=10)
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=95, pady=10)
         #Display the Sign In Title
         self.Menu_Title.pack(ipadx=5, ipady=5, padx=200, pady=35)
         #Display the Home Button
@@ -446,6 +554,9 @@ class Menu_Page():
 
     def Hide_Button(self, empty):
         Launch_Home_Page()
+    
+    def Hide_Button_1(self, empty):
+        Launch_Basket_Page()
 
 class Purchase_Page():
     def __init__(self, main_window):
@@ -463,6 +574,40 @@ class Purchase_Page():
         self.third_top_frame.columnconfigure(3, weight=1)
         self.fourth_top_frame = tk.Frame(main_window, bg=main_color)
         self.bottom_frame = tk.Frame(main_window, bg=main_color)
+
+        #Logo
+        bg_image_two = Image.open("./images/photologo.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=410,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
+
+        #Basket
+        bg_image_three = Image.open("./images/shopping-cart-res.png")
+        bg_photo_three = ImageTk.PhotoImage(bg_image_three)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_three = tk.Canvas(self.top_frame, width=bg_image_three.width, height=bg_image_three.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_three.place(x=150,y=20)
+        canvas_three.create_image(0, 0, anchor=tk.NW, image=bg_photo_three)
+        canvas_three.image = bg_photo_three
+        canvas_three.bind("<Button-1>", self.Hide_Button_1)
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+            notif_image = Image.open("./images/number-1.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=168,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
+            notif_image = Image.open("./images/number-2.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=168,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        else : pass 
 
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
@@ -648,6 +793,9 @@ class Purchase_Page():
     def Hide_Button(self, empty):
         Launch_Home_Page()
 
+    def Hide_Button_1(self, empty):
+        Launch_Basket_Page()
+
 class Info_Passengers():
     # Create a frame at the top for buttons
     def __init__(self, main_window):
@@ -658,9 +806,43 @@ class Info_Passengers():
         self.scroll_canva.config(highlightthickness=0, borderwidth=0)
         self.display_frame = tk.Frame(self.scroll_canva, bg=main_color)
 
+        #Logo
+        bg_image_two = Image.open("./images/photologo.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=410,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
+
+        #Basket
+        bg_image_three = Image.open("./images/shopping-cart-res.png")
+        bg_photo_three = ImageTk.PhotoImage(bg_image_three)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_three = tk.Canvas(self.top_frame, width=bg_image_three.width, height=bg_image_three.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_three.place(x=150,y=20)
+        canvas_three.create_image(0, 0, anchor=tk.NW, image=bg_photo_three)
+        canvas_three.image = bg_photo_three
+        canvas_three.bind("<Button-1>", self.Hide_Button_1)
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+            notif_image = Image.open("./images/number-1.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=168,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
+            notif_image = Image.open("./images/number-2.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=168,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        else : pass 
+
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
-        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
         self.Page_Title= tk.Label(self.display_frame, text=" Your Passengers", font=("Arial", 15), bg=main_color, fg=fourth_color)
         self.Info_passengers = tk.Label(self.display_frame, text="Please enter your information", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.GoBack_Title = tk.Label(self.middle_frame, text="<", font=("Arial", 20), bg=main_color)
@@ -698,7 +880,7 @@ class Info_Passengers():
         # Pack the 'Advanced Search' button to the right (east)
         self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         #Display the title
-        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Home_Page_Title.pack(ipadx=0, ipady=5, padx=10, pady=10)
         #Display the Page Title
         self.Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=30)
         #Display the Go Back Title
@@ -748,8 +930,11 @@ class Info_Passengers():
             print(Actual_Search.Passengers_Type_Number)
             Launch_Purchase_Results_Page()
 
-    def Hide_Button_1(self, empty):
+    def Hide_Button(self, empty):
         Launch_Home_Page()
+    
+    def Hide_Button_1(self, empty):
+        Launch_Basket_Page()
 
     def Hide_Button_2(self, empty):
         Launch_Purchase_Page()
@@ -776,9 +961,43 @@ class Purchase_Results_Page():
         self.scroll_canva.config(highlightthickness=0, borderwidth=0)
         self.display_frame = tk.Frame(self.scroll_canva, bg=main_color)
 
+        #Logo
+        bg_image_two = Image.open("./images/photologo.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=410,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
+
+        #Basket
+        bg_image_three = Image.open("./images/shopping-cart-res.png")
+        bg_photo_three = ImageTk.PhotoImage(bg_image_three)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_three = tk.Canvas(self.top_frame, width=bg_image_three.width, height=bg_image_three.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_three.place(x=150,y=20)
+        canvas_three.create_image(0, 0, anchor=tk.NW, image=bg_photo_three)
+        canvas_three.image = bg_photo_three
+        canvas_three.bind("<Button-1>", self.Hide_Button_1)
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+            notif_image = Image.open("./images/number-1.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=168,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
+            notif_image = Image.open("./images/number-2.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=168,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        else : pass 
+
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
-        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
         self.Page_Title= tk.Label(self.display_frame, text=" Choose your Flight Hour", font=("Arial", 15), bg=main_color, fg=fourth_color)
         self.GoBack_Title = tk.Label(self.second_top_frame, text="<", font=("Arial", 20), bg=main_color)
         self.GoBack_Title.bind("<Button-1>", self.Hide_Button_2)
@@ -828,7 +1047,7 @@ class Purchase_Results_Page():
         # Pack the 'Advanced Search' button to the right (east)
         self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         #Display the title
-        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Home_Page_Title.pack(ipadx=0, ipady=5, padx=10, pady=10)
 
         self.second_top_frame.pack(side=tk.TOP, fill=tk.X)
         # Add a Canvas widget for drawing the line
@@ -923,8 +1142,11 @@ class Purchase_Results_Page():
             self.canvas.create_text(380, 120, anchor='nw', text="Departure Time: "+str(self.Search_Results_Outbound[i][0]['DepartureTime']), font=("Arial", 10))
             self.canvas.create_text(580, 120, anchor='nw', text="Arrival Time: "+str(self.Search_Results_Outbound[i][0]['ArrivalTime']), font=("Arial", 10))
 
-    def Hide_Button_1(self, empty):
+    def Hide_Button(self, empty):
         Launch_Home_Page()
+    
+    def Hide_Button_1(self, empty):
+        Launch_Basket_Page()
 
     def Hide_Button_2(self, empty):
         Launch_Purchase_Page()
@@ -1015,9 +1237,43 @@ class Flight_Results_Page():
         canvas.create_image(0, 0, anchor=tk.NW, image=bg_photo_one)
         canvas.image = bg_photo_one
 
+        #Logo
+        bg_image_two = Image.open("./images/photologo.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=410,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
+
+        #Basket
+        bg_image_three = Image.open("./images/shopping-cart-res.png")
+        bg_photo_three = ImageTk.PhotoImage(bg_image_three)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_three = tk.Canvas(self.top_frame, width=bg_image_three.width, height=bg_image_three.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_three.place(x=150,y=20)
+        canvas_three.create_image(0, 0, anchor=tk.NW, image=bg_photo_three)
+        canvas_three.image = bg_photo_three
+        canvas_three.bind("<Button-1>", self.Hide_Button_1)
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+            notif_image = Image.open("./images/number-1.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=168,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
+            notif_image = Image.open("./images/number-2.png")
+            bg_photo_four = ImageTk.PhotoImage(notif_image)
+            canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=168,y=18)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+        else : pass 
+
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
-        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
         self.Page_Title= tk.Label(self.second_top_frame, text=" Your Outbound Flight Recap", font=("Arial", 15), bg=main_color, fg=fourth_color)
         self.Info_passengers = tk.Label(self.second_top_frame, text="Add To basket and pay after", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.GoBack_Title = tk.Label(self.second_top_frame, text="<", font=("Arial", 20), bg=main_color)
@@ -1103,17 +1359,21 @@ class Flight_Results_Page():
         #Display the Choose Return Button
         self.Chose_Return_Button.pack(ipadx=5, ipady=5, padx=0, pady=10)
     
-    def Hide_Button_1(self, empty):
+    def Hide_Button(self, empty):
         Launch_Home_Page()
+
+    def Hide_Button_1(self, empty):
+        Launch_Basket_Page()
     
     def Hide_Button_2(self, empty):
         Launch_Purchase_Results_Page()
 
     def AddBasket(self):
         Actual_Basket.Complete_Basket(Actual_Outbound_Flight, Actual_Inbound_Flight)
-        print(Actual_Basket.Outbound_Flight_B.Flight_Number)
-        print(Actual_Basket.Inbound_Flight_B.Flight_Number)
-        print(Actual_Basket.Basket_Total_Price)
+        #print(Actual_Basket.Outbound_Flight_B.Flight_Number)
+        #print(Actual_Basket.Inbound_Flight_B.Flight_Number)
+        #print(Actual_Basket.Basket_Total_Price)
+        Launch_Flight_Results_Page()
 
 
 class Basket_Page():
