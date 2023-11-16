@@ -642,7 +642,7 @@ class Purchase_Page():
         self.Return_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
         self.Passengers_Input = tk.Spinbox(self.third_top_frame, from_=1, to=10)
         self.Class_Input = ttk.Combobox(self.third_top_frame, values=["Economy", "Business", "First Class"])
-        if Actual_Search.CompleteAccept():
+        if Actual_Search.ReturnOrNot==False:
             self.From_Input.insert(0, "Paris")
             self.To_Input.insert(0, "New York")
             #Remove for final version
@@ -1033,7 +1033,6 @@ class Purchase_Results_Page():
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.ReSearch_Button = tk.Button(self.second_top_frame, text='Re-Search', command=self.ReSearch_Flight, font=("Arial", 10), bg=third_color, fg=main_color)
 
-
         # Pack all wigets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
@@ -1109,7 +1108,7 @@ class Purchase_Results_Page():
             self.Price_display=0
             self.Total_Price_display=0
             fly_photo[i] = ImageTk.PhotoImage(fly_image)
-            if Actual_Outbound_Flight.Flight_Number!=None:
+            if Actual_Search.ReturnOrNot == True:
                 self.Search_Results_Outbound[i] = Actual_Search.Search_Inbound()
             else:
                 self.Search_Results_Outbound[i] = Actual_Search.Search_Outbound()
@@ -1230,6 +1229,7 @@ class Flight_Results_Page():
         self.second_top_frame = tk.Frame(main_window, bg=main_color)
         self.left_frame = tk.Frame(main_window, bg=main_color)
         self.right_frame = tk.Frame(main_window, bg=main_color)
+
         bg_image_one = Image.open("./images/avion_ress.png")
         bg_photo_one = ImageTk.PhotoImage(bg_image_one)
         # Créer un canevas pour afficher l'image de fond
@@ -1271,6 +1271,14 @@ class Flight_Results_Page():
             canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
             canvas_four.image = bg_photo_four
         else : pass 
+        #Plane
+        bg_image_five = Image.open("./images/black-planeres.png")
+        bg_photo_five = ImageTk.PhotoImage(bg_image_five)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_five = tk.Canvas(self.right_frame, width=bg_image_five.width, height=bg_image_five.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_five.place(x=142,y=10)
+        canvas_five.create_image(0, 0, anchor=tk.NW, image=bg_photo_five)
+        canvas_five.image = bg_photo_five
 
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
@@ -1282,7 +1290,7 @@ class Flight_Results_Page():
         self.Space_Title_1 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
         self.Space_Title_2 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
 
-        # BUttonq
+        # Buttons
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
@@ -1290,14 +1298,14 @@ class Flight_Results_Page():
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.AddBasket_Button = tk.Button(self.right_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
         if Actual_Inbound_Flight.Flight_Number==None:
-            self.Chose_Return_Button = tk.Button(self.left_frame, text='Choose Return', command=Launch_Purchase_Results_Page, font=("Arial", 15), bg=third_color, fg=main_color)
+            self.Chose_Return_Button = tk.Button(self.left_frame, text='Choose Return', command=self.Re_Pur, font=("Arial", 15), bg=third_color, fg=main_color)
         elif (Actual_Inbound_Flight.Flight_Number!=None) & (Actual_Outbound_Flight.Flight_Number!=None):
             self.Chose_Return_Button = tk.Button(self.left_frame, text='Go to Basket', command=Launch_Basket_Page, font=("Arial", 15), bg=third_color, fg=main_color)
         #Info
         self.Flight_Title = tk.Label(self.right_frame, text="Flight Number: "+str(Actual_Outbound_Flight.Flight_Number), font=("Arial", 11), bg=main_color)
         self.Departure_Title = tk.Label(self.right_frame, text="Departure: "+str(Actual_Outbound_Flight.Departure_Airport), font=("Arial", 11), bg=main_color)
         self.Arrival_Title = tk.Label(self.right_frame, text="Arrival: "+str(Actual_Outbound_Flight.Arrival_Airport), font=("Arial", 11), bg=main_color)
-        self.DepartureTime_Title = tk.Label(self.right_frame, text=str(Actual_Outbound_Flight.Departure_Time)+"    ---->", font=("Arial", 15), bg=main_color)
+        self.DepartureTime_Title = tk.Label(self.right_frame, text=str(Actual_Outbound_Flight.Departure_Time), font=("Arial", 15), bg=main_color)
         self.ArrivalTime_Title = tk.Label(self.right_frame, text=str(Actual_Outbound_Flight.Arrival_Time), font=("Arial", 15), bg=main_color)
         self.Duration_Title = tk.Label(self.right_frame, text="Duration: "+str(Actual_Outbound_Flight.Flight_Duration), font=("Arial", 11), bg=main_color)
         self.Price_Title = tk.Label(self.right_frame, text="Adult Price: "+str(Actual_Outbound_Flight.Price)+"£", font=("Arial", 11), bg=main_color)
@@ -1370,11 +1378,15 @@ class Flight_Results_Page():
         Launch_Purchase_Results_Page()
 
     def AddBasket(self):
-        Actual_Basket.Complete_Basket(Actual_Outbound_Flight, Actual_Inbound_Flight)
+        Actual_Basket.Complete_Basket(Actual_Outbound_Flight, Actual_Inbound_Flight, Actual_Search.ReturnOrNot)
         #print(Actual_Basket.Outbound_Flight_B.Flight_Number)
         #print(Actual_Basket.Inbound_Flight_B.Flight_Number)
         #print(Actual_Basket.Basket_Total_Price)
         Launch_Flight_Results_Page()
+
+    def Re_Pur(self):
+        Actual_Search.ReurnOrNot=True
+        Launch_Purchase_Results_Page()
 
 
 class Basket_Page():

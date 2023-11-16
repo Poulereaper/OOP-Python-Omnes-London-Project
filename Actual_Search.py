@@ -13,6 +13,7 @@ class Actual_Search():
         self.Passengers=0
         self.Passengers_Type = [None]*11
         self.Passengers_Type_Number=[None]*11
+        self.ReturnOrNot=False
 
     def CompleteAccept(self):
         if (self.From=="") & (self.To=="") & (self.Departure_Date=="") & (self.Return_Date=="") & (self.Class=="") & (self.Passengers==0):
