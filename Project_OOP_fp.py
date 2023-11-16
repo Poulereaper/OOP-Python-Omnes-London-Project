@@ -1010,12 +1010,15 @@ class Purchase_Results_Page():
         self.Return_Title = tk.Label(self.second_top_frame, text="Return *", font=("Arial", 10), bg=main_color)
         self.Class_Title = tk.Label(self.second_top_frame, text="Class", font=("Arial", 10), bg=main_color)
 
-
         #Input
         self.From_Input = tk.Entry(self.second_top_frame)
         self.To_Input = tk.Entry(self.second_top_frame)
-        self.From_Input.insert(0, Actual_Search.From)
-        self.To_Input.insert(0, Actual_Search.To)
+        if Actual_Search.ReturnOrNot==False:
+            self.From_Input.insert(0, Actual_Search.From)
+            self.To_Input.insert(0, Actual_Search.To)
+        else :
+            self.From_Input.insert(0, Actual_Search.To)
+            self.To_Input.insert(0, Actual_Search.From)
         self.Departure_Input = DateEntry(self.second_top_frame, date_pattern='y-mm-dd')
         self.Departure_Input.delete(0, tk.END)
         self.Departure_Input.insert(0, Actual_Search.Departure_Date)
@@ -1108,6 +1111,7 @@ class Purchase_Results_Page():
             self.Price_display=0
             self.Total_Price_display=0
             fly_photo[i] = ImageTk.PhotoImage(fly_image)
+            print(Actual_Search.ReturnOrNot)
             if Actual_Search.ReturnOrNot == True:
                 self.Search_Results_Outbound[i] = Actual_Search.Search_Inbound()
             else:
@@ -1297,9 +1301,9 @@ class Flight_Results_Page():
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.AddBasket_Button = tk.Button(self.right_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
-        if Actual_Inbound_Flight.Flight_Number==None:
+        if Actual_Search.ReturnOrNot == False:
             self.Chose_Return_Button = tk.Button(self.left_frame, text='Choose Return', command=self.Re_Pur, font=("Arial", 15), bg=third_color, fg=main_color)
-        elif (Actual_Inbound_Flight.Flight_Number!=None) & (Actual_Outbound_Flight.Flight_Number!=None):
+        else:
             self.Chose_Return_Button = tk.Button(self.left_frame, text='Go to Basket', command=Launch_Basket_Page, font=("Arial", 15), bg=third_color, fg=main_color)
         #Info
         self.Flight_Title = tk.Label(self.right_frame, text="Flight Number: "+str(Actual_Outbound_Flight.Flight_Number), font=("Arial", 11), bg=main_color)
@@ -1385,7 +1389,7 @@ class Flight_Results_Page():
         Launch_Flight_Results_Page()
 
     def Re_Pur(self):
-        Actual_Search.ReurnOrNot=True
+        Actual_Search.ReturnOrNot=True
         Launch_Purchase_Results_Page()
 
 

@@ -87,3 +87,4 @@ class Actual_Search():
         self.Passengers=0
         self.Passengers_Type = [None]*11
         self.Passengers_Type_Number=[None]*11
+        self.ReturnOrNot=False

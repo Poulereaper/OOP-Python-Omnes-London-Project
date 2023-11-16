@@ -42,6 +42,25 @@ class Outbound_Flight():
         self.Passengers=Passengers
         self.Passengers_Type_Number=Passengers_Type_Number
 
+    def Reset_Outbound_Flight():
+        self.Flight_ID = None
+        self.Airline_Name = None
+        self.Flight_Number = None
+        self.Departure_Airport = None
+        self.Departure_Date = None
+        self.Departure_Time = None
+        self.Arrival_Airport = None
+        self.Arrival_Date = None
+        self.Arrival_Time = None
+        self.Flight_Duration = None
+        self.Price = None
+        self.Discount = None
+        self.Seats_Left = None
+        self.Seats_Capacity = None
+        self.Class_Type = 0
+        self.Passengers=0
+        self.Passengers_Type_Number=[None]*11
+
    
 
 class Inbound_Flight():
@@ -82,4 +101,23 @@ class Inbound_Flight():
         self.Class_Type = Class_Type
         self.Passengers=Passengers
         self.Passengers_Type_Number=Passengers_Type_Number
+
+    def Reset_Inbound_Flight():
+        self.Flight_ID = None
+        self.Airline_Name = None
+        self.Flight_Number = None
+        self.Departure_Airport = None
+        self.Departure_Date = None
+        self.Departure_Time = None
+        self.Arrival_Airport = None
+        self.Arrival_Date = None
+        self.Arrival_Time = None
+        self.Flight_Duration = None
+        self.Price = None
+        self.Discount = None
+        self.Seats_Left = None
+        self.Seats_Capacity = None
+        self.Class_Type = 0
+        self.Passengers=0
+        self.Passengers_Type_Number=[None]*11
 
