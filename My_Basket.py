@@ -50,6 +50,3 @@ class Basket():
         #Modify a basket by sql resquest
         pass
 
-    def Rest_Basket(self):
-        Clear_Basket()
-
