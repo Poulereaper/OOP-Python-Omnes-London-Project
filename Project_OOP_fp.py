@@ -31,9 +31,9 @@ class Home_Page():
         canvas_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_one)
         canvas_one.image = bg_photo_one
 
-    
+
         #Logo
-        bg_image_two = Image.open("./images/photologo.png")
+        bg_image_two = Image.open("./images/photologo_re.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
         canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
@@ -113,7 +113,7 @@ class LogIn_Page():
         self.bottom_frame = tk.Frame(main_window, bg=main_color)
 
         #Logo
-        bg_image_two = Image.open("./images/photologo.png")
+        bg_image_two = Image.open("./images/photologo_re.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
         canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
@@ -240,7 +240,7 @@ class SignUp_First_Page():
         self.bottom_frame = tk.Frame(main_window, bg=main_color)
 
         #Logo
-        bg_image_two = Image.open("./images/photologo.png")
+        bg_image_two = Image.open("./images/photologo_re.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
         canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
@@ -352,7 +352,7 @@ class SignUp_Second_Page():
         self.bottom_frame = tk.Frame(main_window, bg=main_color)
 
         #Logo
-        bg_image_two = Image.open("./images/photologo.png")
+        bg_image_two = Image.open("./images/photologo_re.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
         canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
@@ -470,7 +470,7 @@ class Menu_Page():
         self.middle_frame = tk.Frame(main_window, bg=main_color)
 
         #Logo
-        bg_image_two = Image.open("./images/photologo.png")
+        bg_image_two = Image.open("./images/photologo_re.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
         canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
@@ -577,7 +577,7 @@ class Purchase_Page():
         self.bottom_frame = tk.Frame(main_window, bg=main_color)
 
         #Logo
-        bg_image_two = Image.open("./images/photologo.png")
+        bg_image_two = Image.open("./images/photologo_re.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
         canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
@@ -808,7 +808,7 @@ class Info_Passengers():
         self.display_frame = tk.Frame(self.scroll_canva, bg=main_color)
 
         #Logo
-        bg_image_two = Image.open("./images/photologo.png")
+        bg_image_two = Image.open("./images/photologo_re.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
         canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
@@ -963,7 +963,7 @@ class Purchase_Results_Page():
         self.display_frame = tk.Frame(self.scroll_canva, bg=main_color)
 
         #Logo
-        bg_image_two = Image.open("./images/photologo.png")
+        bg_image_two = Image.open("./images/photologo_re.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
         canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
@@ -1239,7 +1239,7 @@ class Flight_Results_Page():
         canvas.image = bg_photo_one
 
         #Logo
-        bg_image_two = Image.open("./images/photologo.png")
+        bg_image_two = Image.open("./images/photologo_re.png")
         bg_photo_two = ImageTk.PhotoImage(bg_image_two)
         # Créer un canevas pour afficher l'image du logo
         canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
@@ -1545,7 +1545,7 @@ def Change_Theme():
     for widget in main_window.winfo_children():
         widget.destroy()
     Menu_Page(main_window)
-
+    
 
 main_window = tk.Tk()
 main_window.title("OOP Air Line")
@@ -1553,8 +1553,6 @@ main_window.geometry("1100x600")
 main_window.style = tk.ttk.Style()
 main_window.style.theme_use("clam")
 #main_window.iconbitmap("./images/avion.ico")
-
-
 
 Actual_Customer = AC.Actual_Customer()
 Actual_Customer.LogOrNot = False
