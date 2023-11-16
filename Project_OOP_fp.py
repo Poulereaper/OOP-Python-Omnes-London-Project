@@ -9,6 +9,7 @@ import Actual_Customer as AC
 import Actual_Search as AS
 import Actual_Flight as AF
 import My_Basket as AB
+#import LogInPage as LP
 import re
 from PIL import Image, ImageTk
 import datetime
@@ -1393,16 +1394,21 @@ class Basket_Page():
         self.Space_Title_3 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
         self.Space_Title_4 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
         self.Space_Title_5 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
+        
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+            pass
+        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
+            self.Flight_Title_O = tk.Label(self.left_frame, text="Flight Number: "+str(Actual_Basket.Outbound_Flight_B.Flight_Number), font=("Arial", 11), bg=main_color)
+            self.Departure_Title_O = tk.Label(self.left_frame, text="Departure: "+str(Actual_Basket.Outbound_Flight_B.Departure_Airport), font=("Arial", 11), bg=main_color)
+            self.Arrival_Title_O = tk.Label(self.left_frame, text="Arrival: "+str(Actual_Basket.Outbound_Flight_B.Arrival_Airport), font=("Arial", 11), bg=main_color)
 
-        self.Flight_Title_O = tk.Label(self.left_frame, text="Flight Number: "+str(Actual_Basket.Outbound_Flight_B.Flight_Number), font=("Arial", 11), bg=main_color)
-        self.Departure_Title_O = tk.Label(self.left_frame, text="Departure: "+str(Actual_Basket.Outbound_Flight_B.Departure_Airport), font=("Arial", 11), bg=main_color)
-        self.Arrival_Title_O = tk.Label(self.left_frame, text="Arrival: "+str(Actual_Basket.Outbound_Flight_B.Arrival_Airport), font=("Arial", 11), bg=main_color)
+            self.Flight_Title_R = tk.Label(self.right_frame, text="Flight Number: "+str(Actual_Basket.Inbound_Flight_B.Flight_Number), font=("Arial", 11), bg=main_color)
+            self.Departure_Title_R = tk.Label(self.right_frame, text="Departure: "+str(Actual_Basket.Inbound_Flight_B.Departure_Airport), font=("Arial", 11), bg=main_color)
+            self.Arrival_Title_R = tk.Label(self.right_frame, text="Arrival: "+str(Actual_Basket.Inbound_Flight_B.Arrival_Airport), font=("Arial", 11), bg=main_color)
+         
+        else : pass 
 
-        self.Flight_Title_R = tk.Label(self.right_frame, text="Flight Number: "+str(Actual_Basket.Inbound_Flight_B.Flight_Number), font=("Arial", 11), bg=main_color)
-        self.Departure_Title_R = tk.Label(self.right_frame, text="Departure: "+str(Actual_Basket.Inbound_Flight_B.Departure_Airport), font=("Arial", 11), bg=main_color)
-        self.Arrival_Title_R = tk.Label(self.right_frame, text="Arrival: "+str(Actual_Basket.Inbound_Flight_B.Arrival_Airport), font=("Arial", 11), bg=main_color)
-
-        # Buttons 
+        # Buttons
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
