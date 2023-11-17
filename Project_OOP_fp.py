@@ -1116,10 +1116,6 @@ class Purchase_Results_Page():
                 self.Search_Results_Outbound[i] = Actual_Search.Search_Inbound()
             else:
                 self.Search_Results_Outbound[i] = Actual_Search.Search_Outbound()
-            #self.TimeToPass=self.Search_Results_Outbound[i][0]['DepartureTime']
-            #print(self.Search_Results_Outbound[i])
-            #self.Flight_Title = tk.Label(self.display_frame, text="Flight "+str(i+1), font=("Arial", 10), bg=main_color)
-            #self.Flight_Title.pack(ipadx=5, ipady=5, padx=490, pady=3)
             
             # Create a canvas widget
             self.canvas = tk.Canvas(self.display_frame, width=950, height=200, bg=main_color, highlightthickness=0, borderwidth=0)
@@ -1404,25 +1400,11 @@ class Basket_Page():
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
         self.Page_Title= tk.Label(self.second_top_frame, text=" Your Basket", font=("Arial", 15), bg=main_color, fg=fourth_color)
-        self.Info_passengers = tk.Label(self.second_top_frame, text="Add To basket and pay after", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.Space_Title_1 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
         self.Space_Title_2 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
         self.Space_Title_3 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
         self.Space_Title_4 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
         self.Space_Title_5 = tk.Label(self.right_frame, text=" ", font=("Arial", 10), bg=main_color)
-        
-        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
-            pass
-        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
-            self.Flight_Title_O = tk.Label(self.left_frame, text="Flight Number: "+str(Actual_Basket.Outbound_Flight_B.Flight_Number), font=("Arial", 11), bg=main_color)
-            self.Departure_Title_O = tk.Label(self.left_frame, text="Departure: "+str(Actual_Basket.Outbound_Flight_B.Departure_Airport), font=("Arial", 11), bg=main_color)
-            self.Arrival_Title_O = tk.Label(self.left_frame, text="Arrival: "+str(Actual_Basket.Outbound_Flight_B.Arrival_Airport), font=("Arial", 11), bg=main_color)
-
-            self.Flight_Title_R = tk.Label(self.right_frame, text="Flight Number: "+str(Actual_Basket.Inbound_Flight_B.Flight_Number), font=("Arial", 11), bg=main_color)
-            self.Departure_Title_R = tk.Label(self.right_frame, text="Departure: "+str(Actual_Basket.Inbound_Flight_B.Departure_Airport), font=("Arial", 11), bg=main_color)
-            self.Arrival_Title_R = tk.Label(self.right_frame, text="Arrival: "+str(Actual_Basket.Inbound_Flight_B.Arrival_Airport), font=("Arial", 11), bg=main_color)
-         
-        else : pass 
 
         # Buttons
         if Actual_Customer.LogOrNot == False:
@@ -1431,7 +1413,9 @@ class Basket_Page():
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.Pay_Button = tk.Button(self.right_frame, text='Pay', command=self.Pay, font=("Arial", 15), bg=third_color, fg=main_color)
-        self.Delete_Button = tk.Button(self.right_frame, text='Delete', command=self.Delete, font=("Arial", 15), bg=third_color, fg=main_color)
+        self.Delete_Button = tk.Button(self.right_frame, text='Delete Basket', command=self.Delete, font=("Arial", 11), bg=third_color, fg=main_color)
+        self.Change_Outbound_Button = tk.Button(self.right_frame, text='Change Outbound', command=self.Change_Outbound, font=("Arial", 11), bg=third_color, fg=main_color)
+        self.Change_Inbound_Button = tk.Button(self.right_frame, text='Change Inbound', command=self.Change_Inbound, font=("Arial", 11), bg=third_color, fg=main_color)
 
         # Pack all wigets
         #Frame
@@ -1453,19 +1437,51 @@ class Basket_Page():
         self.left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         #Display the title
         #Display the Page Title
-        self.Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=20)
-        #Display the Info Title
-        self.Info_passengers.pack(ipadx=5, ipady=5, padx=0, pady=10)
-        #Display the Space Title
-        self.Space_Title_1.pack(ipadx=5, ipady=5, padx=10, pady=10)
-        #Display the Infos
-        self.Flight_Title_O.pack(ipadx=5, ipady=5, padx=0, pady=10)
-        self.Departure_Title_O.pack(ipadx=5, ipady=5, padx=0, pady=10)
-        self.Arrival_Title_O.pack(ipadx=5, ipady=5, padx=0, pady=10)
-        self.Flight_Title_R.pack(ipadx=5, ipady=5, padx=0, pady=10)
-        self.Departure_Title_R.pack(ipadx=5, ipady=5, padx=0, pady=10)
-        self.Arrival_Title_R.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=20, side=tk.LEFT)
+        self.Total_Price_display=0
+        self.Price_display=0
+
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+            pass
+        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
+
+            for i in range(2):  
+                self.Total_Price_display=0
+                self.Price_display=0
+                if i==0: self.Display_Flight = Actual_Basket.Outbound_Flight_B
+                else : self.Display_Flight = Actual_Basket.Inbound_Flight_B
+                # Create a canvas widget
+                self.canvas = tk.Canvas(self.left_frame, width=750, height=160, bg=main_color, highlightthickness=0, borderwidth=0)
+                #self.canvas.bind("<Button-1>", lambda event, param=Display_Flight.Flight_ID : self.FLight_Select(event, param))
+                self.canvas.pack(padx=25, pady=10, side=tk.TOP, fill=tk.X)
+                # Draw a rectangle on the canvas
+                self.canvas.create_rectangle(0, 0, 750, 160, outline='black', width=2)
+                
+                # Print information in the rectangle
+                #self.canvas.create_text(20, 20, anchor='nw', text="Flight Number: "+str(self.Search_Results_Outbound[i]), font=("Arial", 10))
+                #self.canvas.create_image(10, 10, anchor='nw', image=fly_photo[i], tags=("fly"+str(i)))
+                self.canvas.create_text(280, 30, anchor='nw', text="Flight Number: "+str(self.Display_Flight.Flight_Number), font=("Arial", 10))
+                self.canvas.create_text(280, 50, anchor='nw', text="Departure: "+str(self.Display_Flight.Departure_Airport), font=("Arial", 10))
+                self.canvas.create_text(280, 70, anchor='nw', text="Arrival: "+str(self.Display_Flight.Arrival_Airport), font=("Arial", 10))
+                if Actual_Search.Passengers == 1:
+                    self.Total_Price_display=float(self.Display_Flight.Price)*Actual_Search.Class_Type
+                else :
+                    for j in range(Actual_Search.Passengers):
+                        self.Total_Price_display+=(float(self.Display_Flight.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type
+                self.canvas.create_text(660, 30, anchor='ne', text=str(self.Total_Price_display)+"£", font=("Arial", 15))
+                self.Price_display=round(float(self.Display_Flight.Price)*Actual_Search.Class_Type,2)
+                self.canvas.create_text(660, 60, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
+                self.canvas.create_text(280, 110, anchor='nw', text="Departure Time: "+str(self.Display_Flight.Departure_Time), font=("Arial", 10))
+                self.canvas.create_text(480, 110, anchor='nw', text="Arrival Time: "+str(self.Display_Flight.Arrival_Time), font=("Arial", 10))
+            
+        else : pass 
+
         
+        #Buttons
+        self.Change_Outbound_Button.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Change_Inbound_Button.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Delete_Button.pack(ipadx=5, ipady=5, padx=0, pady=20)
+        self.Pay_Button.pack(ipadx=5, ipady=0, padx=0, pady=30)
 
     def Hide_Button_1(self, empty):
         Launch_Home_Page()
@@ -1476,7 +1492,19 @@ class Basket_Page():
 
     def Delete(self):
         print("Delete")
-        #Launch_Home_Page()
+        Actual_Basket.Delete_Basket()
+        Launch_Home_Page()
+    
+    def Change_Outbound(self):
+        Actual_Search.ReturnOrNot=False
+        print("Change Outbound")
+        Launch_Purchase_Results_Page()
+    
+    def Change_Inbound(self):
+        Actual_Search.ReturnOrNot=True
+        print("Change Inbound")
+        Launch_Purchase_Results_Page()
+
 #---------------------## ALL THE FUNCTIONS ##---------------------#
 
 ## Opennig Pages ##
