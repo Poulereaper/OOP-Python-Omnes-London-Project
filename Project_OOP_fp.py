@@ -1096,21 +1096,16 @@ class Purchase_Results_Page():
         self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
 
         #Display the Page Title
-        self.Page_Title.pack(ipadx=5, ipady=5, padx=490, pady=30)
+        self.Page_Title.pack(ipadx=5, ipady=5, padx=450, pady=30)
         #Display the Go Back Title
         self.GoBack_Title.place(x=22, y=47)
 
         #Make search
         self.Search_Results_Outbound = [None] * 5
 
-        fly_image = Image.open("./images/avion_res.png")
-        #fly_photo = ImageTk.PhotoImage(fly_image)
-        fly_photo=[None]*5
-        
         for i in range(5):
             self.Price_display=0
             self.Total_Price_display=0
-            fly_photo[i] = ImageTk.PhotoImage(fly_image)
             print(Actual_Search.ReturnOrNot)
             if Actual_Search.ReturnOrNot == True:
                 self.Search_Results_Outbound[i] = Actual_Search.Search_Inbound()
@@ -1118,15 +1113,14 @@ class Purchase_Results_Page():
                 self.Search_Results_Outbound[i] = Actual_Search.Search_Outbound()
             
             # Create a canvas widget
-            self.canvas = tk.Canvas(self.display_frame, width=950, height=200, bg=main_color, highlightthickness=0, borderwidth=0)
+            self.canvas = tk.Canvas(self.display_frame, width=850, height=200, highlightthickness=0 ,borderwidth=0, bg=main_color)
             self.canvas.bind("<Button-1>", lambda event, param=self.Search_Results_Outbound[i]: self.FLight_Select(event, param))
-            self.canvas.pack(padx=75, pady=15, side=tk.TOP, fill=tk.X)
+            self.canvas.pack(padx=65, pady=15, side=tk.TOP, fill=tk.X)
             # Draw a rectangle on the canvas
             self.canvas.create_rectangle(0, 0, 950, 200, outline='black', width=2)
-            
+
             # Print information in the rectangle
             #self.canvas.create_text(20, 20, anchor='nw', text="Flight Number: "+str(self.Search_Results_Outbound[i]), font=("Arial", 10))
-            self.canvas.create_image(10, 10, anchor='nw', image=fly_photo[i], tags=("fly"+str(i)))
             self.canvas.create_text(380, 40, anchor='nw', text="Flight Number: "+str(self.Search_Results_Outbound[i][0]['FlightNumber']), font=("Arial", 10))
             self.canvas.create_text(380, 60, anchor='nw', text="Departure: "+str(self.Search_Results_Outbound[i][0]['Departure']), font=("Arial", 10))
             self.canvas.create_text(380, 80, anchor='nw', text="Arrival: "+str(self.Search_Results_Outbound[i][0]['Arrival']), font=("Arial", 10))
@@ -1141,6 +1135,15 @@ class Purchase_Results_Page():
             self.canvas.create_text(760, 70, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
             self.canvas.create_text(380, 120, anchor='nw', text="Departure Time: "+str(self.Search_Results_Outbound[i][0]['DepartureTime']), font=("Arial", 10))
             self.canvas.create_text(580, 120, anchor='nw', text="Arrival Time: "+str(self.Search_Results_Outbound[i][0]['ArrivalTime']), font=("Arial", 10))
+            bg_image_rep = Image.open("./images/avion_res.png")
+            bg_photo_rep = ImageTk.PhotoImage(bg_image_rep)
+            # Créer un canevas pour afficher l'image du logo
+            canvas_rep = tk.Canvas(self.canvas, width=bg_image_rep.width, height=bg_image_rep.height, highlightthickness=0,borderwidth=0)
+            canvas_rep.place(x=10,y=10)
+            canvas_rep.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep)
+            canvas_rep.image = bg_photo_rep
+            bg_image_rep.close()
+                
 
     def Hide_Button(self, empty):
         Launch_Home_Page()
@@ -1396,6 +1399,16 @@ class Basket_Page():
         self.left_frame = tk.Frame(main_window, bg=main_color)
         self.right_frame = tk.Frame(main_window, bg=main_color)
 
+        #Logo
+        bg_image_two = Image.open("./images/photologo_re.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=410,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
+
+        
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
@@ -1413,9 +1426,6 @@ class Basket_Page():
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.Pay_Button = tk.Button(self.right_frame, text='Pay', command=self.Pay, font=("Arial", 15), bg=third_color, fg=main_color)
-        self.Delete_Button = tk.Button(self.right_frame, text='Delete Basket', command=self.Delete, font=("Arial", 11), bg=third_color, fg=main_color)
-        self.Change_Outbound_Button = tk.Button(self.right_frame, text='Change Outbound', command=self.Change_Outbound, font=("Arial", 11), bg=third_color, fg=main_color)
-        self.Change_Inbound_Button = tk.Button(self.right_frame, text='Change Inbound', command=self.Change_Inbound, font=("Arial", 11), bg=third_color, fg=main_color)
 
         # Pack all wigets
         #Frame
@@ -1473,14 +1483,20 @@ class Basket_Page():
                 self.canvas.create_text(660, 60, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
                 self.canvas.create_text(280, 110, anchor='nw', text="Departure Time: "+str(self.Display_Flight.Departure_Time), font=("Arial", 10))
                 self.canvas.create_text(480, 110, anchor='nw', text="Arrival Time: "+str(self.Display_Flight.Arrival_Time), font=("Arial", 10))
-            
+                bg_image_rep = Image.open("./images/bin.png")
+                bg_photo_rep = ImageTk.PhotoImage(bg_image_rep)
+                # Créer un canevas pour afficher l'image du logo
+                canvas_rep = tk.Canvas(self.canvas, width=bg_image_rep.width, height=bg_image_rep.height, highlightthickness=0,borderwidth=0)
+                canvas_rep.place(x=10,y=10)
+                canvas_rep.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep)
+                canvas_rep.image = bg_photo_rep
+                bg_image_rep.close()
+
+
         else : pass 
 
         
         #Buttons
-        self.Change_Outbound_Button.pack(ipadx=5, ipady=5, padx=0, pady=10)
-        self.Change_Inbound_Button.pack(ipadx=5, ipady=5, padx=0, pady=10)
-        self.Delete_Button.pack(ipadx=5, ipady=5, padx=0, pady=20)
         self.Pay_Button.pack(ipadx=5, ipady=0, padx=0, pady=30)
 
     def Hide_Button_1(self, empty):
