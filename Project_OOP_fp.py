@@ -659,6 +659,7 @@ class Purchase_Page():
             self.Passengers_Input.insert(0, Actual_Search.Passengers)
             self.Class_Input.delete(0, tk.END)
             self.Class_Input.insert(0, Actual_Search.Class)
+            Launch_Purchase_Results_Page()
 
 
         # Pack all wigets
@@ -1594,13 +1595,14 @@ class Basket_Page():
             Actual_Search.Reset_Search()
         elif param==1:
             print(Actual_Inbound_Flight.Price)
-            ##Error here : work with Outbound but not with Inbound -> Outbound Basket is none apparently
             Actual_Basket.Complete_Basket(Actual_Inbound_Flight, None, False)
             Actual_Outbound_Flight.Complete_Outbound_Flight(Actual_Basket.Outbound_Flight_B.Flight_ID, Actual_Basket.Outbound_Flight_B.Airline_Name, Actual_Basket.Outbound_Flight_B.Flight_Number, Actual_Basket.Outbound_Flight_B.Departure_Airport, Actual_Basket.Outbound_Flight_B.Departure_Date, Actual_Basket.Outbound_Flight_B.Departure_Time, Actual_Basket.Outbound_Flight_B.Arrival_Airport, Actual_Basket.Outbound_Flight_B.Arrival_Date, Actual_Basket.Outbound_Flight_B.Arrival_Time, Actual_Basket.Outbound_Flight_B.Flight_Duration, Actual_Basket.Outbound_Flight_B.Price, Actual_Basket.Outbound_Flight_B.Discount, Actual_Basket.Outbound_Flight_B.Seats_Left, Actual_Basket.Outbound_Flight_B.Seats_Capacity, Actual_Basket.Outbound_Flight_B.Class_Type, Actual_Basket.Outbound_Flight_B.Passengers, Actual_Basket.Outbound_Flight_B.Passengers_Type_Number)
             print(Actual_Outbound_Flight.Flight_Number)
             print(Actual_Basket.Outbound_Flight_B.Flight_Number)
             #Actual_Inbound_Flight.Reset_Inbound_Flight()
             Actual_Search.ReturnOrNot=True
+            Actual_Search.From=Actual_Outbound_Flight.Departure_Airport
+            Actual_Search.To=Actual_Outbound_Flight.Arrival_Airport
 
         else:
             Actual_Search.ReturnOrNot=True
