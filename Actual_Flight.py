@@ -42,7 +42,7 @@ class Outbound_Flight():
         self.Passengers=Passengers
         self.Passengers_Type_Number=Passengers_Type_Number
 
-    def Reset_Outbound_Flight():
+    def Reset_Outbound_Flight(self):
         self.Flight_ID = None
         self.Airline_Name = None
         self.Flight_Number = None
@@ -102,7 +102,7 @@ class Inbound_Flight():
         self.Passengers=Passengers
         self.Passengers_Type_Number=Passengers_Type_Number
 
-    def Reset_Inbound_Flight():
+    def Reset_Inbound_Flight(self):
         self.Flight_ID = None
         self.Airline_Name = None
         self.Flight_Number = None

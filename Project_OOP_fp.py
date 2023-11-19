@@ -1426,6 +1426,7 @@ class Basket_Page():
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.Pay_Button = tk.Button(self.right_frame, text='Pay', command=self.Pay, font=("Arial", 15), bg=third_color, fg=main_color)
+        self.Delete_Button = tk.Button(self.right_frame, text='Delete my Basket', command=self.Delete, font=("Arial", 11), bg=third_color, fg=main_color)
 
         # Pack all wigets
         #Frame
@@ -1451,8 +1452,76 @@ class Basket_Page():
         self.Total_Price_display=0
         self.Price_display=0
 
-        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
-            pass
+        if (Actual_Basket.Outbound_Flight_B==None)&(Actual_Basket.Inbound_Flight_B==None):
+            for i in range(2):  
+                # Create a canvas widget
+                self.canvas = tk.Canvas(self.left_frame, width=750, height=200, bg=main_color, highlightthickness=0, borderwidth=0)
+                #self.canvas.bind("<Button-1>", lambda event, param=Display_Flight.Flight_ID : self.FLight_Select(event, param))
+                self.canvas.pack(padx=25, pady=10, side=tk.TOP, fill=tk.X)
+                # Draw a rectangle on the canvas
+                self.canvas.create_rectangle(0, 0, 750, 200, outline='black', width=2)
+                
+                # Print information in the rectangle
+                self.canvas.create_text(300, 80, anchor='nw', text="It looks pretty empty here! ", font=("Arial", 13))
+                #images
+                bg_image_rep_one = Image.open("./images/avion_res.png")
+                bg_photo_rep_one = ImageTk.PhotoImage(bg_image_rep_one)
+                # Créer un canevas pour afficher l'image du logo
+                canvas_rep_one = tk.Canvas(self.canvas, width=bg_image_rep_one.width, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
+                canvas_rep_one.place(x=10,y=10)
+                canvas_rep_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep_one)
+                canvas_rep_one.image = bg_photo_rep_one
+                bg_image_rep_one.close()
+            
+        elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+             for i in range(2):  
+                self.Total_Price_display=0
+                self.Price_display=0
+                # Create a canvas widget
+                self.canvas = tk.Canvas(self.left_frame, width=750, height=200, bg=main_color, highlightthickness=0, borderwidth=0)
+                #self.canvas.bind("<Button-1>", lambda event, param=Display_Flight.Flight_ID : self.FLight_Select(event, param))
+                self.canvas.pack(padx=25, pady=10, side=tk.TOP, fill=tk.X)
+                # Draw a rectangle on the canvas
+                self.canvas.create_rectangle(0, 0, 750, 200, outline='black', width=2)
+                
+                # Print information in the rectangle
+                if i==0: 
+                    self.Display_Flight = Actual_Basket.Outbound_Flight_B
+                    self.canvas.create_text(280, 30, anchor='nw', text="Flight Number: "+str(self.Display_Flight.Flight_Number), font=("Arial", 10))
+                    self.canvas.create_text(280, 50, anchor='nw', text="Departure: "+str(self.Display_Flight.Departure_Airport), font=("Arial", 10))
+                    self.canvas.create_text(280, 70, anchor='nw', text="Arrival: "+str(self.Display_Flight.Arrival_Airport), font=("Arial", 10))
+                    if Actual_Search.Passengers == 1:
+                        self.Total_Price_display=float(self.Display_Flight.Price)*Actual_Search.Class_Type
+                    else :
+                        for j in range(Actual_Search.Passengers):
+                            self.Total_Price_display+=(float(self.Display_Flight.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type
+                    self.canvas.create_text(660, 30, anchor='ne', text=str(self.Total_Price_display)+"£", font=("Arial", 15))
+                    self.Price_display=round(float(self.Display_Flight.Price)*Actual_Search.Class_Type,2)
+                    self.canvas.create_text(660, 60, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
+                    self.canvas.create_text(280, 110, anchor='nw', text="Departure Time: "+str(self.Display_Flight.Departure_Time), font=("Arial", 10))
+                    self.canvas.create_text(480, 110, anchor='nw', text="Arrival Time: "+str(self.Display_Flight.Arrival_Time), font=("Arial", 10))
+                    bg_image_two = Image.open("./images/bin.png")
+                    bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+                    # Créer un canevas pour afficher l'image du logo
+                    canvas_two = tk.Canvas(self.canvas, width=bg_image_two.width, height=bg_image_two.height, highlightthickness=0,borderwidth=0)
+                    canvas_two.place(x=720,y=170)
+                    canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+                    canvas_two.image = bg_photo_two
+                    bg_image_two.close()
+                    canvas_two.bind("<Button-1>", lambda event, param=i: self.Delete(event, param))
+                else : 
+                    self.Display_Flight = Actual_Basket.Outbound_Flight_B
+                    self.canvas.create_text(660, 30, anchor='ne', text="Need to return from"+str(self.Display_Flight.Arrival_Airport)+"?", font=("Arial", 15))
+                #images
+                bg_image_rep_one = Image.open("./images/avion_res.png")
+                bg_photo_rep_one = ImageTk.PhotoImage(bg_image_rep_one)
+                # Créer un canevas pour afficher l'image du logo
+                canvas_rep_one = tk.Canvas(self.canvas, width=bg_image_rep_one.width, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
+                canvas_rep_one.place(x=10,y=10)
+                canvas_rep_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep_one)
+                canvas_rep_one.image = bg_photo_rep_one
+                bg_image_rep_one.close()
+
         elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
 
             for i in range(2):  
@@ -1461,11 +1530,11 @@ class Basket_Page():
                 if i==0: self.Display_Flight = Actual_Basket.Outbound_Flight_B
                 else : self.Display_Flight = Actual_Basket.Inbound_Flight_B
                 # Create a canvas widget
-                self.canvas = tk.Canvas(self.left_frame, width=750, height=160, bg=main_color, highlightthickness=0, borderwidth=0)
+                self.canvas = tk.Canvas(self.left_frame, width=750, height=200, bg=main_color, highlightthickness=0, borderwidth=0)
                 #self.canvas.bind("<Button-1>", lambda event, param=Display_Flight.Flight_ID : self.FLight_Select(event, param))
                 self.canvas.pack(padx=25, pady=10, side=tk.TOP, fill=tk.X)
                 # Draw a rectangle on the canvas
-                self.canvas.create_rectangle(0, 0, 750, 160, outline='black', width=2)
+                self.canvas.create_rectangle(0, 0, 750, 200, outline='black', width=2)
                 
                 # Print information in the rectangle
                 #self.canvas.create_text(20, 20, anchor='nw', text="Flight Number: "+str(self.Search_Results_Outbound[i]), font=("Arial", 10))
@@ -1483,21 +1552,66 @@ class Basket_Page():
                 self.canvas.create_text(660, 60, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
                 self.canvas.create_text(280, 110, anchor='nw', text="Departure Time: "+str(self.Display_Flight.Departure_Time), font=("Arial", 10))
                 self.canvas.create_text(480, 110, anchor='nw', text="Arrival Time: "+str(self.Display_Flight.Arrival_Time), font=("Arial", 10))
-                bg_image_rep = Image.open("./images/bin.png")
-                bg_photo_rep = ImageTk.PhotoImage(bg_image_rep)
+                #images
+                bg_image_rep_one = Image.open("./images/avion_res.png")
+                bg_photo_rep_one = ImageTk.PhotoImage(bg_image_rep_one)
                 # Créer un canevas pour afficher l'image du logo
-                canvas_rep = tk.Canvas(self.canvas, width=bg_image_rep.width, height=bg_image_rep.height, highlightthickness=0,borderwidth=0)
-                canvas_rep.place(x=10,y=10)
-                canvas_rep.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep)
-                canvas_rep.image = bg_photo_rep
-                bg_image_rep.close()
-
-
+                canvas_rep_one = tk.Canvas(self.canvas, width=bg_image_rep_one.width, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
+                canvas_rep_one.place(x=10,y=10)
+                canvas_rep_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep_one)
+                canvas_rep_one.image = bg_photo_rep_one
+                bg_image_rep_one.close()
+                bg_image_two = Image.open("./images/bin.png")
+                bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+                # Créer un canevas pour afficher l'image du logo
+                canvas_two = tk.Canvas(self.canvas, width=bg_image_two.width, height=bg_image_two.height, highlightthickness=0,borderwidth=0)
+                canvas_two.place(x=720,y=170)
+                canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+                canvas_two.image = bg_photo_two
+                bg_image_two.close()
+                canvas_two.bind("<Button-1>", lambda event, param=i+1: self.Delete(event, param))
+                self.Delete_Button.pack(ipadx=5, ipady=5, padx=0, pady=10, side=tk.LEFT)
         else : pass 
 
-        
         #Buttons
         self.Pay_Button.pack(ipadx=5, ipady=0, padx=0, pady=30)
+
+    def Hide_Button_1(self, empty):
+        Launch_Home_Page()
+
+    def Pay(self):
+        print("Pay")
+        #Launch_Home_Page()
+    
+    def Delete(self, event, param):
+        print("Delete")
+        if param==0:
+            Actual_Search.ReturnOrNot=False
+            Actual_Basket.Delete_Outbound()
+            Actual_Outbound_Flight.Reset_Outbound_Flight()
+            print(Actual_Outbound_Flight.Flight_Number)
+            Actual_Inbound_Flight.Reset_Inbound_Flight()
+            Actual_Search.Reset_Search()
+        elif param==1:
+            print(Actual_Inbound_Flight.Price)
+            ##Error here : work with Outbound but not with Inbound -> Outbound Basket is none apparently
+            Actual_Basket.Complete_Basket(Actual_Inbound_Flight, None, False)
+            Actual_Outbound_Flight.Complete_Outbound_Flight(Actual_Basket.Outbound_Flight_B.Flight_ID, Actual_Basket.Outbound_Flight_B.Airline_Name, Actual_Basket.Outbound_Flight_B.Flight_Number, Actual_Basket.Outbound_Flight_B.Departure_Airport, Actual_Basket.Outbound_Flight_B.Departure_Date, Actual_Basket.Outbound_Flight_B.Departure_Time, Actual_Basket.Outbound_Flight_B.Arrival_Airport, Actual_Basket.Outbound_Flight_B.Arrival_Date, Actual_Basket.Outbound_Flight_B.Arrival_Time, Actual_Basket.Outbound_Flight_B.Flight_Duration, Actual_Basket.Outbound_Flight_B.Price, Actual_Basket.Outbound_Flight_B.Discount, Actual_Basket.Outbound_Flight_B.Seats_Left, Actual_Basket.Outbound_Flight_B.Seats_Capacity, Actual_Basket.Outbound_Flight_B.Class_Type, Actual_Basket.Outbound_Flight_B.Passengers, Actual_Basket.Outbound_Flight_B.Passengers_Type_Number)
+            print(Actual_Outbound_Flight.Flight_Number)
+            print(Actual_Basket.Outbound_Flight_B.Flight_Number)
+            #Actual_Inbound_Flight.Reset_Inbound_Flight()
+            Actual_Search.ReturnOrNot=True
+
+        else:
+            Actual_Search.ReturnOrNot=True
+            Actual_Inbound_Flight.Reset_Inbound_Flight()
+            Actual_Basket.Delete_Inbound()
+        Launch_Basket_Page()
+
+    def Delete_All(self):
+        print("Delete All")
+        Actual_Basket.Delete_Basket()
+        Launch_Basket_Page()
 
     def Hide_Button_1(self, empty):
         Launch_Home_Page()
@@ -1506,10 +1620,6 @@ class Basket_Page():
         print("Pay")
         #Launch_Home_Page()
 
-    def Delete(self):
-        print("Delete")
-        Actual_Basket.Delete_Basket()
-        Launch_Home_Page()
     
     def Change_Outbound(self):
         Actual_Search.ReturnOrNot=False

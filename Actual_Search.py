@@ -77,7 +77,7 @@ class Actual_Search():
             print(result[0]['FlightID'])
         return result
 
-    def Rest_Search(self):
+    def Reset_Search(self):
         self.From=""
         self.To=""
         self.Departure_Date=""

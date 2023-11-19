@@ -42,11 +42,13 @@ class Basket():
         self.Basket_Total = 0
         self.Basket_date = None
 
-    def Delete_Basket(self):
-        #Delete a basket by sql resquest
-        pass
+    def Delete_Outbound(self):
+        self.Outbound_Flight_B = self.Inbound_Flight_B
+        self.Inbound_Flight_B = None
+        self.Clear_Basket()
 
-    def Modify_Basket(self):
-        #Modify a basket by sql resquest
-        pass
+    def Delete_Inbound(self):
+        self.Inbound_Flight_B = None
+        self.Complete_Basket(self.Outbound_Flight_B, self.Inbound_Flight_B, False)
+
 
