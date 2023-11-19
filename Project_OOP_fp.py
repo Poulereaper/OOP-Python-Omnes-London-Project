@@ -1512,7 +1512,9 @@ class Basket_Page():
                     canvas_two.bind("<Button-1>", lambda event, param=i: self.Delete(event, param))
                 else : 
                     self.Display_Flight = Actual_Basket.Outbound_Flight_B
-                    self.canvas.create_text(660, 30, anchor='ne', text="Need to return from"+str(self.Display_Flight.Arrival_Airport)+"?", font=("Arial", 15))
+                    self.canvas.create_text(640, 30, anchor='ne', text="Need to return from "+str(self.Display_Flight.Arrival_Airport)+"?", font=("Arial", 15))
+                    self.Book_Return_Button = tk.Button(self.canvas, text='Book Return', command=self.Book_Return, font=("Arial", 11), bg=third_color, fg=main_color)
+                    self.Book_Return_Button.place(x=460, y=100)
                 #images
                 bg_image_rep_one = Image.open("./images/avion_res.png")
                 bg_photo_rep_one = ImageTk.PhotoImage(bg_image_rep_one)
@@ -1603,7 +1605,7 @@ class Basket_Page():
             Actual_Search.ReturnOrNot=True
             Actual_Search.From=Actual_Outbound_Flight.Departure_Airport
             Actual_Search.To=Actual_Outbound_Flight.Arrival_Airport
-
+            Actual_Search.Departure_Date=Actual_Search.Return_Date
         else:
             Actual_Search.ReturnOrNot=True
             Actual_Inbound_Flight.Reset_Inbound_Flight()
@@ -1622,6 +1624,9 @@ class Basket_Page():
         print("Pay")
         #Launch_Home_Page()
 
+    def Book_Return(self):
+        Actual_Search.ReturnOrNot=True
+        Launch_Purchase_Results_Page()
     
     def Change_Outbound(self):
         Actual_Search.ReturnOrNot=False
