@@ -610,6 +610,26 @@ class Purchase_Page():
             canvas_four.image = bg_photo_four
         else : pass 
 
+        #AddOrNot
+        if Actual_Search.Need_Return==False:
+            bg_image_five = Image.open("./images/add.png")
+            bg_photo_five = ImageTk.PhotoImage(bg_image_five)
+            # Créer un canevas pour afficher l'image du logo
+            canvas_five = tk.Canvas(self.second_top_frame, width=bg_image_five.width, height=bg_image_five.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_five.place(x=935,y=108)
+            canvas_five.create_image(0, 0, anchor=tk.NW, image=bg_photo_five)
+            canvas_five.image = bg_photo_five
+            canvas_five.bind("<Button-1>", self.Hide_Button_2)
+        else:
+            bg_image_five = Image.open("./images/no_add.png")
+            bg_photo_five = ImageTk.PhotoImage(bg_image_five)
+            # Créer un canevas pour afficher l'image du logo
+            canvas_five = tk.Canvas(self.second_top_frame, width=bg_image_five.width, height=bg_image_five.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_five.place(x=920,y=108)
+            canvas_five.create_image(0, 0, anchor=tk.NW, image=bg_photo_five)
+            canvas_five.image = bg_photo_five
+            canvas_five.bind("<Button-1>", self.Hide_Button_2)
+
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
         self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
@@ -700,7 +720,7 @@ class Purchase_Page():
         #Display The Radio Button
         #self.Return_Input_Radio.grid(row=2, column=3, padx=10, pady=3, ipadx=5, ipady=0)
         #Display the Return Input
-        self.Return_Input.grid(row=2, column=3, padx=10, pady=3, ipadx=5, ipady=5)
+        if Actual_Search.Need_Return==True: self.Return_Input.grid(row=2, column=3, padx=10, pady=3, ipadx=5, ipady=5)
         #Display the Second Space Title
         self.Second_Space_Title.grid(row=3, column=0, padx=10, pady=20, ipadx=5, ipady=0)
         #Display the Passengers Title
@@ -732,7 +752,7 @@ class Purchase_Page():
         else :
             if self.Return!='':
                 try :
-                    if self.Departure > self.Return:
+                    if (self.Departure > self.Return)&(Actual_Search.Need_Return==True):
                         tk.messagebox.showinfo('Error', 'Return date must be after departure date')
                     else :
                         if (self.Passengers == int(self.Passengers)) & (self.Passengers > 1) & (self.Passengers < 11):
@@ -797,6 +817,15 @@ class Purchase_Page():
 
     def Hide_Button_1(self, empty):
         Launch_Basket_Page()
+    
+    def Hide_Button_2(self, empty):
+        if Actual_Search.Need_Return==False:
+            Actual_Search.Need_Return=True
+            Launch_Purchase_Page()
+        else:
+            Actual_Search.Need_Return=False
+            Actual_Search.Return_Date=''
+            Launch_Purchase_Page()
 
 class Info_Passengers():
     # Create a frame at the top for buttons
@@ -1073,11 +1102,11 @@ class Purchase_Results_Page():
         #Departure Title
         self.Departure_Title.grid(row=1, column=3, padx=10, pady=3, ipadx=5, ipady=0)
         #Departure Input
-        self.Departure_Input.grid(row=2, column=3, padx=10, pady=0, ipadx=5, ipady=5)
+        if Actual_Search.ReturnOrNot==False: self.Departure_Input.grid(row=2, column=3, padx=10, pady=0, ipadx=5, ipady=5)
         #Return Title
         self.Return_Title.grid(row=1, column=4, padx=10, pady=3, ipadx=5, ipady=0)
         #Return Input
-        self.Return_Input.grid(row=2, column=4, padx=10, pady=0, ipadx=5, ipady=5)
+        if Actual_Search.Need_Return==True: self.Return_Input.grid(row=2, column=4, padx=10, pady=0, ipadx=5, ipady=5)
         #Class Title
         self.Class_Title.grid(row=1, column=5, padx=10, pady=3, ipadx=5, ipady=0)
         #Class Input
@@ -1169,7 +1198,8 @@ class Purchase_Results_Page():
         self.From=self.From_Input.get()
         self.To=self.To_Input.get()
         self.Departure=self.Departure_Input.get()
-        self.Return=self.Return_Input.get()
+        if Actual_Search.ReturnOrNot==True: self.Return=self.Return_Input.get()
+        else : self.Return=''
         self.Passengers=Actual_Search.Passengers
         self.Class=self.Class_Input.get()
         print(self.From)
@@ -1178,53 +1208,34 @@ class Purchase_Results_Page():
         if (self.From=='') or (self.To=='') or (self.Departure=='') or (self.Passengers=='') or (self.Class==''):
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
         else :
-            if self.Return!='':
-                try :
-                    if self.Departure > self.Return:
-                        tk.messagebox.showinfo('Error', 'Return date must be after departure date')
-                    else :
-                        if (self.Passengers == int(self.Passengers)) & (self.Passengers > 1) & (self.Passengers < 11):
-                            if (self.Class == "Economy") or (self.Class == "Business") or (self.Class =="First Class"):
-                                if (self.From == str(self.From)) & (self.To == str(self.To)):
-                                    print("Search Flight")
-                                    # Dates are valid
-                                    Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
-                                    Launch_Info_Passengers()
-
-                            else:
-                                tk.messagebox.showinfo('Error', 'Invalid Class')
-                        elif self.Passengers == 1 :
+            try :
+                if (self.Passengers == int(self.Passengers)) & (self.Passengers > 1) & (self.Passengers < 11):
+                    if (self.Class == "Economy") or (self.Class == "Business") or (self.Class =="First Class"):
+                        if (self.From == str(self.From)) & (self.To == str(self.To)):
                             print("Search Flight")
                             # Dates are valid
-                            Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
-                            Launch_Purchase_Results_Page()
-                        else:
-                            tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
-                except ValueError:
-                    # Invalid date format
-                    tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
-            else :
-                try :
-                    if (self.Passengers == int(self.Passengers)) & (self.Passengers > 1) & (self.Passengers < 11):
-                        if (self.Class == "Economy") or (self.Class == "Business") or (self.Class =="First Class"):
-                            if (self.From == str(self.From)) & (self.To == str(self.To)):
-                                print("Search Flight")
-                                # Dates are valid
+                            if (Actual_Search.ReturnOrNot == False) or (Actual_Search.Need_Return==False):
                                 Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
-                                Launch_Info_Passengers()
-
-                        else:
-                            tk.messagebox.showinfo('Error', 'Invalid Class')
-                    elif self.Passengers == 1 :
-                        print("Search Flight")
-                        # Dates are valid
+                                Launch_Purchase_Results_Page()
+                            else:
+                                Actual_Search.Change_Actual_Search(Actual_Search.From, Actual_Search.To, Actual_Search.Departure_Date, self.Return, self.Class, self.Passengers)
+                                Launch_Purchase_Results_Page()
+                    else:
+                        tk.messagebox.showinfo('Error', 'Invalid Class')
+                elif self.Passengers == 1 :
+                    print("Search Flight")
+                    # Dates are valid
+                    if (Actual_Search.ReturnOrNot == False) or (Actual_Search.Need_Return==False):
                         Actual_Search.Change_Actual_Search(self.From, self.To, self.Departure, self.Return, self.Class, self.Passengers)
                         Launch_Purchase_Results_Page()
                     else:
-                        tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
-                except ValueError:
-                    # Invalid date format
-                    tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
+                        Actual_Search.Change_Actual_Search(Actual_Search.From, Actual_Search.To, Actual_Search.Departure_Date, self.Return, self.Class, self.Passengers)
+                        Launch_Purchase_Results_Page()
+                else:
+                    tk.messagebox.showinfo('Error', 'Invalid Number of Passengers')
+            except ValueError:
+                # Invalid date format
+                tk.messagebox.showinfo('Error', 'Invalid date format or Number of Passengers or Class')
 
 
 class Flight_Results_Page():
@@ -1301,7 +1312,7 @@ class Flight_Results_Page():
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.AddBasket_Button = tk.Button(self.right_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
-        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None)&(Actual_Search.Need_Return==True):
             self.Chose_Return_Button = tk.Button(self.left_frame, text='Choose Return', command=Launch_Purchase_Results_Page, font=("Arial", 15), bg=third_color, fg=main_color)
         else:
             self.Chose_Return_Button = tk.Button(self.left_frame, text='Go to Basket', command=Launch_Basket_Page, font=("Arial", 15), bg=third_color, fg=main_color)
@@ -1676,6 +1687,7 @@ class Basket_Page():
         #Launch_Home_Page()
 
     def Book_Return(self):
+        Actual_Search.Need_Return=True
         Actual_Search.ReturnOrNot=True
         Launch_Purchase_Results_Page()
     
