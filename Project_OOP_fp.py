@@ -1301,8 +1301,8 @@ class Flight_Results_Page():
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.AddBasket_Button = tk.Button(self.right_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
-        if Actual_Search.ReturnOrNot == False:
-            self.Chose_Return_Button = tk.Button(self.left_frame, text='Choose Return', command=self.Re_Pur, font=("Arial", 15), bg=third_color, fg=main_color)
+        if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
+            self.Chose_Return_Button = tk.Button(self.left_frame, text='Choose Return', command=Launch_Purchase_Results_Page, font=("Arial", 15), bg=third_color, fg=main_color)
         else:
             self.Chose_Return_Button = tk.Button(self.left_frame, text='Go to Basket', command=Launch_Basket_Page, font=("Arial", 15), bg=third_color, fg=main_color)
         #Info
@@ -1370,7 +1370,8 @@ class Flight_Results_Page():
         #Display the Add to basket Button
         self.AddBasket_Button.place(x=43, y=280)
         #Display the Choose Return Button
-        self.Chose_Return_Button.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        if Actual_Basket.Outbound_Flight_B!=None:
+            self.Chose_Return_Button.pack(ipadx=5, ipady=5, padx=0, pady=10)
     
     def Hide_Button(self, empty):
         Launch_Home_Page()
@@ -1386,11 +1387,8 @@ class Flight_Results_Page():
         #print(Actual_Basket.Outbound_Flight_B.Flight_Number)
         #print(Actual_Basket.Inbound_Flight_B.Flight_Number)
         #print(Actual_Basket.Basket_Total_Price)
-        Launch_Flight_Results_Page()
-
-    def Re_Pur(self):
         Actual_Search.ReturnOrNot=True
-        Launch_Purchase_Results_Page()
+        Launch_Flight_Results_Page()
 
 
 class Basket_Page():
@@ -1427,7 +1425,6 @@ class Basket_Page():
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.Pay_Button = tk.Button(self.right_frame, text='Pay', command=self.Pay, font=("Arial", 15), bg=third_color, fg=main_color)
-        self.Delete_Button = tk.Button(self.right_frame, text='Delete my Basket', command=self.Delete, font=("Arial", 11), bg=third_color, fg=main_color)
 
         # Pack all wigets
         #Frame
@@ -1465,7 +1462,10 @@ class Basket_Page():
                 # Print information in the rectangle
                 self.canvas.create_text(300, 80, anchor='nw', text="It looks pretty empty here! ", font=("Arial", 13))
                 #images
-                bg_image_rep_one = Image.open("./images/avion_res.png")
+                if main_color == main_color_light:
+                    bg_image_rep_one = Image.open("./images/Where_L_res.png")
+                else:
+                    bg_image_rep_one = Image.open("./images/Where_D_res.png")
                 bg_photo_rep_one = ImageTk.PhotoImage(bg_image_rep_one)
                 # Créer un canevas pour afficher l'image du logo
                 canvas_rep_one = tk.Canvas(self.canvas, width=bg_image_rep_one.width, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
@@ -1473,9 +1473,27 @@ class Basket_Page():
                 canvas_rep_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep_one)
                 canvas_rep_one.image = bg_photo_rep_one
                 bg_image_rep_one.close()
-            
+                if i==0:
+                    self.Time_To_Shop_Button = tk.Button(self.canvas, text='Fly to shop!', command=Launch_Purchase_Page, font=("Arial", 11), bg=third_color, fg=main_color)
+                    self.Time_To_Shop_Button.place(x=590, y=75)
+                    #Plane
+                    bg_image_five = Image.open("./images/black-planeres.png")
+                    bg_photo_five = ImageTk.PhotoImage(bg_image_five)
+                    # Créer un canevas pour afficher l'image du logo
+                    canvas_five = tk.Canvas(self.canvas, width=bg_image_five.width, height=bg_image_five.height, bg=main_color,highlightthickness=0,borderwidth=0)
+                    canvas_five.place(x=520,y=75)
+                    canvas_five.create_image(0, 0, anchor=tk.NW, image=bg_photo_five)
+                    canvas_five.image = bg_photo_five
+            if Actual_Customer.LogOrNot == False:
+                self.SignInfo = tk.Label(self.right_frame, text="Sign In or Sign Up for faster order", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Sign_Button = tk.Button(self.right_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
+                self.SignInfo.pack(ipadx=5, ipady=5, padx=0, pady=20)
+                self.Sign_Button.pack(ipadx=5, ipady=5, padx=0, pady=0)
+            else :
+                self.SignInfo = tk.Label(self.right_frame, text="Already Loged In ! \n What a smart customer ;)", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.SignInfo.pack(ipadx=5, ipady=5, padx=0, pady=20)
         elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None):
-             for i in range(2):  
+            for i in range(2):  
                 self.Total_Price_display=0
                 self.Price_display=0
                 # Create a canvas widget
@@ -1510,13 +1528,17 @@ class Basket_Page():
                     canvas_two.image = bg_photo_two
                     bg_image_two.close()
                     canvas_two.bind("<Button-1>", lambda event, param=i: self.Delete(event, param))
+                    bg_image_rep_one = Image.open("./images/avion_res.png")
                 else : 
                     self.Display_Flight = Actual_Basket.Outbound_Flight_B
                     self.canvas.create_text(640, 30, anchor='ne', text="Need to return from "+str(self.Display_Flight.Arrival_Airport)+"?", font=("Arial", 15))
                     self.Book_Return_Button = tk.Button(self.canvas, text='Book Return', command=self.Book_Return, font=("Arial", 11), bg=third_color, fg=main_color)
                     self.Book_Return_Button.place(x=460, y=100)
-                #images
-                bg_image_rep_one = Image.open("./images/avion_res.png")
+                    if main_color == main_color_light:
+                        bg_image_rep_one = Image.open("./images/Where_L_res.png")
+                    else:
+                        bg_image_rep_one = Image.open("./images/Where_D_res.png")
+                #images 
                 bg_photo_rep_one = ImageTk.PhotoImage(bg_image_rep_one)
                 # Créer un canevas pour afficher l'image du logo
                 canvas_rep_one = tk.Canvas(self.canvas, width=bg_image_rep_one.width, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
@@ -1524,9 +1546,22 @@ class Basket_Page():
                 canvas_rep_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep_one)
                 canvas_rep_one.image = bg_photo_rep_one
                 bg_image_rep_one.close()
+            if Actual_Customer.LogOrNot == False:
+                self.SignInfo = tk.Label(self.right_frame, text="Sign In or Sign Up for faster order", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Sign_Button = tk.Button(self.right_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
+                self.SignInfo.pack(ipadx=5, ipady=5, padx=0, pady=20)
+                self.Sign_Button.pack(ipadx=5, ipady=5, padx=0, pady=0)
+                self.Delet_All_Basket_Button = tk.Button(self.right_frame, text='Delete My Basket', command=self.Delete_All, font=("Arial", 11), bg=second_color, fg=main_color)
+                self.Delet_All_Basket_Button.pack(ipadx=5, ipady=5, padx=0, pady=60)
+                self.Pay_Button.pack(ipadx=5, ipady=0, padx=0, pady=0)
+            else :
+                self.SignInfo = tk.Label(self.right_frame, text="Already Loged In ! \n What a smart customer ;)", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.SignInfo.pack(ipadx=5, ipady=5, padx=0, pady=20)
+                self.Delet_All_Basket_Button = tk.Button(self.right_frame, text='Delete My Basket', command=self.Delete_All, font=("Arial", 11), bg=second_color, fg=main_color)
+                self.Delet_All_Basket_Button.pack(ipadx=5, ipady=5, padx=0, pady=60)
+                self.Pay_Button.pack(ipadx=5, ipady=0, padx=0, pady=0)
 
         elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
-
             for i in range(2):  
                 self.Total_Price_display=0
                 self.Price_display=0
@@ -1573,11 +1608,24 @@ class Basket_Page():
                 canvas_two.image = bg_photo_two
                 bg_image_two.close()
                 canvas_two.bind("<Button-1>", lambda event, param=i+1: self.Delete(event, param))
-                self.Delete_Button.pack(ipadx=5, ipady=5, padx=0, pady=10, side=tk.LEFT)
+            
+            if Actual_Customer.LogOrNot == False:
+                self.SignInfo = tk.Label(self.right_frame, text="Sign In or Sign Up for faster order", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Sign_Button = tk.Button(self.right_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
+                self.SignInfo.pack(ipadx=5, ipady=5, padx=0, pady=20)
+                self.Sign_Button.pack(ipadx=5, ipady=5, padx=0, pady=0)
+                self.Delet_All_Basket_Button = tk.Button(self.right_frame, text='Delete My Basket', command=self.Delete_All, font=("Arial", 11), bg=second_color, fg=main_color)
+                self.Delet_All_Basket_Button.pack(ipadx=5, ipady=5, padx=0, pady=60)
+                self.Pay_Button.pack(ipadx=5, ipady=0, padx=0, pady=0)
+            else :
+                self.SignInfo = tk.Label(self.right_frame, text="Already Loged In ! \n What a smart customer ;)", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.SignInfo.pack(ipadx=5, ipady=5, padx=0, pady=20)
+                self.Delet_All_Basket_Button = tk.Button(self.right_frame, text='Delete My Basket', command=self.Delete_All, font=("Arial", 11), bg=second_color, fg=main_color)
+                self.Delet_All_Basket_Button.pack(ipadx=5, ipady=5, padx=0, pady=60)
+                self.Pay_Button.pack(ipadx=5, ipady=0, padx=0, pady=0)
         else : pass 
 
         #Buttons
-        self.Pay_Button.pack(ipadx=5, ipady=0, padx=0, pady=30)
 
     def Hide_Button_1(self, empty):
         Launch_Home_Page()
@@ -1614,7 +1662,10 @@ class Basket_Page():
 
     def Delete_All(self):
         print("Delete All")
-        Actual_Basket.Delete_Basket()
+        Actual_Basket.Clear_Basket()
+        Actual_Outbound_Flight.Reset_Outbound_Flight()
+        Actual_Inbound_Flight.Reset_Inbound_Flight()
+        Actual_Search.Reset_Search()
         Launch_Basket_Page()
 
     def Hide_Button_1(self, empty):
