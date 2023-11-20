@@ -503,6 +503,19 @@ class Menu_Page():
             canvas_four.image = bg_photo_four
         else : pass 
 
+        #theme
+        if main_color==main_color_light:
+            bg_image_five = Image.open("./images/light-mode.png")
+        else:
+            bg_image_five = Image.open("./images/dark-mode.png")
+        bg_photo_five = ImageTk.PhotoImage(bg_image_five)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_five = tk.Canvas(self.middle_frame, width=bg_image_five.width, height=bg_image_five.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_five.place(x=1020,y=20)
+        canvas_five.create_image(0, 0, anchor=tk.NW, image=bg_photo_five)
+        canvas_five.image = bg_photo_five
+        canvas_five.bind("<Button-1>", self.Change_Theme)
+
         
         #Title
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
@@ -517,10 +530,6 @@ class Menu_Page():
             self.LogIn_Button = tk.Button(self.middle_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
         self.Purchase = tk.Button(self.middle_frame, text='   Purchase   ', command=Launch_Purchase_Page, bg=second_color, fg=main_color)
         self.CLose = tk.Button(self.middle_frame, text='      Close       ', command=self.Close, bg=second_color, fg=main_color)
-        if main_color==main_color_light:
-            self.Change_Theme = tk.Button(self.middle_frame, text='Dark Theme', command=Change_Theme, bg=second_color, fg=main_color)
-        else:
-            self.Change_Theme = tk.Button(self.middle_frame, text='Light Theme', command=Change_Theme, bg=second_color, fg=main_color)
 
         # Pack all widgets
         #Frame
@@ -547,8 +556,6 @@ class Menu_Page():
         self.Purchase.pack(ipadx=24, ipady=7, padx=10, pady=15)
         #Display the Close Button
         self.CLose.pack(ipadx=24, ipady=7, padx=10, pady=15)
-        #Display the Change Theme Button
-        self.Change_Theme.pack(ipadx=24, ipady=7, padx=10, pady=15)
 
     def Close(self):
         main_window.destroy()
@@ -558,6 +565,9 @@ class Menu_Page():
     
     def Hide_Button_1(self, empty):
         Launch_Basket_Page()
+    
+    def Change_Theme(self, empty):
+        Change_Theme()
 
 class Purchase_Page():
     def __init__(self, main_window):
