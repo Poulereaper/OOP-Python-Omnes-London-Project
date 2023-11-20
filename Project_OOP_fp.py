@@ -1778,7 +1778,11 @@ class Payment_Page():
         self.canvas_left = tk.Canvas(self.left_frame, width=550, height=300, bg=main_color, highlightthickness=0, borderwidth=0)
         #self.canvas.bind("<Button-1>", lambda event, param=Display_Flight.Flight_ID : self.FLight_Select(event, param))
         self.canvas_left.pack(padx=25, pady=30, side=tk.TOP, fill=tk.X)
-        #
+         # Create a canvas widget
+        self.canvas_right = tk.Canvas(self.right_frame, width=300, height=400, bg=main_color, highlightthickness=0, borderwidth=0)
+        #self.canvas.bind("<Button-1>", lambda event, param=Display_Flight.Flight_ID : self.FLight_Select(event, param))
+        self.canvas_right.pack(padx=25, pady=30, side=tk.TOP, fill=tk.X)
+
         #Inputs
         self.Card_Number_Title = tk.Label(self.canvas_left, text="Card Number", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.Card_Number = tk.Entry(self.canvas_left, width=30, bg=main_color, fg=fourth_color, font=("Arial", 12))
@@ -1789,14 +1793,18 @@ class Payment_Page():
         self.Card_Code = tk.Entry(self.canvas_left, width=10, bg=main_color, fg=fourth_color, font=("Arial", 12))
         self.Card_Name_Title = tk.Label(self.canvas_left, text="Card Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.Card_Name = tk.Entry(self.canvas_left, width=30, bg=main_color, fg=fourth_color, font=("Arial", 12))
-
+        self.New_Email_Info = tk.Label(self.canvas_right, text="You will recieve your bill and your tickets on this email", font=("Arial", 8), bg=main_color, fg=fourth_color)
+        self.New_Email_Title = tk.Label(self.canvas_right, text="E-mail", font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.Email = tk.Entry(self.canvas_right, width=30, bg=main_color, fg=fourth_color, font=("Arial", 10))
+        if Actual_Customer.LogOrNot == True:
+            self.Card_Name.insert(0, Actual_Customer.First_Name+" "+Actual_Customer.Last_Name)
+            self.Email.insert(0, Actual_Customer.Email)
+            elf.SignInfo = tk.Label(self.canvas_right, text="Already Loged In ! \n What a smart customer ;)", font=("Arial", 8), bg=main_color, fg=fourth_color)
+        else :
+            self.SignInfo = tk.Label(self.canvas_right, text="Sign In or Sign Up for faster order", font=("Arial", 8), bg=main_color, fg=fourth_color)
+            self.Sign_Button = tk.Button(self.canvas_right, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
         # Draw a rectangle on the canvas
         self.canvas_left.create_rectangle(0, 0, 550, 300, outline='black', width=2)
-
-        # Create a canvas widget
-        self.canvas_right = tk.Canvas(self.right_frame, width=300, height=400, bg=main_color, highlightthickness=0, borderwidth=0)
-        #self.canvas.bind("<Button-1>", lambda event, param=Display_Flight.Flight_ID : self.FLight_Select(event, param))
-        self.canvas_right.pack(padx=25, pady=30, side=tk.TOP, fill=tk.X)
         # Draw a rectangle on the canvas
         self.canvas_right.create_rectangle(0, 0, 300, 350, outline='black', width=2)
         #Card Number
@@ -1836,6 +1844,12 @@ class Payment_Page():
         canvas_six.create_image(0, 0, anchor=tk.NW, image=bg_photo_six)
         canvas_six.image = bg_photo_six
 
+        #Email
+        self.New_Email_Info.place(x=10, y=10)
+        self.New_Email_Title.place(x=10, y=40)
+        self.Email.place(x=10, y=65)
+        self.SignInfo.place(x=10, y=95)
+        if Actual_Customer.LogOrNot == False: self.Sign_Button.place(x=10, y=120)
         
 
     
