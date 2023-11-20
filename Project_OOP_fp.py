@@ -107,6 +107,7 @@ class Home_Page():
 class LogIn_Page():
     def __init__(self, main_window):
         self.db=dbconnect.DBHelper()
+        self.See=False
         # Create a frame at the top for buttons
         self.top_frame = tk.Frame(main_window, bg=main_color)
         self.middle_frame = tk.Frame(main_window, bg=main_color)
