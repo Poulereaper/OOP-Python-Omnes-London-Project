@@ -1968,7 +1968,7 @@ class Payment_Page():
     
     def Pay(self):
         print("Pay")
-        #Launch_Home_Page()
+        Actual_Basket.Create_Res(self.Email.get())
 
 
 #---------------------## ALL THE FUNCTIONS ##---------------------#
