@@ -25,7 +25,7 @@ class Home_Page():
         self.right_frame = tk.Frame(main_window)
         bg_image_one = Image.open("./images/degrado.jpg")
         bg_photo_one = ImageTk.PhotoImage(bg_image_one)
-        # Créer un canevas pour afficher l'image de fond
+        #Créer un canevas pour afficher l'image de fond
         canvas_one = tk.Canvas(self.right_frame, width=bg_image_one.width, height=bg_image_one.height)
         canvas_one.pack()
         canvas_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_one)
