@@ -34,7 +34,7 @@ class Basket():
         self.Basket_Total_Price = round(self.Basket_Total_Price,2)
         self.Basket_date = datetime.datetime.now()
     
-    def Create_Res(self, Email):
+    def Create_Res(self, Email, CustomerID):
         #Creat a res by sql resquest
         #nasket date = now
         self.Basket_date = datetime.datetime.now()
@@ -42,25 +42,43 @@ class Basket():
         #Request to the database to see the last res ID anable to creat a new one
         sql_1="SELECT MAX(ReservationID) AS PlusGrandReservationID FROM Reservations;"
         Last_ID = dbconnect.DBHelper().fetch(sql_1)
-        res_ID = Last_ID[0]['PlusGrandReservationID'] + 1
+        Last_ID = Last_ID[0]['PlusGrandReservationID'] + 1
+        sql_2="SELECT MAX(ReservationgrpID) AS PlusGrandReservationGrpID FROM Reservations;"
+        Res_ID = dbconnect.DBHelper().fetch(sql_2)
+        Res_ID = Res_ID[0]['PlusGrandReservationGrpID'] + 1
         #Request to the database to get all the existing TicketsNum
-        sql_2="SELECT DISTINCT NumTicket FROM Reservations;"
-        ListNumTickets = dbconnect.DBHelper().fetch(sql_2)
+        sql_3="SELECT DISTINCT NumTicket FROM Reservations;"
+        ListNumTickets = dbconnect.DBHelper().fetch(sql_3)
         ListNumTickets = [d['NumTicket'] for d in ListNumTickets]
         ListNumTicketsNew = [None]*self.Outbound_Flight_B.Passengers*2
         if self.Inbound_Flight_B != None:
             for j in range(2):
+                if j==0:
+                    Flight_ID=self.Outbound_Flight_B.Flight_ID
+                    Price = self.Outbound_Flight_B.Price
+                    Class=self.Outbound_Flight_B.Class_Type
+                else:
+                    Flight_ID=self.Inbound_Flight_B.Flight_ID
+                    Price = self.Inbound_Flight_B.Price
+                    Class=self.Inbound_Flight_B.Class_Type
                 for i in range(self.Outbound_Flight_B.Passengers):
-                    Number=self.generer_numero_billet(ListNumTickets)
+                    Number=self.generer_numero_billet(ListNumTickets, ListNumTicketsNew)
                     ListNumTicketsNew.append(Number)
-                    print(Number)
-                    print(Res_ID)
-                    print(Email)
-                    if i==0:Flight_ID=self.Outbound_Flight_B.Flight_ID
-                    else:Flight_ID=self.Inbound_Flight_B.Flight_ID
-                    print(Flight_ID)
-                    sql_3="INSERT INTO `reservations` (`ReservationID`, `ReservationDate`, `NumTicket`, `FlightID`, `CustomerID`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Res_ID, self.Basket_date, Number, FlightID, None)
-            #print(ListNumTickets)
+                    Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type))
+                    sql_4="INSERT INTO `reservations` (`ReservationID`, `ReservationGrpID`, `ReservationDate`, `NumTicket`, `FlightID`, `CustomerID`, `Price`, `Class`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Last_ID, Res_ID, self.Basket_date, Number, Flight_ID, CustomerID, Ticket_Price, Class)
+                    dbconnect.DBHelper().execute(sql_4)
+                    Last_ID+=1
+        else:
+            Flight_ID=self.Outbound_Flight_B.Flight_ID
+            Price = self.Outbound_Flight_B.Price
+            for i in range(self.Outbound_Flight_B.Passengers):
+                    Number=self.generer_numero_billet(ListNumTickets, ListNumTicketsNew)
+                    ListNumTicketsNew.append(Number)
+                    Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type))
+                    Class=self.Outbound_Flight_B.Class_Type
+                    sql_3="INSERT INTO `reservations` (`ReservationID`, `ReservationGrpID`, `ReservationDate`, `NumTicket`, `FlightID`, `CustomerID`, `Price`, `Class`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Last_ID, Res_ID, self.Basket_date, Number, Flight_ID, CustomerID, Ticket_Price, Class)
+                    dbconnect.DBHelper().execute(sql_3)
+                    Last_ID+=1
 
     def Clear_Basket(self):
         self.Outbound_Flight_B = None
@@ -77,7 +95,7 @@ class Basket():
         self.Inbound_Flight_B = None
         self.Complete_Basket(self.Outbound_Flight_B, self.Inbound_Flight_B, False)
 
-    def generer_numero_billet(self, ListNumTickets):
+    def generer_numero_billet(self, ListNumTickets, ListNumTicketsNew):
         while True:
             # Générer 5 lettres majuscules aléatoires
             lettres = ''.join(random.choices(string.ascii_uppercase, k=5))
@@ -86,7 +104,7 @@ class Basket():
             # Concaténer les lettres et les chiffres pour former le numéro de billet
             numero_billet = lettres + chiffres
             # Vérifier si le numéro de billet existe déjà dans la liste
-            if numero_billet not in ListNumTickets:
+            if (numero_billet not in ListNumTickets) or (numero_billet not in ListNumTicketsNew):
                 break  # Sortir de la boucle si le numéro est unique
         return numero_billet
 
