@@ -1565,6 +1565,23 @@ class Basket_Page():
                 canvas_rep_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep_one)
                 canvas_rep_one.image = bg_photo_rep_one
                 bg_image_rep_one.close()
+
+            self.Total_Price_display=0
+            if Actual_Search.Passengers == 1:
+                if Actual_Basket.Inbound_Flight_B==None: self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type)
+                else : self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type+(Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Class_Type)
+            else :
+                if Actual_Basket.Inbound_Flight_B==None:
+                    for j in range(Actual_Search.Passengers):
+                        self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type)
+                else : 
+                    for j in range(Actual_Search.Passengers):
+                        self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type+((Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type)
+            self.Total_Price_B = round(self.Total_Price_display,2)
+            self.Total_Price_B_Label = tk.Label(self.right_frame, text=str(self.Total_Price_B)+"£", font=("Arial", 15), bg=main_color, fg=fourth_color)
+            self.Total_Basket_Price = tk.Label(self.right_frame, text="Total Basket Price :", font=("Arial", 11), bg=main_color, fg=fourth_color)
+            self.Total_Basket_Price.pack(ipadx=5, ipady=5, padx=10, pady=0)
+            self.Total_Price_B_Label.pack(ipadx=5, ipady=5, padx=10, pady=10)
             if Actual_Customer.LogOrNot == False:
                 self.SignInfo = tk.Label(self.right_frame, text="Sign In or Sign Up for faster order", font=("Arial", 10), bg=main_color, fg=fourth_color)
                 self.Sign_Button = tk.Button(self.right_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
@@ -1627,7 +1644,24 @@ class Basket_Page():
                 canvas_two.image = bg_photo_two
                 bg_image_two.close()
                 canvas_two.bind("<Button-1>", lambda event, param=i+1: self.Delete(event, param))
-            
+
+            self.Total_Price_display=0
+            if Actual_Search.Passengers == 1:
+                if Actual_Basket.Inbound_Flight_B==None: self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type)
+                else : self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type+(Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Class_Type)
+            else :
+                if Actual_Basket.Inbound_Flight_B==None:
+                    for j in range(Actual_Search.Passengers):
+                        self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type)
+                else : 
+                    for j in range(Actual_Search.Passengers):
+                        self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type+((Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type)
+            self.Total_Price_B = round(self.Total_Price_display,2)
+            self.Total_Price_B_Label = tk.Label(self.right_frame, text=str(self.Total_Price_B)+"£", font=("Arial", 15), bg=main_color, fg=fourth_color)
+            self.Total_Basket_Price = tk.Label(self.right_frame, text="Total Basket Price :", font=("Arial", 11), bg=main_color, fg=fourth_color)
+            self.Total_Basket_Price.pack(ipadx=5, ipady=5, padx=10, pady=0)
+            self.Total_Price_B_Label.pack(ipadx=5, ipady=5, padx=10, pady=10)
+
             if Actual_Customer.LogOrNot == False:
                 self.SignInfo = tk.Label(self.right_frame, text="Sign In or Sign Up for faster order", font=("Arial", 10), bg=main_color, fg=fourth_color)
                 self.Sign_Button = tk.Button(self.right_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
@@ -1745,7 +1779,6 @@ class Payment_Page():
         else :
             self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
-        self.Pay_Button = tk.Button(self.right_frame, text='Confirm Payment', command=self.Pay, font=("Arial", 15), bg=third_color, fg=main_color)
 
         # Pack all wigets
         #Frame
@@ -1781,7 +1814,7 @@ class Payment_Page():
          # Create a canvas widget
         self.canvas_right = tk.Canvas(self.right_frame, width=300, height=400, bg=main_color, highlightthickness=0, borderwidth=0)
         #self.canvas.bind("<Button-1>", lambda event, param=Display_Flight.Flight_ID : self.FLight_Select(event, param))
-        self.canvas_right.pack(padx=25, pady=30, side=tk.TOP, fill=tk.X)
+        self.canvas_right.pack(padx=25, pady=0, side=tk.TOP, fill=tk.X)
 
         #Inputs
         self.Card_Number_Title = tk.Label(self.canvas_left, text="Card Number", font=("Arial", 10), bg=main_color, fg=fourth_color)
@@ -1797,16 +1830,42 @@ class Payment_Page():
         self.New_Email_Title = tk.Label(self.canvas_right, text="E-mail", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.Email = tk.Entry(self.canvas_right, width=30, bg=main_color, fg=fourth_color, font=("Arial", 10))
         if Actual_Customer.LogOrNot == True:
-            self.Card_Name.insert(0, Actual_Customer.First_Name+" "+Actual_Customer.Last_Name)
+            self.Card_Name.insert(0, Actual_Customer.FirstName+" "+Actual_Customer.LastName)
             self.Email.insert(0, Actual_Customer.Email)
-            elf.SignInfo = tk.Label(self.canvas_right, text="Already Loged In ! \n What a smart customer ;)", font=("Arial", 8), bg=main_color, fg=fourth_color)
+            self.SignInfo = tk.Label(self.canvas_right, text="Already Loged In !    \n What a smart customer ;)", font=("Arial", 8), bg=main_color, fg=fourth_color)
         else :
             self.SignInfo = tk.Label(self.canvas_right, text="Sign In or Sign Up for faster order", font=("Arial", 8), bg=main_color, fg=fourth_color)
             self.Sign_Button = tk.Button(self.canvas_right, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
+        #Basket Info 
+        self.OutB_From = tk.Label(self.canvas_right, text=Actual_Basket.Outbound_Flight_B.Departure_Airport, font=("Arial", 11), bg=main_color, fg=fourth_color)
+        self.OutB_To = tk.Label(self.canvas_right, text=Actual_Basket.Outbound_Flight_B.Arrival_Airport, font=("Arial", 11), bg=main_color, fg=fourth_color)
+        self.OutB_Date = tk.Label(self.canvas_right, text=Actual_Basket.Outbound_Flight_B.Departure_Date, font=("Arial", 11), bg=main_color, fg=fourth_color)
+        self.OutB_Passengers = tk.Label(self.canvas_right, text="x"+str(Actual_Basket.Outbound_Flight_B.Passengers), font=("Arial", 11), bg=main_color, fg=fourth_color)
+        if Actual_Basket.Inbound_Flight_B!=None:
+            self.InB_From = tk.Label(self.canvas_right, text=Actual_Basket.Inbound_Flight_B.Departure_Airport, font=("Arial", 11), bg=main_color, fg=fourth_color)
+            self.InB_To = tk.Label(self.canvas_right, text=Actual_Basket.Inbound_Flight_B.Arrival_Airport, font=("Arial", 11), bg=main_color, fg=fourth_color)
+            self.InB_Date = tk.Label(self.canvas_right, text=Actual_Basket.Inbound_Flight_B.Departure_Date, font=("Arial", 11), bg=main_color, fg=fourth_color)
+            self.InB_Passengers = tk.Label(self.canvas_right, text="x"+str(Actual_Basket.Inbound_Flight_B.Passengers), font=("Arial", 11), bg=main_color, fg=fourth_color)
+        if Actual_Search.Passengers == 1:
+            if Actual_Basket.Inbound_Flight_B==None: self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type)
+            else : self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type+(Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Class_Type)
+        else :
+            if Actual_Basket.Inbound_Flight_B==None:
+                for j in range(Actual_Search.Passengers):
+                    self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type)
+            else : 
+                for j in range(Actual_Search.Passengers):
+                    self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type+((Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type)
+        self.Total_Price = round(self.Total_Price_display,2)
+        self.Total_Price_Label = tk.Label(self.canvas_right, text=str(self.Total_Price)+"£", font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.Total_Basket_Price = tk.Label(self.canvas_right, text="Total Basket Price", font=("Arial", 11), bg=main_color, fg=fourth_color)
+        
+        self.Pay_Button = tk.Button(self.canvas_left, text='Proced Payment', command=self.Pay, font=("Arial", 15), bg=third_color, fg=main_color)
+
         # Draw a rectangle on the canvas
         self.canvas_left.create_rectangle(0, 0, 550, 300, outline='black', width=2)
         # Draw a rectangle on the canvas
-        self.canvas_right.create_rectangle(0, 0, 300, 350, outline='black', width=2)
+        self.canvas_right.create_rectangle(0, 0, 300, 380, outline='black', width=2)
         #Card Number
         self.Card_Number_Title.place(x=35, y=30)
         self.Card_Number.place(x=35, y=55)
@@ -1843,21 +1902,63 @@ class Payment_Page():
         canvas_six.place(x=120,y=210)
         canvas_six.create_image(0, 0, anchor=tk.NW, image=bg_photo_six)
         canvas_six.image = bg_photo_six
+        
+        self.Pay_Button.place(x=360, y=220)
 
+        #Right Canvas
         #Email
         self.New_Email_Info.place(x=10, y=10)
         self.New_Email_Title.place(x=10, y=40)
         self.Email.place(x=10, y=65)
         self.SignInfo.place(x=10, y=95)
         if Actual_Customer.LogOrNot == False: self.Sign_Button.place(x=10, y=120)
-        
-
-    
-        #if Actual_Search.Passengers == 1:
-            #self.Total_Price_display=float(self.Display_Flight.Price)*Actual_Search.Class_Type
-        #else :
-            #for j in range(Actual_Search.Passengers):
-                #self.Total_Price_display+=(float(self.Display_Flight.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type
+        # Add a Canvas widget for drawing the line
+        self.line_canvas_two = tk.Canvas(self.canvas_right, height=3, bg=second_color)
+        self.line_canvas_two.config(highlightthickness=0, borderwidth=0)
+        self.line_canvas_two.place(x=12, y=155, width=275)
+        # Create a line under top_frame
+        self.line_canvas_two.create_line(5, 2, 150, 2, fill=second_color)
+        #Basket Info
+        self.OutB_From.place(x=10, y=180)
+        #Visa Card
+        bg_image_seven = Image.open("./images/black-planeress.png")
+        bg_photo_seven = ImageTk.PhotoImage(bg_image_seven)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_seven = tk.Canvas(self.canvas_right, width=bg_image_seven.width, height=bg_image_seven.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_seven.place(x=97,y=182)
+        canvas_seven.create_image(0, 0, anchor=tk.NW, image=bg_photo_seven)
+        canvas_seven.image = bg_photo_seven
+        self.OutB_To.place(x=130, y=180)
+        self.OutB_Date.place(x=10, y=210)
+        bg_image_height = Image.open("./images/passenger.png")
+        bg_photo_height = ImageTk.PhotoImage(bg_image_height)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_height = tk.Canvas(self.canvas_right, width=bg_image_height.width, height=bg_image_height.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_height.place(x=130,y=212)
+        canvas_height.create_image(0, 0, anchor=tk.NW, image=bg_photo_height)
+        canvas_height.image = bg_photo_height
+        self.OutB_Passengers.place(x=150, y=210)
+        if Actual_Basket.Inbound_Flight_B!=None:
+            self.InB_From.place(x=10, y=250)
+            bg_image_nine = Image.open("./images/black-planeress.png")
+            bg_photo_nine = ImageTk.PhotoImage(bg_image_nine)
+            # Créer un canevas pour afficher l'image du logo
+            canvas_nine = tk.Canvas(self.canvas_right, width=bg_image_nine.width, height=bg_image_nine.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_nine.place(x=97,y=252)
+            canvas_nine.create_image(0, 0, anchor=tk.NW, image=bg_photo_nine)
+            canvas_nine.image = bg_photo_nine
+            self.InB_To.place(x=130, y=250)
+            self.InB_Date.place(x=10, y=280)
+            bg_image_ten = Image.open("./images/passenger.png")
+            bg_photo_ten = ImageTk.PhotoImage(bg_image_ten)
+            # Créer un canevas pour afficher l'image du logo
+            canvas_ten = tk.Canvas(self.canvas_right, width=bg_image_ten.width, height=bg_image_ten.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_ten.place(x=130,y=282)
+            canvas_ten.create_image(0, 0, anchor=tk.NW, image=bg_photo_ten)
+            canvas_ten.image = bg_photo_ten
+            self.InB_Passengers.place(x=150, y=280)
+        self.Total_Basket_Price.place(x=10, y=320)
+        self.Total_Price_Label.place(x=10, y=340)
                 
 
         #Buttons
