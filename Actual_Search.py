@@ -54,8 +54,18 @@ class Actual_Search():
             self.Class_Type=2.5
         self.Passengers=Passengers
 
-    def Search_Outbound(self):
+    def Search_HowMany(self):
+        sql="SELECT COUNT(*) AS HowMany FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureDate='{}' AND SeatsAvailable>='{}'".format(self.From,self.To,self.Departure_Date,self.Passengers)
+        result = dbconnect.DBHelper().fetch(sql)
+        if len(result)==0:
+            print("No Flight")
+        else:
+            print("Search HowMany Succeed")
+            print(result[0]['HowMany'])
+        return result[0]['HowMany']
 
+
+    def Search_Outbound(self):
         sql="SELECT * FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureDate='{}' AND SeatsAvailable>='{}'".format(self.From,self.To,self.Departure_Date,self.Passengers)
         result = dbconnect.DBHelper().fetch(sql)
         if len(result)==0:
