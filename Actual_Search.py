@@ -13,6 +13,8 @@ class Actual_Search():
         self.Passengers=0
         self.Passengers_Type = [None]*11
         self.Passengers_Type_Number=[None]*11
+        self.Need_Return=False
+        self.ReturnOrNot=False
 
     def CompleteAccept(self):
         if (self.From=="") & (self.To=="") & (self.Departure_Date=="") & (self.Return_Date=="") & (self.Class=="") & (self.Passengers==0):
@@ -39,21 +41,18 @@ class Actual_Search():
             print("Complet Actual Search Failed")
     
     def Change_Actual_Search(self,From,To,Departure_Date,Return_Date,Class,Passengers):
-        if self.CompleteAccept():
-            print("Actual Search is empty for the moment")
-        else :
-            self.From=From
-            self.To=To
-            self.Departure_Date=Departure_Date
-            self.Return_Date=Return_Date
-            self.Class=Class
-            if Class=="Economy":
-                self.Class_Type=1
-            elif Class=="Business":
-                self.Class_Type=1.3
-            elif Class=="First Class":
-                self.Class_Type=2.5
-            self.Passengers=Passengers
+        self.From=From
+        self.To=To
+        self.Departure_Date=Departure_Date
+        self.Return_Date=Return_Date
+        self.Class=Class
+        if Class=="Economy":
+            self.Class_Type=1
+        elif Class=="Business":
+            self.Class_Type=1.3
+        elif Class=="First Class":
+            self.Class_Type=2.5
+        self.Passengers=Passengers
 
     def Search_Outbound(self):
 
@@ -76,7 +75,7 @@ class Actual_Search():
             print(result[0]['FlightID'])
         return result
 
-    def Rest_Search(self):
+    def Reset_Search(self):
         self.From=""
         self.To=""
         self.Departure_Date=""
@@ -86,3 +85,5 @@ class Actual_Search():
         self.Passengers=0
         self.Passengers_Type = [None]*11
         self.Passengers_Type_Number=[None]*11
+        self.Need_Return=False
+        self.ReturnOrNot=False

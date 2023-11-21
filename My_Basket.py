@@ -9,11 +9,12 @@ class Basket():
         self.Basket_Total_Price = 0
         self.Basket_date = datetime.datetime.now()
 
-    def Complete_Basket(self, Outbound_Flight, Inbound_Flight):
-        self.Outbound_Flight_B = Outbound_Flight
-        self.Inbound_Flight_B = Inbound_Flight
-        print("print du test : ", self.Inbound_Flight_B.Flight_Number)
-        if self.Inbound_Flight_B.Flight_Number==None:
+    def Complete_Basket(self, Outbound_Flight, Inbound_Flight, Condition):
+        #self.Outbound_Flight_B = Outbound_Flight
+        #self.Inbound_Flight_B = Inbound_Flight
+        #print("print du test : ", self.Inbound_Flight_B.Flight_Number)
+        if Condition==False:
+            self.Outbound_Flight_B = Outbound_Flight
             self.Inbound_Flight_B = None
             if self.Outbound_Flight_B.Passengers==1:
                 self.Basket_Total_Price = float(self.Outbound_Flight_B.Price*Outbound_Flight.Class_Type)
@@ -21,6 +22,8 @@ class Basket():
                 for j in range(Outbound_Flight.Passengers):
                     self.Basket_Total_Price += float(((self.Outbound_Flight_B.Price*Outbound_Flight.Passengers_Type_Number[j])*Outbound_Flight.Class_Type))
         else:
+            self.Outbound_Flight_B = Outbound_Flight
+            self.Inbound_Flight_B = Inbound_Flight
             if self.Outbound_Flight_B.Passengers==1:
                 self.Basket_Total_Price = float(self.Outbound_Flight_B.Price*Outbound_Flight.Class_Type + self.Inbound_Flight_B.Price*Inbound_Flight.Class_Type)
             else:
@@ -39,14 +42,13 @@ class Basket():
         self.Basket_Total = 0
         self.Basket_date = None
 
-    def Delete_Basket(self):
-        #Delete a basket by sql resquest
-        pass
+    def Delete_Outbound(self):
+        self.Outbound_Flight_B = self.Inbound_Flight_B
+        self.Inbound_Flight_B = None
+        self.Clear_Basket()
 
-    def Modify_Basket(self):
-        #Modify a basket by sql resquest
-        pass
+    def Delete_Inbound(self):
+        self.Inbound_Flight_B = None
+        self.Complete_Basket(self.Outbound_Flight_B, self.Inbound_Flight_B, False)
 
-    def Rest_Basket(self):
-        Clear_Basket()
 
