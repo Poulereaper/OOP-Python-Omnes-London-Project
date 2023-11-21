@@ -64,21 +64,37 @@ class Basket():
                 for i in range(self.Outbound_Flight_B.Passengers):
                     Number=self.generer_numero_billet(ListNumTickets, ListNumTicketsNew)
                     ListNumTicketsNew.append(Number)
-                    Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type))
+                    Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type)**(1-(self.Outbound_Flight_B.Discount/100)))
                     sql_4="INSERT INTO `reservations` (`ReservationID`, `ReservationGrpID`, `ReservationDate`, `NumTicket`, `FlightID`, `CustomerID`, `Price`, `Class`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Last_ID, Res_ID, self.Basket_date, Number, Flight_ID, CustomerID, Ticket_Price, Class)
                     dbconnect.DBHelper().execute(sql_4)
                     Last_ID+=1
+                sql_5="UPDATE flight SET SeatsAvailable = SeatsAvailable - '{}' WHERE FlightID = '{}';".format(self.Outbound_Flight_B.Passengers, Flight_ID)
+                dbconnect.DBHelper().execute(sql_5)
         else:
             Flight_ID=self.Outbound_Flight_B.Flight_ID
             Price = self.Outbound_Flight_B.Price
-            for i in range(self.Outbound_Flight_B.Passengers):
+            if self.Outbound_Flight_B.Passengers==1:
+                Number=self.generer_numero_billet(ListNumTickets, None)
+                Ticket_Price = float((Price*self.Outbound_Flight_B.Class_Type)*(1-(self.Outbound_Flight_B.Discount/100)))
+                Class=self.Outbound_Flight_B.Class_Type
+                sql_3="INSERT INTO `reservations` (`ReservationID`, `ReservationGrpID`, `ReservationDate`, `NumTicket`, `FlightID`, `CustomerID`, `Price`, `Class`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Last_ID, Res_ID, self.Basket_date, Number, Flight_ID, CustomerID, Ticket_Price, Class)
+                dbconnect.DBHelper().execute(sql_3)
+                #Remove one from the booked flight*
+                sql_5="UPDATE flight SET SeatsAvailable = SeatsAvailable - '{}' WHERE FlightID = '{}';".format(self.Outbound_Flight_B.Passengers, Flight_ID)
+                dbconnect.DBHelper().execute(sql_5)
+            else:
+                for i in range(self.Outbound_Flight_B.Passengers):
                     Number=self.generer_numero_billet(ListNumTickets, ListNumTicketsNew)
                     ListNumTicketsNew.append(Number)
-                    Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type))
+                    Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type)*(1-(self.Outbound_Flight_B.Discount/100)))
                     Class=self.Outbound_Flight_B.Class_Type
                     sql_3="INSERT INTO `reservations` (`ReservationID`, `ReservationGrpID`, `ReservationDate`, `NumTicket`, `FlightID`, `CustomerID`, `Price`, `Class`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Last_ID, Res_ID, self.Basket_date, Number, Flight_ID, CustomerID, Ticket_Price, Class)
                     dbconnect.DBHelper().execute(sql_3)
                     Last_ID+=1
+                    #Remove one from the booked flight*
+                sql_5="UPDATE flight SET SeatsAvailable = SeatsAvailable - '{}' WHERE FlightID = '{}';".format(self.Outbound_Flight_B.Passengers, Flight_ID)
+                dbconnect.DBHelper().execute(sql_5)
+        print("Create Res Succeed")
 
     def Clear_Basket(self):
         self.Outbound_Flight_B = None

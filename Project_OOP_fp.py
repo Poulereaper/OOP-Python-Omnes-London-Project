@@ -1143,38 +1143,42 @@ class Purchase_Results_Page():
 
         #Make search
         self.Search_Results_Outbound = [None] * 5
+        rep=Actual_Search.Search_HowMany()
+        #print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        #print(rep)
+        #print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
-        for i in range(5):
+        for i in range(rep):
             self.Price_display=0
             self.Total_Price_display=0
             print(Actual_Search.ReturnOrNot)
             if Actual_Search.ReturnOrNot == True:
-                self.Search_Results_Outbound[i] = Actual_Search.Search_Inbound()
+                self.Search_Results_Outbound = Actual_Search.Search_Inbound()
             else:
-                self.Search_Results_Outbound[i] = Actual_Search.Search_Outbound() 
+                self.Search_Results_Outbound = Actual_Search.Search_Outbound() 
             # Create a canvas widget
             self.canvas = tk.Canvas(self.display_frame, width=850, height=200, highlightthickness=0 ,borderwidth=0, bg=main_color)
-            self.canvas.bind("<Button-1>", lambda event, param=self.Search_Results_Outbound[i]: self.FLight_Select(event, param))
+            self.canvas.bind("<Button-1>", lambda event, param=self.Search_Results_Outbound: self.FLight_Select(event, param))
             self.canvas.pack(padx=65, pady=15, side=tk.TOP, fill=tk.X)
             # Draw a rectangle on the canvas
             self.canvas.create_rectangle(0, 0, 950, 200, outline='black', width=2)
 
             # Print information in the rectangle
             #self.canvas.create_text(20, 20, anchor='nw', text="Flight Number: "+str(self.Search_Results_Outbound[i]), font=("Arial", 10))
-            self.canvas.create_text(380, 40, anchor='nw', text="Flight Number: "+str(self.Search_Results_Outbound[i][0]['FlightNumber']), font=("Arial", 10))
-            self.canvas.create_text(380, 60, anchor='nw', text="Departure: "+str(self.Search_Results_Outbound[i][0]['Departure']), font=("Arial", 10))
-            self.canvas.create_text(380, 80, anchor='nw', text="Arrival: "+str(self.Search_Results_Outbound[i][0]['Arrival']), font=("Arial", 10))
+            self.canvas.create_text(380, 40, anchor='nw', text="Flight Number: "+str(self.Search_Results_Outbound[i]['FlightNumber']), font=("Arial", 10))
+            self.canvas.create_text(380, 60, anchor='nw', text="Departure: "+str(self.Search_Results_Outbound[i]['Departure']), font=("Arial", 10))
+            self.canvas.create_text(380, 80, anchor='nw', text="Arrival: "+str(self.Search_Results_Outbound[i]['Arrival']), font=("Arial", 10))
             if Actual_Search.Passengers == 1:
-                self.Total_Price_display=float(self.Search_Results_Outbound[i][0]['Price'])*Actual_Search.Class_Type
+                self.Total_Price_display=float(self.Search_Results_Outbound[i]['Price'])*Actual_Search.Class_Type
             else :
                 for j in range(Actual_Search.Passengers):
-                    self.Total_Price_display+=(float(self.Search_Results_Outbound[i][0]['Price'])*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type
+                    self.Total_Price_display+=(float(self.Search_Results_Outbound[i]['Price'])*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type
             self.Price_display=round(self.Price_display, 2)
             self.canvas.create_text(760, 40, anchor='ne', text=str(self.Total_Price_display)+"£", font=("Arial", 15))
-            self.Price_display=round(float(self.Search_Results_Outbound[i][0]['Price'])*Actual_Search.Class_Type,2)
+            self.Price_display=round(float(self.Search_Results_Outbound[i]['Price'])*Actual_Search.Class_Type,2)
             self.canvas.create_text(760, 70, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
-            self.canvas.create_text(380, 120, anchor='nw', text="Departure Time: "+str(self.Search_Results_Outbound[i][0]['DepartureTime']), font=("Arial", 10))
-            self.canvas.create_text(580, 120, anchor='nw', text="Arrival Time: "+str(self.Search_Results_Outbound[i][0]['ArrivalTime']), font=("Arial", 10))
+            self.canvas.create_text(380, 120, anchor='nw', text="Departure Time: "+str(self.Search_Results_Outbound[i]['DepartureTime']), font=("Arial", 10))
+            self.canvas.create_text(580, 120, anchor='nw', text="Arrival Time: "+str(self.Search_Results_Outbound[i]['ArrivalTime']), font=("Arial", 10))
             bg_image_rep = Image.open("./images/avion_res.png")
             bg_photo_rep = ImageTk.PhotoImage(bg_image_rep)
             # Créer un canevas pour afficher l'image du logo
@@ -1967,8 +1971,31 @@ class Payment_Page():
         Launch_Home_Page()
     
     def Pay(self):
-        print("Pay")
-        Actual_Basket.Create_Res(self.Email.get(), Actual_Customer.CustomerID)
+        # Verify all inputs
+        if (self.Card_Number.get()!="")&(self.Card_Date.get()!="")&(self.Card_Code.get()!="")&(self.Card_Name.get()!="")&(self.Email.get()!=""):
+            if(int(self.Card_Number.get())>1)&(int(self.Card_Number.get())<10000000000000000):
+                if(int(self.Card_Code.get())>99)&(int(self.Card_Code.get())<1000):
+                    # Check if the email is a valid email address using a regular expression
+                    if not re.match(r'^[\w\.-]+@[\w\.-]+$', self.Email.get()):
+                        # Invalid email format, show an error message
+                        tk.messagebox.showinfo('Error', 'Invalid email format')
+                    else :
+                        print("Pay")
+                        Actual_Basket.Create_Res(self.Email.get(), Actual_Customer.CustomerID)
+                        Actual_Basket.Clear_Basket()
+                        Actual_Outbound_Flight.Reset_Outbound_Flight()
+                        Actual_Inbound_Flight.Reset_Inbound_Flight()
+                        Actual_Search.Reset_Search()
+                        #Launch_Basket_Page()
+                else :
+                    #message box 
+                    tk.messagebox.showerror("Error", "Please enter a valid card code")
+            else :
+                #message box 
+                tk.messagebox.showerror("Error", "Please enter a valid Card Number")
+        else :
+            #message box 
+            tk.messagebox.showerror("Error", "Please fill all the inputs")
 
 
 #---------------------## ALL THE FUNCTIONS ##---------------------#
