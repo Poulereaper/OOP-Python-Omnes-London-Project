@@ -26,7 +26,8 @@ class Home_Page():
         bg_image_one = Image.open("./images/degrado.jpg")
         bg_photo_one = ImageTk.PhotoImage(bg_image_one)
         #Créer un canevas pour afficher l'image de fond
-        canvas_one = tk.Canvas(self.right_frame, width=bg_image_one.width, height=bg_image_one.height)
+        canvas_one = tk.Canvas(self.right_frame, width=bg_image_one.width, height=bg_image_one.height, bg=main_color, highlightthickness=0, borderwidth=0)
+        canvas_one.config(bg=main_color)
         canvas_one.pack()
         canvas_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_one)
         canvas_one.image = bg_photo_one
@@ -1973,20 +1974,23 @@ class Payment_Page():
     def Pay(self):
         # Verify all inputs
         if (self.Card_Number.get()!="")&(self.Card_Date.get()!="")&(self.Card_Code.get()!="")&(self.Card_Name.get()!="")&(self.Email.get()!=""):
-            if(int(self.Card_Number.get())>1)&(int(self.Card_Number.get())<10000000000000000):
+            if(int(self.Card_Number.get())>999999999999999)&(int(self.Card_Number.get())<10000000000000000):
                 if(int(self.Card_Code.get())>99)&(int(self.Card_Code.get())<1000):
                     # Check if the email is a valid email address using a regular expression
                     if not re.match(r'^[\w\.-]+@[\w\.-]+$', self.Email.get()):
                         # Invalid email format, show an error message
                         tk.messagebox.showinfo('Error', 'Invalid email format')
-                    else :
-                        print("Pay")
-                        Actual_Basket.Create_Res(self.Email.get(), Actual_Customer.CustomerID)
-                        Actual_Basket.Clear_Basket()
-                        Actual_Outbound_Flight.Reset_Outbound_Flight()
-                        Actual_Inbound_Flight.Reset_Inbound_Flight()
-                        Actual_Search.Reset_Search()
-                        #Launch_Basket_Page()
+                        if(self.Date.get()<=datetime.date.today()):
+                            #message box 
+                            tk.messagebox.showerror("Error", "Please enter a valid date")
+                        else :
+                            print("Pay")
+                            Actual_Basket.Create_Res(self.Email.get(), Actual_Customer.CustomerID)
+                            Actual_Basket.Clear_Basket()
+                            Actual_Outbound_Flight.Reset_Outbound_Flight()
+                            Actual_Inbound_Flight.Reset_Inbound_Flight()
+                            Actual_Search.Reset_Search()
+                            #Launch_Basket_Page()
                 else :
                     #message box 
                     tk.messagebox.showerror("Error", "Please enter a valid card code")
