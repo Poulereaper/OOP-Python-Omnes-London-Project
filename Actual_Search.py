@@ -69,6 +69,7 @@ class Actual_Search():
         sql="SELECT * FROM flight WHERE Departure='{}' AND Arrival='{}' AND DepartureDate='{}' AND SeatsAvailable>='{}'".format(self.From,self.To,self.Departure_Date,self.Passengers)
         result = dbconnect.DBHelper().fetch(sql)
         if len(result)==0:
+            return None
             print("No Flight")
         else:
             print("Search Outbound Succeed")
