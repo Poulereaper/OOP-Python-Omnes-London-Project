@@ -9,6 +9,7 @@ import Actual_Customer as AC
 import Actual_Search as AS
 import Actual_Flight as AF
 import My_Basket as AB
+import Mail as M
 #import LogInPage as LP
 import re
 from PIL import Image, ImageTk
@@ -2068,17 +2069,18 @@ class Payment_Page():
                     if not re.match(r'^[\w\.-]+@[\w\.-]+$', self.Email.get()):
                         # Invalid email format, show an error message
                         tk.messagebox.showinfo('Error', 'Invalid email format')
-                        if(self.Date.get()<=datetime.date.today()):
+                    else: 
+                        #if(self.Card_Date.get()<=datetime.date.today()):
                             #message box 
-                            tk.messagebox.showerror("Error", "Please enter a valid date")
-                        else :
-                            print("Pay")
-                            Actual_Basket.Create_Res(self.Email.get(), Actual_Customer.CustomerID)
-                            Actual_Basket.Clear_Basket()
-                            Actual_Outbound_Flight.Reset_Outbound_Flight()
-                            Actual_Inbound_Flight.Reset_Inbound_Flight()
-                            Actual_Search.Reset_Search()
-                            #Launch_Basket_Page()
+                            #tk.messagebox.showerror("Error", "Please enter a valid date")
+                        #else :
+                        print("Pay")
+                        Actual_Basket.Create_Res(self.Email.get(), Actual_Customer.CustomerID, self.Card_Name.get())
+                        Actual_Basket.Clear_Basket()
+                        Actual_Outbound_Flight.Reset_Outbound_Flight()
+                        Actual_Inbound_Flight.Reset_Inbound_Flight()
+                        Actual_Search.Reset_Search()
+                        #Launch_Basket_Page()
                 else :
                     #message box 
                     tk.messagebox.showerror("Error", "Please enter a valid card code")

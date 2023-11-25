@@ -3,6 +3,7 @@ import dbconnect
 import datetime
 import random
 import string
+import Mail as M
 
 class Basket():
     def __init__(self):
@@ -34,7 +35,7 @@ class Basket():
         self.Basket_Total_Price = round(self.Basket_Total_Price,2)
         self.Basket_date = datetime.datetime.now()
     
-    def Create_Res(self, Email, CustomerID):
+    def Create_Res(self, Email, CustomerID, Name):
         #Creat a res by sql resquest
         #nasket date = now
         self.Basket_date = datetime.datetime.now()
@@ -94,6 +95,7 @@ class Basket():
                     #Remove one from the booked flight*
                 sql_5="UPDATE flight SET SeatsAvailable = SeatsAvailable - '{}' WHERE FlightID = '{}';".format(self.Outbound_Flight_B.Passengers, Flight_ID)
                 dbconnect.DBHelper().execute(sql_5)
+        M.send_email(Email, Name, self.Outbound_Flight_B, self.Inbound_Flight_B, self.Basket_Total_Price)
         print("Create Res Succeed")
 
     def Clear_Basket(self):
