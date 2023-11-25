@@ -25,7 +25,7 @@ class Home_Page():
         # Create a frame at the top for buttons
         self.top_frame = tk.Frame(main_window, bg=main_color)
         self.left_frame = tk.Frame(main_window, bg=main_color)
-        self.right_frame = tk.Frame(main_window)
+        self.right_frame = tk.Frame(main_window, bg=main_color)
         bg_image_one = Image.open("./images/degrado.jpg")
         bg_photo_one = ImageTk.PhotoImage(bg_image_one)
         #Créer un canevas pour afficher l'image de fond
@@ -77,7 +77,7 @@ class Home_Page():
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
-            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_My_Account, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.Buy_Now_Button = tk.Button(self.left_frame, text='Buy Now', command=Launch_Purchase_Page, font=("Arial", 17), bg=third_color, fg=main_color)
         self.Buy_Now_Button.config(height=1, width=10)
@@ -545,7 +545,7 @@ class Menu_Page():
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.middle_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
         else :
-            self.LogIn_Button = tk.Button(self.middle_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
+            self.LogIn_Button = tk.Button(self.middle_frame, text='My Account', command=Launch_My_Account, bg=second_color, fg=main_color)
         self.Purchase = tk.Button(self.middle_frame, text='   Purchase   ', command=Launch_Purchase_Page, bg=second_color, fg=main_color)
         self.CLose = tk.Button(self.middle_frame, text='      Close       ', command=self.Close, bg=second_color, fg=main_color)
 
@@ -593,8 +593,10 @@ class Menu_Page():
 
 class My_Account_Page():
     def __init__(self, main_window):
-        # Create a frame at the top for buttons
+         # Create a frame at the top for buttons
         self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.left_frame = tk.Frame(main_window, bg=main_color)
+        self.right_frame = tk.Frame(main_window, bg=main_color)
 
         #Logo
         bg_image_two = Image.open("./images/photologo_re.png")
@@ -610,7 +612,7 @@ class My_Account_Page():
         bg_photo_three = ImageTk.PhotoImage(bg_image_three)
         # Créer un canevas pour afficher l'image du logo
         canvas_three = tk.Canvas(self.top_frame, width=bg_image_three.width, height=bg_image_three.height, bg=main_color,highlightthickness=0,borderwidth=0)
-        canvas_three.place(x=150,y=20)
+        canvas_three.place(x=50,y=20)
         canvas_three.create_image(0, 0, anchor=tk.NW, image=bg_photo_three)
         canvas_three.image = bg_photo_three
         canvas_three.bind("<Button-1>", self.Hide_Button_1)
@@ -618,27 +620,24 @@ class My_Account_Page():
             notif_image = Image.open("./images/number-1.png")
             bg_photo_four = ImageTk.PhotoImage(notif_image)
             canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
-            canvas_four.place(x=168,y=18)
+            canvas_four.place(x=68,y=18)
             canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
             canvas_four.image = bg_photo_four
         elif (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B!=None):
             notif_image = Image.open("./images/number-2.png")
             bg_photo_four = ImageTk.PhotoImage(notif_image)
             canvas_four = tk.Canvas(self.top_frame, width=notif_image.width, height=notif_image.height, bg=main_color,highlightthickness=0,borderwidth=0)
-            canvas_four.place(x=168,y=18)
+            canvas_four.place(x=68,y=18)
             canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
             canvas_four.image = bg_photo_four
         else : pass 
 
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
-        self.Pres_OOPAirLine = tk.Label(self.right_frame, text="Welcome to OOP Air Line", font=("Arial", 15))
 
-        # Create 
-        if Actual_Customer.LogOrNot == False:
-            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
-        else :
-            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+        # Button
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        if Actual_Customer.AdminOrNot == True:
+            self.Admin_Button = tk.Button(self.left_frame, text='Employee Space', command=Launch_Home_Page, bg=second_color)
 
         # Pack all wigets
         #Frame
@@ -649,19 +648,19 @@ class My_Account_Page():
         self.line_canvas.pack(fill=tk.X)
         # Create a line under top_frame
         self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
-   
-
-        # Pack the 'Sign In or Sign Up' button to the left (west)
-        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
-        # Pack the Menu Button
+        self.left_frame.pack(side=tk.LEFT, fill=tk.X)
+        self.right_frame.pack(side=tk.RIGHT, fill=tk.X)
+        # Pack the 'Advanced Search' button to the right (east)
         self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         #Display the title
-        self.Home_Page_Title.pack(ipadx=0, ipady=5, padx=10, pady=10)
+        self.Home_Page_Title.place(x=580, y=10)
+        #Display the Admin Button
+        if Actual_Customer.AdminOrNot == True:
+            self.Admin_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
 
 
     def Hide_Button_1(self, empty):
         Launch_Basket_Page()
-
 
 ##------------------------------------------------------------------------------------------------------##
 ##----------------------------------------------Purchase Page-------------------------------------------##
@@ -757,7 +756,7 @@ class Purchase_Page():
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
-            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_My_Account, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.Search_Button = tk.Button(self.fourth_top_frame, text='Search', command=self.Search_Flight, font=("Arial", 15), bg=third_color, fg=main_color)
         self.Search_Button.config(height=1, width=10)
@@ -774,7 +773,7 @@ class Purchase_Page():
             self.To_Input.insert(0, "New York")
             #Remove for final version
             self.Class_Input.delete(0, tk.END)
-            self.Class_Input.insert(0, "First Class")
+            self.Class_Input.insert(0, "Economy")
         else :
             self.From_Input.insert(1, Actual_Search.From)
             self.To_Input.insert(0, Actual_Search.To)
@@ -971,7 +970,7 @@ class Info_Passengers():
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
-            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_My_Account, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.Submit_Button = tk.Button(self.display_frame, text='Submit', command=self.Submit, font=("Arial", 15), bg=third_color, fg=main_color)
 
@@ -1149,7 +1148,7 @@ class Purchase_Results_Page():
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
-            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_My_Account, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.ReSearch_Button = tk.Button(self.second_top_frame, text='Re-Search', command=self.ReSearch_Flight, font=("Arial", 10), bg=third_color, fg=main_color)
 
@@ -1225,9 +1224,6 @@ class Purchase_Results_Page():
             self.No_Flight_Title.pack(ipadx=5, ipady=5, padx=370, pady=30)
             self.Info_Noo_Flight.pack(ipadx=5, ipady=5, padx=370, pady=30)
         else:
-            self.Search_Results_Outbound = [None] * rep
-            print("REEEEEEEEEEEEEEEEEEEEEEEEP")
-            print(rep)
             for i in range(rep):
                 self.Price_display=0
                 self.Total_Price_display=0
@@ -1417,7 +1413,7 @@ class Flight_Results_Page():
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
-            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_My_Account, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.AddBasket_Button = tk.Button(self.right_frame, text='Add to Basket', command=self.AddBasket, font=("Arial", 15), bg=third_color, fg=main_color)
         if (Actual_Basket.Outbound_Flight_B!=None)&(Actual_Basket.Inbound_Flight_B==None)&(Actual_Search.Need_Return==True):
@@ -1549,7 +1545,7 @@ class Basket_Page():
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
-            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_My_Account, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         self.Pay_Button = tk.Button(self.right_frame, text='Pay', command=Launch_Payment_Page, font=("Arial", 15), bg=third_color, fg=main_color)
 
@@ -1595,7 +1591,7 @@ class Basket_Page():
                     bg_image_rep_one = Image.open("./images/Where_D_res.png")
                 bg_photo_rep_one = ImageTk.PhotoImage(bg_image_rep_one)
                 # Créer un canevas pour afficher l'image du logo
-                canvas_rep_one = tk.Canvas(self.canvas, width=bg_image_rep_one.width, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
+                canvas_rep_one = tk.Canvas(self.canvas, width=261, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
                 canvas_rep_one.place(x=10,y=10)
                 canvas_rep_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep_one)
                 canvas_rep_one.image = bg_photo_rep_one
@@ -1647,14 +1643,14 @@ class Basket_Page():
                     self.canvas.create_text(480, 110, anchor='nw', text="Arrival Time: "+str(self.Display_Flight.Arrival_Time), font=("Arial", 10))
                     bg_image_two = Image.open("./images/bin.png")
                     bg_photo_two = ImageTk.PhotoImage(bg_image_two)
-                    # Créer un canevas pour afficher l'image du logo
                     canvas_two = tk.Canvas(self.canvas, width=bg_image_two.width, height=bg_image_two.height, highlightthickness=0,borderwidth=0)
                     canvas_two.place(x=720,y=170)
                     canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
                     canvas_two.image = bg_photo_two
                     bg_image_two.close()
                     canvas_two.bind("<Button-1>", lambda event, param=i: self.Delete(event, param))
-                    bg_image_rep_one = Image.open("./images/avion_res.png")
+                    image_name = "./images/Flights_Images/"+(str(self.Display_Flight.Arrival_Airport).replace(' ', '_'))+".png"
+                    bg_image_rep_one = Image.open(image_name)
                 else : 
                     self.Display_Flight = Actual_Basket.Outbound_Flight_B
                     self.canvas.create_text(640, 30, anchor='ne', text="Need to return from "+str(self.Display_Flight.Arrival_Airport)+"?", font=("Arial", 15))
@@ -1667,7 +1663,7 @@ class Basket_Page():
                 #images 
                 bg_photo_rep_one = ImageTk.PhotoImage(bg_image_rep_one)
                 # Créer un canevas pour afficher l'image du logo
-                canvas_rep_one = tk.Canvas(self.canvas, width=bg_image_rep_one.width, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
+                canvas_rep_one = tk.Canvas(self.canvas, width=261, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
                 canvas_rep_one.place(x=10,y=10)
                 canvas_rep_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep_one)
                 canvas_rep_one.image = bg_photo_rep_one
@@ -1731,10 +1727,11 @@ class Basket_Page():
                 self.canvas.create_text(280, 110, anchor='nw', text="Departure Time: "+str(self.Display_Flight.Departure_Time), font=("Arial", 10))
                 self.canvas.create_text(480, 110, anchor='nw', text="Arrival Time: "+str(self.Display_Flight.Arrival_Time), font=("Arial", 10))
                 #images
-                bg_image_rep_one = Image.open("./images/avion_res.png")
+                image_name = "./images/Flights_Images/"+(str(self.Display_Flight.Arrival_Airport).replace(' ', '_'))+".png"
+                bg_image_rep_one = Image.open(image_name)
                 bg_photo_rep_one = ImageTk.PhotoImage(bg_image_rep_one)
                 # Créer un canevas pour afficher l'image du logo
-                canvas_rep_one = tk.Canvas(self.canvas, width=bg_image_rep_one.width, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
+                canvas_rep_one = tk.Canvas(self.canvas, width=261, height=bg_image_rep_one.height, highlightthickness=0,borderwidth=0)
                 canvas_rep_one.place(x=10,y=10)
                 canvas_rep_one.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep_one)
                 canvas_rep_one.image = bg_photo_rep_one
@@ -1873,7 +1870,7 @@ class Payment_Page():
         if Actual_Customer.LogOrNot == False:
             self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
         else :
-            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_LogIn_Page, bg=second_color)
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_My_Account, bg=second_color)
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
 
         # Pack all wigets
@@ -2158,6 +2155,11 @@ def Launch_Payment_Page():
         widget.destroy()
     Payment_Page(main_window)
 
+def Launch_My_Account():
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    My_Account_Page(main_window)
+
 def Change_Theme():
     global main_color
     global second_color
@@ -2208,18 +2210,22 @@ main_color_light="#fff7ea"
 second_color_light="#722a39"
 third_color_light="#375c4f"
 fourth_color_light="#3f171f"
+def_color_light="#252525"
 #Dark Theme
 main_color_dark='#292929'
 second_color_dark="#9c4c5b"
 third_color_dark="#017368"
 fourth_color_dark="#cf6679"
+def_color_drak="#fff9ea"
 
 #Theme
 main_color=main_color_light
 second_color=second_color_light
 third_color=third_color_light
 fourth_color=fourth_color_light
-main_window.configure(bg=main_color)
+def_color=def_color_light
+main_window.configure(bg=main_color, highlightthickness=0, borderwidth=0, relief='ridge')
+main_window.fg=def_color
 
 Home_Page(main_window)
 tk.mainloop()
