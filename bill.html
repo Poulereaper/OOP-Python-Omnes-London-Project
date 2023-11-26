@@ -1,0 +1,74 @@
+<div class="page-container">Page of</div>
+<div class="logo-container"><img style="height: 18px;" src="https://app.useanvil.com/img/email-logo-black.png"/></div>
+<table class="invoice-info-container">
+<tbody>
+<tr>
+<td class="client-name" rowspan="2">{{client_name}}</td>
+<td class="client-mail" rowspan="2">{{client_mail}}</td>
+<td>OOP Air-Line</td>
+</tr>
+<tr>
+<td>32 Aybrook St</td>
+</tr>
+<tr>
+<td>Receipt Date: <strong>{{today_date}}</strong></td>
+<td>London W1U 4AW</td>
+</tr>
+<tr>
+<td>Receipt Number: <strong>{{Res_ID}}</strong></td>
+<td>oop.air.line@gmail.com</td>
+</tr>
+</tbody>
+</table>
+<table class="line-items-container">
+<thead>
+<tr>
+<th class="heading-quantity">&nbsp;</th>
+<th class="heading-description">Description</th>
+<th class="heading-price">&nbsp;</th>
+<th class="heading-subtotal">Subtotal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&nbsp;</td>
+<td>{{item1}}</td>
+<td class="right">&nbsp;</td>
+<td class="bold">{{subtotal1}}</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>{{item2}}</td>
+<td class="right">&nbsp;</td>
+<td class="bold">{{subtotal2}}</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>{{item3}}</td>
+<td class="right">&nbsp;</td>
+<td class="bold">{{subtotal3}}</td>
+</tr>
+</tbody>
+</table>
+<table class="line-items-container has-bottom-border">
+<thead>
+<tr>
+<th>Payment Info</th>
+<th>Month to Pay</th>
+<th>Total to Pay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="payment-info">
+<div>Account No: <strong>123567744</strong></div>
+</td>
+<td class="large">{{month}}</td>
+<td class="large total">{{total}}</td>
+</tr>
+</tbody>
+</table>
+<div class="footer">
+<div class="footer-info">oop.air.line@gmail.com | 69 la tric | oop-APP</div>
+<div class="footer-thanks"><img src="https://github.com/anvilco/html-pdf-invoice-template/raw/main/img/heart.png" alt="heart" />Thank you for choosing OOP Air-Line!</div>
+</div>

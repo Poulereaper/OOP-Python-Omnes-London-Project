@@ -4,6 +4,7 @@ import datetime
 import random
 import string
 import Mail as M
+import PDF_Create as PDF
 
 class Basket():
     def __init__(self):
@@ -96,6 +97,7 @@ class Basket():
                 sql_5="UPDATE flight SET SeatsAvailable = SeatsAvailable - '{}' WHERE FlightID = '{}';".format(self.Outbound_Flight_B.Passengers, Flight_ID)
                 dbconnect.DBHelper().execute(sql_5)
         M.send_email(Email, Name, self.Outbound_Flight_B, self.Inbound_Flight_B, self.Basket_Total_Price)
+        PDF.bill_pdf(Name, Email, self.Outbound_Flight_B, self.Inbound_Flight_B, 1000, 1000, Res_ID)
         print("Create Res Succeed")
 
     def Clear_Basket(self):
