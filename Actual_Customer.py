@@ -1,5 +1,6 @@
 import pymysql
 import dbconnect
+import datetime
 
 class Actual_Customer():
     def __init__(self):
@@ -12,6 +13,8 @@ class Actual_Customer():
         self.UserName = ""
         self.Phone = 0
         self.AdminOrNot = False
+        self.ProfilePicture = None
+        self.Page = 0
     # Check if we can Complet the Actual Customer
     def CompleteAccept(self):
         if (self.Email != "") & (self.Password != "") & (self.FirstName != "") & (self.LastName != "") & (self.UserName != "") & (self.Phone != 0):
@@ -19,13 +22,14 @@ class Actual_Customer():
         else:
             return False
     # Complet Actual Customer
-    def Complet_Actual_Customer(self, Email, Password, FirstName, LastName, UserName, Phone):
+    def Complet_Actual_Customer(self, Email, Password, FirstName, LastName, UserName, Phone, ProfilePicture):
         self.Email = Email
         self.Password = Password
         self.FirstName = FirstName
         self.LastName = LastName
         self.UserName = UserName
         self.Phone = Phone
+        self.ProfilePicture = ProfilePicture
 
     # Creat the Actual Customer in the DB
     def Creat_Actual_Customer(self):
@@ -63,6 +67,7 @@ class Actual_Customer():
     
     def Copy_To_Actual_Customer(self, result):
         self.LogOrNot = True
+        self.CustomerID = result[0]['CustomerID']
         self.Email = result[0]['Email']
         self.Password = result[0]['Password']
         self.FirstName = result[0]['FirstName']
@@ -70,3 +75,64 @@ class Actual_Customer():
         self.UserName = result[0]['UserName']
         self.Phone = result[0]['Phone']
         self.AdminOrNot = result[0]['AdminOrNot']
+        self.ProfilePicture = result[0]['ProfilePicture']
+
+    def HowMany_Orders(self):
+        sql = "SELECT COUNT(DISTINCT ReservationGrpID) FROM Reservations WHERE CustomerID = '{}'".format(self.CustomerID)
+        result = dbconnect.DBHelper().fetch(sql)
+        return result[0]['COUNT(DISTINCT ReservationGrpID)']
+    
+    def Select_UpComing_Flight(self):
+        sql = """SELECT
+        r.FlightID,
+        r.ReservationGrpID,
+        COUNT(r.ReservationID) AS NombreDeReservations,
+        SUM(r.Price) AS SommeDesPrix,
+        f.FlightNumber,
+        f.Departure,
+        f.DepartureDate,
+        f.Arrival,
+        f.ArrivalDate,
+        f.DepartureTime,
+        f.ArrivalTime,
+        f.Airline,
+        f.Duration
+        FROM
+            Reservations r
+            INNER JOIN flight f ON r.FlightID = f.FlightID
+        WHERE
+            r.CustomerID = '{}'
+            AND f.DepartureDate > '{}'
+        GROUP BY
+            r.FlightID, r.ReservationGrpID, r.Price, f.FlightNumber, f.Departure, f.DepartureDate, f.Arrival, f.ArrivalDate, f.DepartureTime, f.ArrivalTime, f.Airline, f.Duration;
+        """.format(self.CustomerID, datetime.datetime.now())
+        result = dbconnect.DBHelper().fetch(sql)
+        return result
+        
+    def Select_Past_Flight(self):
+        sql = """SELECT
+        r.FlightID,
+        r.ReservationGrpID,
+        COUNT(r.ReservationID) AS NombreDeReservations,
+        SUM(r.Price) AS SommeDesPrix,
+        f.FlightNumber,
+        f.Departure,
+        f.DepartureDate,
+        f.Arrival,
+        f.ArrivalDate,
+        f.DepartureTime,
+        f.ArrivalTime,
+        f.Airline,
+        f.Duration
+        FROM
+            Reservations r
+            INNER JOIN flight f ON r.FlightID = f.FlightID
+        WHERE
+            r.CustomerID = '{}'
+            AND f.DepartureDate < '{}'
+        GROUP BY
+            r.FlightID, r.ReservationGrpID, r.Price, f.FlightNumber, f.Departure, f.DepartureDate, f.Arrival, f.ArrivalDate, f.DepartureTime, f.ArrivalTime, f.Airline, f.Duration;
+        """.format(self.CustomerID, datetime.datetime.now())
+        result = dbconnect.DBHelper().fetch(sql)
+        return result
+

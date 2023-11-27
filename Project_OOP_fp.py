@@ -228,7 +228,7 @@ class LogIn_Page():
                 # Copy the result to the Actual_Customer
                 Actual_Customer.Copy_To_Actual_Customer(result)
                 # Login successful, show the home page
-                Launch_Home_Page()
+                Launch_My_Account()
             else:
                 # Login failed, show an error message
                 tk.messagebox.showinfo('Error', 'Invalid email or password')
@@ -596,8 +596,14 @@ class My_Account_Page():
     def __init__(self, main_window):
          # Create a frame at the top for buttons
         self.top_frame = tk.Frame(main_window, bg=main_color)
-        self.left_frame = tk.Frame(main_window, bg=main_color)
+        self.left_frame = tk.Frame(main_window,  width=290, bg=main_color)
         self.right_frame = tk.Frame(main_window, bg=main_color)
+        self.top_right_frame = tk.Frame(self.right_frame, height=70, bg=main_color)
+        self.rest_right_frame = tk.Frame(self.right_frame, bg=main_color)
+
+        self.scroll_canva = tk.Canvas(self.rest_right_frame, bg=main_color)
+        self.scroll_canva.config(highlightthickness=0, borderwidth=0)
+        self.display_frame = tk.Frame(self.scroll_canva, bg=main_color)
 
         #Logo
         bg_image_two = Image.open("./images/photologo_re.png")
@@ -631,15 +637,44 @@ class My_Account_Page():
             canvas_four.place(x=68,y=18)
             canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
             canvas_four.image = bg_photo_four
-        else : pass 
+        else : pass
+        #Profile Picture 
+        if (Actual_Customer.ProfilePicture==None) or (Actual_Customer.ProfilePicture=="") :
+            bg_image_five = Image.open("./pp/user.png")
+        else:
+            bg_image_five = Image.open(Actual_Customer.ProfilePicture)
+        bg_photo_five = ImageTk.PhotoImage(bg_image_five)
+        canvas_five = tk.Canvas(self.left_frame, width=bg_image_five.width, height=bg_image_five.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_five.place(x=45,y=30)
+        canvas_five.create_image(0, 0, anchor=tk.NW, image=bg_photo_five)
+        canvas_five.image = bg_photo_five
 
+        #Title and Text
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
-
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button)
+        self.Name_Title = tk.Label(self.left_frame, text=Actual_Customer.FirstName+" "+Actual_Customer.LastName, font=("Arial", 15), bg=main_color, fg=fourth_color)
+        self.UserName_Title = tk.Label(self.left_frame, text=Actual_Customer.UserName, font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.Email_Title = tk.Label(self.left_frame, text=Actual_Customer.Email, font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.Phone_Title = tk.Label(self.left_frame, text=Actual_Customer.Phone, font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.Employment_Title = tk.Label(self.left_frame, text="Employee ID :"+str(Actual_Customer.CustomerID), font=("Arial", 10), bg=main_color, fg=fourth_color)
+        #Right Titles 
+        self.Upcoming_Flights_Title = tk.Label(self.top_right_frame, text="Upcoming Flights", font=("Arial", 13), bg=main_color, fg=fourth_color)
+        self.Upcoming_Flights_Title.bind("<Button-1>", self.UpComFlights)
+        self.Past_Flights_Title = tk.Label(self.top_right_frame, text="Past Flights", font=("Arial", 13), bg=main_color, fg=fourth_color)
+        self.Past_Flights_Title.bind("<Button-1>", self.PastFlights)
+        self.Settings_Title = tk.Label(self.top_right_frame, text="Settings", font=("Arial", 13), bg=main_color, fg=fourth_color)
+        self.Settings_Title.bind("<Button-1>", self.Settings)
+        self.Cards_Title = tk.Label(self.top_right_frame, text="Cards", font=("Arial", 13), bg=main_color, fg=fourth_color)
+        if Actual_Customer.Page==0:self.Upcoming_Flights_Title.config( fg=third_color)
+        elif Actual_Customer.Page==1:self.Past_Flights_Title.config( fg=third_color)
+        elif Actual_Customer.Page==2:self.Settings_Title.config( fg=third_color)
+        elif Actual_Customer.Page==3:self.Cards_Title.config( fg=third_color)
+        self.Cards_Title.bind("<Button-1>", self.Cards)
         # Button
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         if Actual_Customer.AdminOrNot == True:
-            self.Admin_Button = tk.Button(self.left_frame, text='Employee Space', command=Launch_Home_Page, bg=second_color)
-
+            self.Admin_Button = tk.Button(self.left_frame, text='Employee Space', command=Launch_Home_Page, bg=second_color, fg=main_color, width=15, height=2)
+        self.Purchase_Button = tk.Button(self.left_frame, text=' Go Purchase', command=Launch_Purchase_Page, bg=second_color, fg=main_color, width=15, height=2)
         # Pack all wigets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
@@ -649,19 +684,141 @@ class My_Account_Page():
         self.line_canvas.pack(fill=tk.X)
         # Create a line under top_frame
         self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
-        self.left_frame.pack(side=tk.LEFT, fill=tk.X)
-        self.right_frame.pack(side=tk.RIGHT, fill=tk.X)
+        self.left_frame.pack(side=tk.LEFT, fill=tk.Y)
+        self.right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+        self.top_right_frame.pack(side=tk.TOP, fill=tk.X)
+        
         # Pack the 'Advanced Search' button to the right (east)
         self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         #Display the title
         self.Home_Page_Title.place(x=580, y=10)
+        #Display the Name Title
+        self.Name_Title.place(x=50, y=210)
+        #Display the UserName Title
+        self.UserName_Title.place(x=50, y=235)
+        #Display the Email Title
+        self.Email_Title.place(x=50, y=270)
+        #Display the Phone Title
+        self.Phone_Title.place(x=50, y=310)
+        #Display the Purchase Button
+        self.Purchase_Button.place(x=50, y=420)
         #Display the Admin Button
         if Actual_Customer.AdminOrNot == True:
-            self.Admin_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+            self.Employment_Title.place(x=50, y=345)
+            self.Admin_Button.place(x=50, y=480)
+                #draw Line right of left frame
+        self.line_canvas_right = tk.Canvas(self.left_frame, width=3, height=self.left_frame.winfo_screenheight()-220, bg=second_color)
+        self.line_canvas_right.config(highlightthickness=0, borderwidth=0)
+        self.line_canvas_right.place(x=270, y=20)
+        # Create a line on right of top_frame
+        self.line_canvas_right.create_line(2, 0, 2, self.left_frame.winfo_screenheight(), fill=second_color)
+        #Display the Upcoming Flights Title
+        self.Upcoming_Flights_Title.place(x=40, y=15)
+        #Display the Past Flights Title
+        self.Past_Flights_Title.place(x=260, y=15)
+        #Display the Settings Title
+        self.Settings_Title.place(x=470, y=15)
+        #Display the Cards Title
+        self.Cards_Title.place(x=650, y=15)
 
+        self.rest_right_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.yscrollbar = tk.Scrollbar(self.rest_right_frame, orient="vertical", command=self.scroll_canva.yview)
+        self.yscrollbar.pack(side=tk.RIGHT, fill='y')
+        self.scroll_canva.configure(yscrollcommand=self.yscrollbar.set)
+        self.scroll_canva.bind('<Configure>', lambda e: self.scroll_canva.configure(scrollregion = self.scroll_canva.bbox("all")))
+        self.display_frame.pack(fill=tk.BOTH, expand=True)
+        self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
+
+        #Display Stuff in right frame
+        if Actual_Customer.Page==0 or Actual_Customer.Page==1:
+            rep=Actual_Customer.HowMany_Orders()
+            if (rep==0) or (rep==None) or ((Actual_Search.ReturnOrNot==True) & (rep==0)):
+                if Actual_Customer.Page==0:
+                    self.No_Flight_Title = tk.Label(self.display_frame, text="No Flight Found", font=("Arial", 15), bg=main_color, fg=fourth_color)
+                    self.Info_Noo_Flight = tk.Label(self.display_frame, text="Unfortunately it seems that you have no Upcoming Flights.", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                elif Actual_Customer.Page==1:
+                    self.No_Flight_Title = tk.Label(self.display_frame, text="No Flight Found", font=("Arial", 15), bg=main_color, fg=fourth_color)
+                    self.Info_Noo_Flight = tk.Label(self.display_frame, text="Unfortunately it seems that you have no Past Flights.", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.No_Flight_Title.pack(ipadx=5, ipady=5, padx=190, pady=40)
+                self.Info_Noo_Flight.pack(ipadx=5, ipady=5, padx=190, pady=30)
+            else:
+                print(rep)
+                for i in range(rep):
+                    self.Price_display=0
+                    self.Total_Price_display=0
+                    if Actual_Customer.Page==0: self.Search_Results = Actual_Customer.Select_UpComing_Flight()
+                    elif Actual_Customer.Page==1: self.Search_Results = Actual_Customer.Select_Past_Flight()
+
+                    try:
+                        # Create a canvas widget
+                        self.canvas = tk.Canvas(self.display_frame, width=700, height=200, highlightthickness=0 ,borderwidth=0, bg=main_color)
+                        self.canvas.bind("<Button-1>", lambda event, param=self.Search_Results: self.FLight_Select(event, param))
+                        self.canvas.pack(padx=65, pady=5, side=tk.TOP, fill=tk.X)
+                        # Draw a rectangle on the canvas
+                        self.canvas.create_rectangle(0, 0, 700, 200, outline='black', width=2)
+                        # Print information in the rectangle
+                        self.canvas.create_text(380, 40, anchor='nw', text="Flight Number: "+str(self.Search_Results[i]['FlightNumber']), font=("Arial", 10))
+                        self.canvas.create_text(380, 60, anchor='nw', text="Departure: "+str(self.Search_Results[i]['Departure']), font=("Arial", 10))
+                        self.canvas.create_text(380, 80, anchor='nw', text="Arrival: "+str(self.Search_Results[i]['Arrival']), font=("Arial", 10))
+                        self.canvas.create_text(630, 40, anchor='nw', text="£"+str(self.Search_Results[i]['SommeDesPrix']), font=("Arial", 15))
+                        self.canvas.create_text(380, 120, anchor='nw', text="Departure Time: "+str(self.Search_Results[i]['DepartureTime']), font=("Arial", 10))
+                        self.canvas.create_text(380, 150, anchor='nw', text="Arrival Time: "+str(self.Search_Results[i]['ArrivalTime']), font=("Arial", 10))
+                        self.canvas.create_text(640, 120, anchor='nw', text="x "+str(self.Search_Results[i]['NombreDeReservations']), font=("Arial", 10))
+                        image_name = "./images/Flights_Images/"+(str(self.Search_Results[i]['Arrival']).replace(' ', '_'))+".png"
+                        bg_image_rep = Image.open(image_name)
+                        bg_photo_rep = ImageTk.PhotoImage(bg_image_rep)
+                        # Créer un canevas pour afficher l'image du logo
+                        canvas_rep = tk.Canvas(self.canvas, width=bg_image_rep.width, height=bg_image_rep.height, highlightthickness=0,borderwidth=0)
+                        canvas_rep.place(x=10,y=10)
+                        canvas_rep.create_image(0, 0, anchor=tk.NW, image=bg_photo_rep)
+                        canvas_rep.image = bg_photo_rep
+                        bg_image_rep.close()
+                        bg_image_height = Image.open("./images/passenger.png")
+                        bg_photo_height = ImageTk.PhotoImage(bg_image_height)
+                        # Créer un canevas pour afficher l'image du logo
+                        canvas_height = tk.Canvas(self.canvas, width=bg_image_height.width, height=bg_image_height.height, bg=main_color,highlightthickness=0,borderwidth=0)
+                        canvas_height.place(x=625, y=120)
+                        canvas_height.create_image(0, 0, anchor=tk.NW, image=bg_photo_height)
+                        canvas_height.image = bg_photo_height
+                        bg_image_height.close()
+                    except IndexError:
+                        if i==0:
+                            self.canvas.destroy()
+                            if Actual_Customer.Page==0:
+                                self.No_Flight_Title = tk.Label(self.display_frame, text="No Flight Found", font=("Arial", 15), bg=main_color, fg=fourth_color)
+                                self.Info_Noo_Flight = tk.Label(self.display_frame, text="Unfortunately it seems that you have no Upcoming Flights.", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                            elif Actual_Customer.Page==1:
+                                self.No_Flight_Title = tk.Label(self.display_frame, text="No Flight Found", font=("Arial", 15), bg=main_color, fg=fourth_color)
+                                self.Info_Noo_Flight = tk.Label(self.display_frame, text="Unfortunately it seems that you have no Past Flights.", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                            self.No_Flight_Title.pack(ipadx=5, ipady=5, padx=190, pady=40)
+                            self.Info_Noo_Flight.pack(ipadx=5, ipady=5, padx=190, pady=30)
+                            break
+                        self.canvas.destroy()
+                        break
+            
+
+    def Hide_Button(self, empty):
+        Launch_Home_Page()
 
     def Hide_Button_1(self, empty):
         Launch_Basket_Page()
+
+    def UpComFlights(self, empty):
+        Actual_Customer.Page=0
+        Launch_My_Account()
+    
+    def PastFlights(self, empty):
+        Actual_Customer.Page=1
+        Launch_My_Account()
+    
+    def Settings(self, empty):
+        Actual_Customer.Page=2
+        Launch_My_Account()
+    
+    def Cards(self, empty):
+        Actual_Customer.Page=3
+        Launch_My_Account()
 
 ##------------------------------------------------------------------------------------------------------##
 ##----------------------------------------------Purchase Page-------------------------------------------##
@@ -2075,6 +2232,7 @@ class Payment_Page():
                             #tk.messagebox.showerror("Error", "Please enter a valid date")
                         #else :
                         print("Pay")
+                        print(Actual_Customer.CustomerID)
                         Actual_Basket.Create_Res(self.Email.get(), Actual_Customer.CustomerID, self.Card_Name.get())
                         Actual_Basket.Clear_Basket()
                         Actual_Outbound_Flight.Reset_Outbound_Flight()

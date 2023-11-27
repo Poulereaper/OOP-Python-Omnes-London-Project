@@ -81,6 +81,7 @@ class Basket():
                 else:
                     In_Price=Flight_Total
                 Flight_Total=0
+                Res_ID+=1
         else:
             Flight_ID=self.Outbound_Flight_B.Flight_ID
             Price = self.Outbound_Flight_B.Price
