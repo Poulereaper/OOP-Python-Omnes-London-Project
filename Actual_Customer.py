@@ -31,6 +31,19 @@ class Actual_Customer():
         self.Phone = Phone
         self.ProfilePicture = ProfilePicture
 
+    def Change_Actual_Customer(self, Email, Password, FirstName, LastName, UserName, Phone, ProfilePicture):
+        self.Email = Email
+        self.Password = Password
+        self.FirstName = FirstName
+        self.LastName = LastName
+        self.UserName = UserName
+        self.Phone = Phone
+        self.ProfilePicture = ProfilePicture
+        #sql
+        sql = "UPDATE Customer SET Email='{}', Password='{}', FirstName='{}', LastName='{}', UserName='{}', Phone='{}', ProfilePicture='{}' WHERE CustomerID='{}'".format(self.Email, self.Password, self.FirstName, self.LastName, self.UserName, self.Phone, self.ProfilePicture, self.CustomerID)
+        dbconnect.DBHelper().execute(sql)
+        print("Change Actual Customer Succeed")
+
     # Creat the Actual Customer in the DB
     def Creat_Actual_Customer(self):
         if self.CompleteAccept():
@@ -76,6 +89,23 @@ class Actual_Customer():
         self.Phone = result[0]['Phone']
         self.AdminOrNot = result[0]['AdminOrNot']
         self.ProfilePicture = result[0]['ProfilePicture']
+
+    def Disconnect(self):
+        self.LogOrNot = False
+        self.CustomerID = 0
+        self.Email = ""
+        self.Password = ""
+        self.FirstName = ""
+        self.LastName = ""
+        self.UserName = ""
+        self.Phone = 0
+        self.AdminOrNot = False
+        self.ProfilePicture = None
+
+    def Delete_Customer(self):
+        sql = "DELETE FROM Customer WHERE CustomerID='{}'".format(self.CustomerID)
+        dbconnect.DBHelper().execute(sql)
+        print("Delete Customer Succeed")
 
     def HowMany_Orders(self):
         sql = "SELECT COUNT(DISTINCT ReservationGrpID) FROM Reservations WHERE CustomerID = '{}'".format(self.CustomerID)

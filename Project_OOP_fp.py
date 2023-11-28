@@ -722,16 +722,16 @@ class My_Account_Page():
         self.Cards_Title.place(x=650, y=15)
 
         self.rest_right_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self.yscrollbar = tk.Scrollbar(self.rest_right_frame, orient="vertical", command=self.scroll_canva.yview)
-        self.yscrollbar.pack(side=tk.RIGHT, fill='y')
-        self.scroll_canva.configure(yscrollcommand=self.yscrollbar.set)
-        self.scroll_canva.bind('<Configure>', lambda e: self.scroll_canva.configure(scrollregion = self.scroll_canva.bbox("all")))
-        self.display_frame.pack(fill=tk.BOTH, expand=True)
-        self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
 
         #Display Stuff in right frame
         if Actual_Customer.Page==0 or Actual_Customer.Page==1:
+            self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+            self.yscrollbar = tk.Scrollbar(self.rest_right_frame, orient="vertical", command=self.scroll_canva.yview)
+            self.yscrollbar.pack(side=tk.RIGHT, fill='y')
+            self.scroll_canva.configure(yscrollcommand=self.yscrollbar.set)
+            self.scroll_canva.bind('<Configure>', lambda e: self.scroll_canva.configure(scrollregion = self.scroll_canva.bbox("all")))
+            self.display_frame.pack(fill=tk.BOTH, expand=True)
+            self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
             rep=Actual_Customer.HowMany_Orders()
             if (rep==0) or (rep==None) or ((Actual_Search.ReturnOrNot==True) & (rep==0)):
                 if Actual_Customer.Page==0:
@@ -796,6 +796,66 @@ class My_Account_Page():
                             break
                         self.canvas.destroy()
                         break
+        elif Actual_Customer.Page==2:
+            #Titles 
+            self.Personal_Info_Title = tk.Label(self.rest_right_frame, text="Personal Information", font=("Arial", 13), bg=main_color, fg=fourth_color)
+            self.First_Name_Title = tk.Label(self.rest_right_frame, text=" First Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.Last_Name_Title = tk.Label(self.rest_right_frame, text=" Last Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.User_Name_Title = tk.Label(self.rest_right_frame, text=" User Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.Email_Title = tk.Label(self.rest_right_frame, text=" Email", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.Phone_Title = tk.Label(self.rest_right_frame, text=" Phone", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.Change_Password_Title = tk.Label(self.rest_right_frame, text="Change Password", font=("Arial", 13), bg=main_color, fg=fourth_color)
+            self.Old_Password_Title = tk.Label(self.rest_right_frame, text=" Old Password", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.New_Password_Title = tk.Label(self.rest_right_frame, text=" New Password", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.Confirm_Password_Title = tk.Label(self.rest_right_frame, text=" Confirm Password", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.Info_Privacy_Title = tk.Label(self.rest_right_frame, text="Your information is private and secure", font=("Arial", 8), bg=main_color, fg=fourth_color)
+            self.Info_Delete_Title = tk.Label(self.rest_right_frame, text="You can delete your account at any time and all your informations will be deleted", font=("Arial", 8), bg=main_color, fg=fourth_color)
+            #Entries
+            self.First_Name_Input = tk.Entry(self.rest_right_frame)
+            self.First_Name_Input.insert(0, Actual_Customer.FirstName)
+            self.Last_Name_Input = tk.Entry(self.rest_right_frame)
+            self.Last_Name_Input.insert(0, Actual_Customer.LastName)
+            self.User_Name_Input = tk.Entry(self.rest_right_frame)
+            self.User_Name_Input.insert(0, Actual_Customer.UserName)
+            self.Email_Input = tk.Entry(self.rest_right_frame)
+            self.Email_Input.insert(0, Actual_Customer.Email)
+            self.Phone_Input = tk.Entry(self.rest_right_frame)
+            self.Phone_Input.insert(0, Actual_Customer.Phone)
+            self.Old_Password_Input = tk.Entry(self.rest_right_frame, show="*")
+            self.New_Password_Input = tk.Entry(self.rest_right_frame)
+            self.Confirm_Password_Input = tk.Entry(self.rest_right_frame, show="*")
+            #Button
+            self.Save_Button = tk.Button(self.rest_right_frame, text='Save', command=self.Save, bg=third_color, fg=main_color, width=15, height=2)
+            self.Disconnect_Button = tk.Button(self.rest_right_frame, text='Disconnect', command=self.Disconnect, bg=second_color, fg=main_color, width=15, height=2)
+            self.Delete_Button = tk.Button(self.rest_right_frame, text='Delete Account', command=self.Delete_Account, bg=second_color, fg=main_color, width=15, height=2)
+            #Display Stuff
+            self.Personal_Info_Title.place(x=50, y=40)
+            self.First_Name_Title.place(x=50, y=100)
+            self.First_Name_Input.place(x=50, y=130)
+            self.Last_Name_Title.place(x=50, y=170)
+            self.Last_Name_Input.place(x=50, y=200)
+            self.User_Name_Title.place(x=50, y=240)
+            self.User_Name_Input.place(x=50, y=270)
+            self.Email_Title.place(x=50, y=310)
+            self.Email_Input.place(x=50, y=340)
+            self.Phone_Title.place(x=50, y=380)
+            self.Phone_Input.place(x=50, y=410)
+            self.Change_Password_Title.place(x=350, y=40)
+            self.Old_Password_Title.place(x=350, y=120)
+            self.Old_Password_Input.place(x=350, y=150)
+            self.New_Password_Title.place(x=350, y=190)
+            self.New_Password_Input.place(x=350, y=220)
+            self.Confirm_Password_Title.place(x=350, y=260)
+            self.Confirm_Password_Input.place(x=350, y=290)
+            self.Save_Button.place(x=600, y=130)
+            self.Disconnect_Button.place(x=600, y=200)
+            self.Delete_Button.place(x=600, y=270)
+            self.Info_Privacy_Title.place(x=400, y=420)
+            self.Info_Delete_Title.place(x=400, y=440)
+
+        elif Actual_Customer.Page==3:
+            pass
+
             
 
     def Hide_Button(self, empty):
@@ -819,6 +879,47 @@ class My_Account_Page():
     def Cards(self, empty):
         Actual_Customer.Page=3
         Launch_My_Account()
+    
+    def Save(self):
+        self.FirstName=self.First_Name_Input.get()
+        self.LastName=self.Last_Name_Input.get()
+        self.UserName=self.User_Name_Input.get()
+        self.Email=self.Email_Input.get()
+        self.Phone=self.Phone_Input.get()
+        self.Old_Password=self.Old_Password_Input.get()
+        self.New_Password=self.New_Password_Input.get()
+        self.Confirm_Password=self.Confirm_Password_Input.get()
+        if (self.FirstName=='') or (self.LastName=='') or (self.UserName=='') or (self.Email=='') or (self.Phone=='') :
+            tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        elif not re.match(r'^[0-9]*$', self.Phone):
+            # Invalid phone format, show an error message
+            tk.messagebox.showinfo('Error', 'Invalid phone format')
+        if (self.Old_Password!='') or ((self.New_Password!='') or (self.Confirm_Password!='')):
+            if (self.Old_Password=='') or (self.New_Password=='') or (self.Confirm_Password==''):
+                tk.messagebox.showinfo('Error', 'Please fill in all the information for the password')
+            elif self.New_Password!=self.Confirm_Password:
+                tk.messagebox.showinfo('Error', 'The new password and the confirmation password are not the same')
+            elif self.Old_Password!=Actual_Customer.Password:
+                tk.messagebox.showinfo('Error', 'The old password is incorrect')
+            else : 
+                Actual_Customer.Change_Actual_Customer(self.Email, self.New_Password, self.FirstName, self.LastName, self.UserName,  self.Phone, Actual_Customer.ProfilePicture)
+                Launch_My_Account()
+        else :
+            Actual_Customer.Change_Actual_Customer(self.Email, Actual_Customer.Password, self.FirstName, self.LastName, self.UserName,  self.Phone, Actual_Customer.ProfilePicture)
+            Launch_My_Account()
+    
+    def Delete_Account(self):
+        response = tk.messagebox.askquestion('Warning', 'Are you sure you want to delete your account?', icon='warning')
+        if response == 'yes':
+            Actual_Customer.Delete_Customer()
+            Launch_Home_Page()
+            print("Delete Account")
+        else:
+            print("Account deletion canceled")
+
+    def Disconnect(self):
+        Actual_Customer.Disconnect()
+        Launch_Home_Page()
 
 ##------------------------------------------------------------------------------------------------------##
 ##----------------------------------------------Purchase Page-------------------------------------------##
