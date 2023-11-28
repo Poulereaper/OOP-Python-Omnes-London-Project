@@ -14,6 +14,10 @@ class Actual_Customer():
         self.Phone = 0
         self.AdminOrNot = False
         self.ProfilePicture = None
+        self.CardNumber = 0
+        self.CardName = ""
+        self.CardDate = 0
+        self.CardCode = 0
         self.Page = 0
     # Check if we can Complet the Actual Customer
     def CompleteAccept(self):
@@ -101,11 +105,20 @@ class Actual_Customer():
         self.Phone = 0
         self.AdminOrNot = False
         self.ProfilePicture = None
+        self.CardNumber = 0
+        self.CardName = ""
+        self.CardDate = 0
+        self.CardCode = 0
 
     def Delete_Customer(self):
         sql = "DELETE FROM Customer WHERE CustomerID='{}'".format(self.CustomerID)
         dbconnect.DBHelper().execute(sql)
         print("Delete Customer Succeed")
+
+    def Add_Card(self, CardNumber, CardName, CardDate, CardCode):
+        sql = "UPDATE Customer SET CardNumber='{}', CardDate='{}', CardName='{}', CardCode='{}' WHERE CustomerID='{}'".format(CradNumber, CardDate, CardName, CardCode, self.CustomerID)
+        dbconnect.DBHelper().execute(sql)
+        print("Change Actual Customer Succeed")
 
     def HowMany_Orders(self):
         sql = "SELECT COUNT(DISTINCT ReservationGrpID) FROM Reservations WHERE CustomerID = '{}'".format(self.CustomerID)

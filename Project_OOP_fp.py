@@ -854,9 +854,70 @@ class My_Account_Page():
             self.Info_Delete_Title.place(x=400, y=440)
 
         elif Actual_Customer.Page==3:
-            pass
-
-            
+            self.canvas_card = tk.Canvas(self.rest_right_frame, width=550, height=300, highlightthickness=0 ,borderwidth=0, bg=main_color)
+            self.canvas_card.pack(padx=65, pady=80)
+            #Inputs
+            self.Card_Number_Title = tk.Label(self.canvas_card, text="Card Number", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.Card_Number = tk.Entry(self.canvas_card, width=30, bg=main_color, fg=fourth_color, font=("Arial", 12))
+            self.Card_Number.insert(0, Actual_Customer.CardNumber)
+            self.Card_Date_Title = tk.Label(self.canvas_card, text="Expierd Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.Card_Date = DateEntry(self.canvas_card, date_pattern='y-mm-dd', width=10, bg=main_color, fg=fourth_color, font=("Arial", 12))
+            self.Card_Date.insert(0, Actual_Customer.CardDate)
+            self.Card_Code_Title = tk.Label(self.canvas_card, text="Card Code", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.Card_Code = tk.Entry(self.canvas_card, width=10, bg=main_color, fg=fourth_color, font=("Arial", 12))
+            self.Card_Name_Title = tk.Label(self.canvas_card, text="Card Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
+            self.Card_Name = tk.Entry(self.canvas_card, width=30, bg=main_color, fg=fourth_color, font=("Arial", 12))
+            self.Card_Name.insert(0, Actual_Customer.FirstName+" "+Actual_Customer.LastName)
+            #Button 
+            self.Save_Button = tk.Button(self.canvas_card, text='Save', command=self.Save_Card, bg=third_color, fg=main_color, width=15, height=2)
+            # Draw a rectangle on the canvas
+            self.canvas_card.create_rectangle(0, 0, 550, 300, outline='black', width=2)
+            #Card Number
+            self.Card_Number_Title.place(x=35, y=30)
+            self.Card_Number.place(x=35, y=55)
+            #Card Date
+            self.Card_Date_Title.place(x=35, y=90)
+            self.Card_Date.place(x=35, y=115)
+            #Card Code
+            self.Card_Code_Title.place(x=250, y=90)
+            self.Card_Code.place(x=250, y=115)
+            #Card Name
+            self.Card_Name_Title.place(x=35, y=150)
+            self.Card_Name.place(x=35, y=175)
+            #Pay-pro
+            bg_image_four = Image.open("./images/pay-pro.png")
+            bg_photo_four = ImageTk.PhotoImage(bg_image_four)
+            # Créer un canevas pour afficher l'image du logo
+            canvas_four = tk.Canvas(self.canvas_card, width=bg_image_four.width, height=bg_image_four.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_four.place(x=500,y=10)
+            canvas_four.create_image(0, 0, anchor=tk.NW, image=bg_photo_four)
+            canvas_four.image = bg_photo_four
+            #master Card
+            bg_image_five = Image.open("./images/mastercard.png")
+            bg_photo_five = ImageTk.PhotoImage(bg_image_five)
+            # Créer un canevas pour afficher l'image du logo
+            canvas_five = tk.Canvas(self.canvas_card, width=bg_image_five.width, height=bg_image_five.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_five.place(x=40,y=220)
+            canvas_five.create_image(0, 0, anchor=tk.NW, image=bg_photo_five)
+            canvas_five.image = bg_photo_five
+            #Visa Card
+            bg_image_six = Image.open("./images/visa.png")
+            bg_photo_six = ImageTk.PhotoImage(bg_image_six)
+            # Créer un canevas pour afficher l'image du logo
+            canvas_six = tk.Canvas(self.canvas_card, width=bg_image_six.width, height=bg_image_six.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_six.place(x=120,y=210)
+            canvas_six.create_image(0, 0, anchor=tk.NW, image=bg_photo_six)
+            canvas_six.image = bg_photo_six
+            #if Actual_Customer.CardNumber!=None:
+                #if isinstance(Actual_Customer.CardNumber, str):
+                    #if Actual_Customer.CardNumber[0] == "4":
+                        #canvas_six.place(x=40, y=210)
+                    #elif Actual_Customer.CardNumber[0] == "5":
+                        #canvas_five.place(x=40, y=220)
+                    #else:
+                        #canvas_five.place(x=40, y=220)
+                        #canvas_six.place(x=120, y=210)
+            self.Save_Button.place(x=400, y=220)
 
     def Hide_Button(self, empty):
         Launch_Home_Page()
@@ -920,6 +981,17 @@ class My_Account_Page():
     def Disconnect(self):
         Actual_Customer.Disconnect()
         Launch_Home_Page()
+
+    def Save_Card(self):
+        self.CardNumber=self.Card_Number.get()
+        self.CardDate=self.Card_Date.get()
+        self.CardCode=self.Card_Code.get()
+        self.CardName=self.Card_Name.get()
+        if (self.CardNumber=='') or (self.CardDate=='') or (self.CardCode=='') or (self.CardName=='') :
+            tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        else:
+            Actual_Customer.Add_Card(self.CardNumber, self.CardDate, self.CardName, self.CardCode)
+            Launch_My_Account()
 
 ##------------------------------------------------------------------------------------------------------##
 ##----------------------------------------------Purchase Page-------------------------------------------##
@@ -2272,7 +2344,7 @@ class Payment_Page():
         self.line_canvas_two.create_line(5, 2, 150, 2, fill=second_color)
         #Basket Info
         self.OutB_From.place(x=10, y=180)
-        #Visa Card
+        #plane
         bg_image_seven = Image.open("./images/black-planeress.png")
         bg_photo_seven = ImageTk.PhotoImage(bg_image_seven)
         # Créer un canevas pour afficher l'image du logo
