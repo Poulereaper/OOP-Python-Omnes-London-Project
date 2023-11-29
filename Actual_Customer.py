@@ -93,6 +93,10 @@ class Actual_Customer():
         self.Phone = result[0]['Phone']
         self.AdminOrNot = result[0]['AdminOrNot']
         self.ProfilePicture = result[0]['ProfilePicture']
+        self.CardNumber = result[0]['CardNumber']
+        self.CardName = result[0]['CardName']
+        self.CardDate = result[0]['CardDate']
+        self.CardCode = result[0]['CardCode']
 
     def Disconnect(self):
         self.LogOrNot = False
@@ -116,9 +120,13 @@ class Actual_Customer():
         print("Delete Customer Succeed")
 
     def Add_Card(self, CardNumber, CardName, CardDate, CardCode):
-        sql = "UPDATE Customer SET CardNumber='{}', CardDate='{}', CardName='{}', CardCode='{}' WHERE CustomerID='{}'".format(CradNumber, CardDate, CardName, CardCode, self.CustomerID)
+        sql = "UPDATE Customer SET CardNumber='{}', CardDate='{}', CardName='{}', CardCode='{}' WHERE CustomerID='{}'".format(CardNumber, CardDate, CardName, CardCode, self.CustomerID)
         dbconnect.DBHelper().execute(sql)
-        print("Change Actual Customer Succeed")
+        self.CardNumber = CardNumber
+        self.CardName = CardName
+        self.CardDate = CardDate
+        self.CardCode = CardCode
+        print("Change Actual Customer Card Succeed")
 
     def HowMany_Orders(self):
         sql = "SELECT COUNT(DISTINCT ReservationGrpID) FROM Reservations WHERE CustomerID = '{}'".format(self.CustomerID)

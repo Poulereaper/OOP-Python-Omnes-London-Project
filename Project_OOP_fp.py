@@ -859,15 +859,22 @@ class My_Account_Page():
             #Inputs
             self.Card_Number_Title = tk.Label(self.canvas_card, text="Card Number", font=("Arial", 10), bg=main_color, fg=fourth_color)
             self.Card_Number = tk.Entry(self.canvas_card, width=30, bg=main_color, fg=fourth_color, font=("Arial", 12))
-            self.Card_Number.insert(0, Actual_Customer.CardNumber)
             self.Card_Date_Title = tk.Label(self.canvas_card, text="Expierd Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
             self.Card_Date = DateEntry(self.canvas_card, date_pattern='y-mm-dd', width=10, bg=main_color, fg=fourth_color, font=("Arial", 12))
-            self.Card_Date.insert(0, Actual_Customer.CardDate)
             self.Card_Code_Title = tk.Label(self.canvas_card, text="Card Code", font=("Arial", 10), bg=main_color, fg=fourth_color)
             self.Card_Code = tk.Entry(self.canvas_card, width=10, bg=main_color, fg=fourth_color, font=("Arial", 12))
             self.Card_Name_Title = tk.Label(self.canvas_card, text="Card Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
             self.Card_Name = tk.Entry(self.canvas_card, width=30, bg=main_color, fg=fourth_color, font=("Arial", 12))
-            self.Card_Name.insert(0, Actual_Customer.FirstName+" "+Actual_Customer.LastName)
+            if Actual_Customer.CardNumber==0:
+                self.Card_Number.insert(0, "0000 0000 0000 0000")
+                self.Card_Code.delete(0, tk.END)
+                self.Card_Name.insert(0, Actual_Customer.FirstName+" "+Actual_Customer.LastName)
+            else:
+                self.Card_Number.insert(0, Actual_Customer.CardNumber)
+                self.Card_Date.delete(0, tk.END)
+                self.Card_Date.insert(0, Actual_Customer.CardDate)
+                self.Card_Name.insert(0, Actual_Customer.CardName)
+
             #Button 
             self.Save_Button = tk.Button(self.canvas_card, text='Save', command=self.Save_Card, bg=third_color, fg=main_color, width=15, height=2)
             # Draw a rectangle on the canvas
@@ -990,8 +997,20 @@ class My_Account_Page():
         if (self.CardNumber=='') or (self.CardDate=='') or (self.CardCode=='') or (self.CardName=='') :
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
         else:
-            Actual_Customer.Add_Card(self.CardNumber, self.CardDate, self.CardName, self.CardCode)
-            Launch_My_Account()
+            if (self.CardNumber!="")&(self.CardDate!="")&(self.CardCode!="")&(self.CardName!=""):
+                if(int(self.CardNumber)>999999999999999)&(int(self.CardNumber)<10000000000000000):
+                    if(int(self.CardCode)>99)&(int(self.CardCode)<1000):
+                        Actual_Customer.Add_Card(self.CardNumber, self.CardDate, self.CardName, self.CardCode)
+                        Launch_My_Account()
+                    else :
+                        #message box 
+                        tk.messagebox.showerror("Error", "Please enter a valid card code")
+                else :
+                    #message box 
+                    tk.messagebox.showerror("Error", "Please enter a valid Card Number")
+            else :
+                #message box 
+                tk.messagebox.showerror("Error", "Please fill all the inputs")
 
 ##------------------------------------------------------------------------------------------------------##
 ##----------------------------------------------Purchase Page-------------------------------------------##
@@ -2243,7 +2262,6 @@ class Payment_Page():
         #Inputs
         self.Card_Number_Title = tk.Label(self.canvas_left, text="Card Number", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.Card_Number = tk.Entry(self.canvas_left, width=30, bg=main_color, fg=fourth_color, font=("Arial", 12))
-        self.Card_Number.insert(0, "00000000000000")
         self.Card_Date_Title = tk.Label(self.canvas_left, text="Expierd Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.Card_Date = DateEntry(self.canvas_left, date_pattern='y-mm-dd', width=10, bg=main_color, fg=fourth_color, font=("Arial", 12))
         self.Card_Code_Title = tk.Label(self.canvas_left, text="Card Code", font=("Arial", 10), bg=main_color, fg=fourth_color)
@@ -2254,10 +2272,14 @@ class Payment_Page():
         self.New_Email_Title = tk.Label(self.canvas_right, text="E-mail", font=("Arial", 10), bg=main_color, fg=fourth_color)
         self.Email = tk.Entry(self.canvas_right, width=30, bg=main_color, fg=fourth_color, font=("Arial", 10))
         if Actual_Customer.LogOrNot == True:
-            self.Card_Name.insert(0, Actual_Customer.FirstName+" "+Actual_Customer.LastName)
+            self.Card_Name.insert(0, Actual_Customer.CardName)
+            self.Card_Number.insert(0, Actual_Customer.CardNumber)
+            self.Card_Date.delete(0, tk.END)
+            self.Card_Date.insert(0, Actual_Customer.CardDate)
             self.Email.insert(0, Actual_Customer.Email)
             self.SignInfo = tk.Label(self.canvas_right, text="Already Loged In !    \n What a smart customer ;)", font=("Arial", 8), bg=main_color, fg=fourth_color)
         else :
+            self.Card_Number.insert(0, "0000 0000 0000 0000")
             self.SignInfo = tk.Label(self.canvas_right, text="Sign In or Sign Up for faster order", font=("Arial", 8), bg=main_color, fg=fourth_color)
             self.Sign_Button = tk.Button(self.canvas_right, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color, fg=main_color)
         #Basket Info 
@@ -2404,14 +2426,18 @@ class Payment_Page():
                             #message box 
                             #tk.messagebox.showerror("Error", "Please enter a valid date")
                         #else :
-                        print("Pay")
-                        print(Actual_Customer.CustomerID)
-                        Actual_Basket.Create_Res(self.Email.get(), Actual_Customer.CustomerID, self.Card_Name.get())
-                        Actual_Basket.Clear_Basket()
-                        Actual_Outbound_Flight.Reset_Outbound_Flight()
-                        Actual_Inbound_Flight.Reset_Inbound_Flight()
-                        Actual_Search.Reset_Search()
-                        #Launch_Basket_Page()
+                        if self.Card_Code.get() != Actual_Customer.CardCode:
+                            #message box 
+                            tk.messagebox.showerror("Error", "Please enter a valid card code")
+                        else :
+                            print("Pay")
+                            print(Actual_Customer.CustomerID)
+                            Actual_Basket.Create_Res(self.Email.get(), Actual_Customer.CustomerID, self.Card_Name.get())
+                            Actual_Basket.Clear_Basket()
+                            Actual_Outbound_Flight.Reset_Outbound_Flight()
+                            Actual_Inbound_Flight.Reset_Inbound_Flight()
+                            Actual_Search.Reset_Search()
+                            #Launch_Basket_Page()
                 else :
                     #message box 
                     tk.messagebox.showerror("Error", "Please enter a valid card code")
