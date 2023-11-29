@@ -13,6 +13,7 @@ class Actual_Customer():
         self.UserName = ""
         self.Phone = 0
         self.AdminOrNot = False
+        self.AdminPage=False
         self.ProfilePicture = None
         self.CardNumber = 0
         self.CardName = ""

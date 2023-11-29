@@ -673,7 +673,7 @@ class My_Account_Page():
         # Button
         self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
         if Actual_Customer.AdminOrNot == True:
-            self.Admin_Button = tk.Button(self.left_frame, text='Employee Space', command=Launch_Home_Page, bg=second_color, fg=main_color, width=15, height=2)
+            self.Admin_Button = tk.Button(self.left_frame, text='Employee Space', command=self.Admin_Page, bg=second_color, fg=main_color, width=15, height=2)
         self.Purchase_Button = tk.Button(self.left_frame, text=' Go Purchase', command=Launch_Purchase_Page, bg=second_color, fg=main_color, width=15, height=2)
         # Pack all wigets
         #Frame
@@ -1011,6 +1011,13 @@ class My_Account_Page():
             else :
                 #message box 
                 tk.messagebox.showerror("Error", "Please fill all the inputs")
+
+    def Amdin_Page(self):
+        if Actual_Customer.AdminOrNot == True:
+            if Actual_Customer.AdminPage==False: Actual_Customer.AdminPage=True
+            elif Actual_Customer.AdminPage==True: Actual_Customer.AdminPage=False
+            Launch_My_Account()
+        Launch_Admin_Page()
 
 ##------------------------------------------------------------------------------------------------------##
 ##----------------------------------------------Purchase Page-------------------------------------------##
