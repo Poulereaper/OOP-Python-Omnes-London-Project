@@ -14,6 +14,8 @@ class Actual_Customer():
         self.Phone = 0
         self.AdminOrNot = False
         self.AdminPage=False
+        self.AdminFlight=""
+        self.AdminCustomer=0
         self.ProfilePicture = None
         self.CardNumber = 0
         self.CardName = ""

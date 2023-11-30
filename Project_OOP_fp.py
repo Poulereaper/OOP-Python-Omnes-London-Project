@@ -1018,18 +1018,21 @@ class My_Account_Page():
                 #self.Info_Title.place(x=600, y=440)
 
             elif Actual_Customer.Page==1:
-                #Titles 
-                self.Serach_Flight_Title = tk.Label(self.rest_right_frame, text="Search Flight", font=("Arial", 13), bg=main_color, fg=fourth_color)
-                self.FLight_Number_Title = tk.Label(self.rest_right_frame, text=" Flight Number", font=("Arial", 10), bg=main_color, fg=fourth_color)
-                #Entry
-                self.Search_Flight_Input = tk.Entry(self.rest_right_frame)
-                #Button
-                self.Search_Flight_Button = tk.Button(self.rest_right_frame, text='Search', command=self.Search_Flight, bg=third_color, fg=main_color, width=15, height=2)
-                #Display Stuff
-                self.Serach_Flight_Title.place(x=50, y=40)
-                self.FLight_Number_Title.place(x=50, y=140)
-                self.Search_Flight_Input.place(x=50, y=170)
-                self.Search_Flight_Button.place(x=350, y=150)
+                if Actual_Customer.AdminFlight=="":
+                    #Titles 
+                    self.Serach_Flight_Title = tk.Label(self.rest_right_frame, text="Search Flight", font=("Arial", 13), bg=main_color, fg=fourth_color)
+                    self.FLight_Number_Title = tk.Label(self.rest_right_frame, text=" Flight Number", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                    #Entry
+                    self.Search_Flight_Input = tk.Entry(self.rest_right_frame)
+                    #Button
+                    self.Search_Flight_Button = tk.Button(self.rest_right_frame, text='Search', command=self.Search_Flight, bg=third_color, fg=main_color, width=15, height=2)
+                    #Display Stuff
+                    self.Serach_Flight_Title.place(x=50, y=40)
+                    self.FLight_Number_Title.place(x=50, y=140)
+                    self.Search_Flight_Input.place(x=50, y=170)
+                    self.Search_Flight_Button.place(x=350, y=150)
+                else :
+                    pass
             
             elif Actual_Customer.Page==2:
                 #Titles 
@@ -1072,20 +1075,54 @@ class My_Account_Page():
                 self.Create_Button.place(x=600, y=130)
 
             elif Actual_Customer.Page==3:
-                #Titles
-                self.Serach_Customer_Title = tk.Label(self.rest_right_frame, text="Search Customer", font=("Arial", 13), bg=main_color, fg=fourth_color)
-                self.Customer_ID_Title = tk.Label(self.rest_right_frame, text=" Customer ID", font=("Arial", 10), bg=main_color, fg=fourth_color)
-                #Entry
-                self.Search_Customer_Input = tk.Entry(self.rest_right_frame)
-                #Button
-                self.Search_Customer_Button = tk.Button(self.rest_right_frame, text='Search', command=self.Search_Customer, bg=third_color, fg=main_color, width=15, height=2)
-                #Display Stuff
-                self.Serach_Customer_Title.place(x=50, y=40)
-                self.Customer_ID_Title.place(x=50, y=140)
-                self.Search_Customer_Input.place(x=50, y=170)
-                self.Search_Customer_Button.place(x=350, y=150)
+                if Actual_Customer.AdminCustomer==0:
+                    #Titles
+                    self.Serach_Customer_Title = tk.Label(self.rest_right_frame, text="Search Customer", font=("Arial", 13), bg=main_color, fg=fourth_color)
+                    self.Customer_ID_Title = tk.Label(self.rest_right_frame, text=" Customer ID", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                    #Entry
+                    self.Search_Customer_Input = tk.Entry(self.rest_right_frame)
+                    #Button
+                    self.Search_Customer_Button = tk.Button(self.rest_right_frame, text='Search', command=self.Search_Customer, bg=third_color, fg=main_color, width=15, height=2)
+                    #Display Stuff
+                    self.Serach_Customer_Title.place(x=50, y=40)
+                    self.Customer_ID_Title.place(x=50, y=140)
+                    self.Search_Customer_Input.place(x=50, y=170)
+                    self.Search_Customer_Button.place(x=350, y=150)
+                else :
+                    pass
             elif Actual_Customer.Page==4:
-                pass
+                self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+                self.yscrollbar = tk.Scrollbar(self.rest_right_frame, orient="vertical", command=self.scroll_canva.yview)
+                self.yscrollbar.pack(side=tk.RIGHT, fill='y')
+                self.scroll_canva.configure(yscrollcommand=self.yscrollbar.set)
+                self.scroll_canva.bind('<Configure>', lambda e: self.scroll_canva.configure(scrollregion = self.scroll_canva.bbox("all")))
+                self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
+                self.top_display_frame = tk.Frame(self.display_frame, bg=main_color, height=100)
+                self.top_display_frame.columnconfigure(0, weight=1)
+                self.top_display_frame.columnconfigure(1, weight=1)
+                self.top_display_frame.columnconfigure(2, weight=1)
+                self.top_display_frame.columnconfigure(3, weight=1)
+                self.display_frame.pack(fill=tk.BOTH, expand=True)
+                self.top_display_frame.pack(side=tk.TOP, fill=tk.X)
+                
+                self.Begin_Date_Title = tk.Label(self.top_display_frame, text="Begin Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.End_Date_Title = tk.Label(self.top_display_frame, text="End Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                #Inputs
+                self.Begin_Date_Input = DateEntry(self.top_display_frame, date_pattern='y-mm-dd')
+                self.Begin_Date_Input.delete(0, tk.END)
+                self.Begin_Date_Input.insert(0, datetime.date.today())
+                self.End_Date_Input = DateEntry(self.top_display_frame, date_pattern='y-mm-dd')
+                self.End_Date_Input.delete(0, tk.END)
+                self.End_Date_Input.insert(0, datetime.date.today())
+                #Button 
+                self.Analyse_Button = tk.Button(self.top_display_frame, text='Analyse', command=self.Analyse, bg=third_color, fg=main_color, width=15, height=2)
+                #Display Stuff
+                self.Begin_Date_Title.grid(row=0, column=0, padx=10, pady=5)
+                self.Begin_Date_Input.grid(row=1, column=0, padx=10, pady=5)
+                self.End_Date_Title.grid(row=0, column=1, padx=10, pady=5)
+                self.End_Date_Input.grid(row=1, column=1, padx=10, pady=5)
+                self.Analyse_Button.grid(row=1, column=3, padx=10, pady=5)
+
 
     def Hide_Button(self, empty):
         Launch_Home_Page()
@@ -1260,6 +1297,21 @@ class My_Account_Page():
             tk.messagebox.showinfo('Error', 'Invalid ID format')
         else:
             #Actual_Customer.Search_Customer(self.Search)
+            Launch_My_Account()
+    
+    def Analyse(self):
+        self.Begin_Date=self.Begin_Date_Input.get()
+        self.End_Date=self.End_Date_Input.get()
+        if (self.Begin_Date=='') or (self.End_Date==''):
+            tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        elif self.Begin_Date>self.End_Date:
+            tk.messagebox.showinfo('Error', 'The end date must be after the begin date')
+        #elif self.Begin_Date<datetime.datetime.now() or self.End_Date<datetime.datetime.now():
+            #tk.messagebox.showinfo('Error', 'The begin or end date must be after or today')
+        elif self.Begin_Date<self.End_Date:
+            tk.messagebox.showinfo('Error', 'The begin date must be before the end date')
+        else:
+            #Actual_Customer.Analyse(self.Begin_Date, self.End_Date)
             Launch_My_Account()
 
 ##------------------------------------------------------------------------------------------------------##
@@ -2676,7 +2728,7 @@ class Payment_Page():
                             #message box 
                             #tk.messagebox.showerror("Error", "Please enter a valid date")
                         #else :
-                        if self.Card_Code.get() != Actual_Customer.CardCode:
+                        if (self.Card_Code.get() != Actual_Customer.CardCode) & (Actual_Customer.CardCode != 0):
                             #message box 
                             tk.messagebox.showerror("Error", "Please enter a valid card code")
                         else :
