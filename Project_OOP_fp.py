@@ -1032,6 +1032,8 @@ class My_Account_Page():
                     self.Search_Flight_Input.place(x=50, y=170)
                     self.Search_Flight_Button.place(x=350, y=150)
                 else :
+                    #sql = "SELECT * FROM Flight WHERE FlightNumber = '{}';".format(Actual_Customer.AdminFlight)
+                    
                     pass
             
             elif Actual_Customer.Page==2:
@@ -1089,6 +1091,7 @@ class My_Account_Page():
                     self.Search_Customer_Input.place(x=50, y=170)
                     self.Search_Customer_Button.place(x=350, y=150)
                 else :
+                    #sql = "SELECT * FROM Customer WHERE CustomerID = '{}';".format(Actual_Customer.AdminCustomer)
                     pass
             elif Actual_Customer.Page==4:
                 self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -1165,6 +1168,9 @@ class My_Account_Page():
         elif not re.match(r'^[0-9]*$', self.Phone):
             # Invalid phone format, show an error message
             tk.messagebox.showinfo('Error', 'Invalid phone format')
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', self.Email):
+            # Invalid email format, show an error message
+            tk.messagebox.showinfo('Error', 'Invalid email format')
         if (self.Old_Password!='') or ((self.New_Password!='') or (self.Confirm_Password!='')):
             if (self.Old_Password=='') or (self.New_Password=='') or (self.Confirm_Password==''):
                 tk.messagebox.showinfo('Error', 'Please fill in all the information for the password')
@@ -1265,6 +1271,9 @@ class My_Account_Page():
         elif not re.match(r'^[0-9]*$', self.Phone):
             # Invalid phone format, show an error message
             tk.messagebox.showinfo('Error', 'Invalid phone format')
+        elif not re.match(r'^[\w\.-]+@[\w\.-]+$', self.Email):
+            # Invalid email format, show an error message
+            tk.messagebox.showinfo('Error', 'Invalid email format')
         elif self.Password!=self.Confirm_Password:
             tk.messagebox.showinfo('Error', 'The password and the confirmation password are not the same')
         else:
@@ -1286,8 +1295,13 @@ class My_Account_Page():
         elif len(self.Search) != 8 or not self.Search[:4].isalpha() or not self.Search[4:].isdigit():
             tk.messagebox.showinfo('Error', 'Invalid Search format')
         else:
-            #Actual_Flight.Search_Flight(self.Search)
-            Launch_My_Account()
+            sql = "SELECT COUNT AS Here FROM Flight WHERE FlightNumber = %s"
+            Here = dbconnect.DBHelper().fetch(sql)
+            if Here == 0:
+                tk.messagebox.showinfo('Error', 'The flight does not exist')
+            else:
+                Actual_Customer.AdminFlight=self.Search
+                Launch_My_Account()
 
     def Search_Customer(self):
         self.Search=self.Search_Customer_Input.get()
@@ -1296,8 +1310,13 @@ class My_Account_Page():
         elif not self.Search.isdigit():
             tk.messagebox.showinfo('Error', 'Invalid ID format')
         else:
-            #Actual_Customer.Search_Customer(self.Search)
-            Launch_My_Account()
+            sql = "SELECT COUNT AS Here FROM Customer WHERE CustomerID = %s"
+            Here = dbconnect.DBHelper().fetch(sql)
+            if Here == 0:
+                tk.messagebox.showinfo('Error', 'The customer does not exist')
+            else:
+                Actual_Customer.AdminCustomer=self.Search
+                Launch_My_Account()
     
     def Analyse(self):
         self.Begin_Date=self.Begin_Date_Input.get()
