@@ -955,13 +955,135 @@ class My_Account_Page():
             #Display the Statistics Title
             self.Statistics_Title.place(x=690, y=15)
             if Actual_Customer.Page==0:
-                pass
+                #Titles 
+                self.Create_Flight_Title = tk.Label(self.rest_right_frame, text="Create Flight", font=("Arial", 13), bg=main_color, fg=fourth_color)
+                self.Departure_Title = tk.Label(self.rest_right_frame, text=" Departure", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Departure_Date_Title = tk.Label(self.rest_right_frame, text=" Departure Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Departure_Time_Title = tk.Label(self.rest_right_frame, text=" Departure Time", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Arrival_Title = tk.Label(self.rest_right_frame, text=" Arrival", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Arrival_Date_Title = tk.Label(self.rest_right_frame, text=" Arrival Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Arrival_Time_Title = tk.Label(self.rest_right_frame, text=" Arrival Time", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Price_Title = tk.Label(self.rest_right_frame, text=" Price (Adulte)", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Discount_Title = tk.Label(self.rest_right_frame, text=" Discount", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Seats_Title = tk.Label(self.rest_right_frame, text=" Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Economy_Title = tk.Label(self.rest_right_frame, text=" Economy Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Business_Title = tk.Label(self.rest_right_frame, text=" Business Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.First_Title = tk.Label(self.rest_right_frame, text=" First Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Info_Title = tk.Label(self.rest_right_frame, text="Please fill all the fields", font=("Arial", 8), bg=main_color, fg=fourth_color)
+                self.Image_Flight_Title = tk.Label(self.rest_right_frame, text="Flight's Image", font=("Arial", 13), bg=main_color, fg=fourth_color)
+                #Entries
+                self.Departure_Input = tk.Entry(self.rest_right_frame)
+                self.Departure_Date_Input = DateEntry(self.rest_right_frame, date_pattern='y-mm-dd')
+                self.Departure_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
+                self.Arrival_Input = tk.Entry(self.rest_right_frame)
+                self.Arrival_Date_Input = DateEntry(self.rest_right_frame, date_pattern='y-mm-dd')
+                self.Arrival_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
+                self.Price_Input = tk.Entry(self.rest_right_frame)
+                self.Seats_Input = tk.Entry(self.rest_right_frame)
+                self.Discount_Input = tk.Entry(self.rest_right_frame)
+                self.Economy_Input = tk.Entry(self.rest_right_frame)
+                self.Business_Input = tk.Entry(self.rest_right_frame)
+                self.First_Input = tk.Entry(self.rest_right_frame)
+                self.Image_Flight_Input = tk.Entry(self.rest_right_frame)
+                #Button
+                self.Create_Button = tk.Button(self.rest_right_frame, text='Create', command=self.Create_Flight, bg=third_color, fg=main_color, width=15, height=2)
+
+                #Display Stuff
+                self.Create_Flight_Title.place(x=50, y=20)
+                self.Departure_Title.place(x=50, y=80)
+                self.Departure_Input.place(x=50, y=110)
+                self.Departure_Date_Title.place(x=50, y=150)
+                self.Departure_Date_Input.place(x=50, y=180)
+                self.Departure_Time_Title.place(x=50, y=220)
+                self.Departure_Time_Input.place(x=50, y=250)
+                self.Arrival_Title.place(x=350, y=80)
+                self.Arrival_Input.place(x=350, y=110)
+                self.Arrival_Date_Title.place(x=350, y=150)
+                self.Arrival_Date_Input.place(x=350, y=180)
+                self.Arrival_Time_Title.place(x=350, y=220)
+                self.Arrival_Time_Input.place(x=350, y=250)
+                self.Seats_Title.place(x=600, y=80)
+                self.Seats_Input.place(x=600, y=110)
+                self.Economy_Title.place(x=600, y=150)
+                self.Economy_Input.place(x=600, y=180)
+                self.Business_Title.place(x=600, y=220)
+                self.Business_Input.place(x=600, y=250)
+                self.First_Title.place(x=600, y=290)
+                self.First_Input.place(x=600, y=320)
+                self.Price_Title.place(x=50, y=360)
+                self.Price_Input.place(x=50, y=390)
+                self.Discount_Title.place(x=350, y=360)
+                self.Discount_Input.place(x=350, y=390)
+                self.Create_Button.place(x=600, y=380)
+                #self.Info_Title.place(x=600, y=440)
+
             elif Actual_Customer.Page==1:
-                pass
+                #Titles 
+                self.Serach_Flight_Title = tk.Label(self.rest_right_frame, text="Search Flight", font=("Arial", 13), bg=main_color, fg=fourth_color)
+                self.FLight_Number_Title = tk.Label(self.rest_right_frame, text=" Flight Number", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                #Entry
+                self.Search_Flight_Input = tk.Entry(self.rest_right_frame)
+                #Button
+                self.Search_Flight_Button = tk.Button(self.rest_right_frame, text='Search', command=self.Search_Flight, bg=third_color, fg=main_color, width=15, height=2)
+                #Display Stuff
+                self.Serach_Flight_Title.place(x=50, y=40)
+                self.FLight_Number_Title.place(x=50, y=140)
+                self.Search_Flight_Input.place(x=50, y=170)
+                self.Search_Flight_Button.place(x=350, y=150)
+            
             elif Actual_Customer.Page==2:
-                pass
+                #Titles 
+                self.Personal_Info_Title = tk.Label(self.rest_right_frame, text="Personal Information", font=("Arial", 13), bg=main_color, fg=fourth_color)
+                self.First_Name_Title = tk.Label(self.rest_right_frame, text=" First Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Last_Name_Title = tk.Label(self.rest_right_frame, text=" Last Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.User_Name_Title = tk.Label(self.rest_right_frame, text=" User Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Email_Title = tk.Label(self.rest_right_frame, text=" Email", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Phone_Title = tk.Label(self.rest_right_frame, text=" Phone", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Password_Title = tk.Label(self.rest_right_frame, text="Password", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Confirm_Password_Title = tk.Label(self.rest_right_frame, text=" Confirm Password", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                
+                #Entries
+                self.First_Name_Input = tk.Entry(self.rest_right_frame)
+                self.Last_Name_Input = tk.Entry(self.rest_right_frame)
+                self.User_Name_Input = tk.Entry(self.rest_right_frame)
+                self.Email_Input = tk.Entry(self.rest_right_frame)
+                self.Phone_Input = tk.Entry(self.rest_right_frame)
+                self.Password_Input = tk.Entry(self.rest_right_frame)
+                self.Confirm_Password_Input = tk.Entry(self.rest_right_frame, show="*")
+                #Button
+                self.Create_Button = tk.Button(self.rest_right_frame, text='Create', command=self.Create_Customer, bg=third_color, fg=main_color, width=15, height=2)
+                
+                #Display Stuff
+                self.Personal_Info_Title.place(x=50, y=40)
+                self.First_Name_Title.place(x=50, y=100)
+                self.First_Name_Input.place(x=50, y=130)
+                self.Last_Name_Title.place(x=50, y=170)
+                self.Last_Name_Input.place(x=50, y=200)
+                self.User_Name_Title.place(x=50, y=240)
+                self.User_Name_Input.place(x=50, y=270)
+                self.Email_Title.place(x=50, y=310)
+                self.Email_Input.place(x=50, y=340)
+                self.Phone_Title.place(x=50, y=380)
+                self.Phone_Input.place(x=50, y=410)
+                self.Password_Title.place(x=350, y=100)
+                self.Password_Input.place(x=350, y=130)
+                self.Confirm_Password_Title.place(x=350, y=170)
+                self.Confirm_Password_Input.place(x=350, y=200)
+                self.Create_Button.place(x=600, y=130)
+
             elif Actual_Customer.Page==3:
-                pass
+                #Titles
+                self.Serach_Customer_Title = tk.Label(self.rest_right_frame, text="Search Customer", font=("Arial", 13), bg=main_color, fg=fourth_color)
+                self.Customer_ID_Title = tk.Label(self.rest_right_frame, text=" Customer ID", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                #Entry
+                self.Search_Customer_Input = tk.Entry(self.rest_right_frame)
+                #Button
+                self.Search_Customer_Button = tk.Button(self.rest_right_frame, text='Search', command=self.Search_Customer, bg=third_color, fg=main_color, width=15, height=2)
+                #Display Stuff
+                self.Serach_Customer_Title.place(x=50, y=40)
+                self.Customer_ID_Title.place(x=50, y=140)
+                self.Search_Customer_Input.place(x=50, y=170)
+                self.Search_Customer_Button.place(x=350, y=150)
             elif Actual_Customer.Page==4:
                 pass
 
@@ -990,7 +1112,8 @@ class My_Account_Page():
     def Statistics(self, empty):
         Actual_Customer.Page=4
         Launch_My_Account()
-    
+
+    #--------Customer---------#
     def Save(self):
         self.FirstName=self.First_Name_Input.get()
         self.LastName=self.Last_Name_Input.get()
@@ -1054,12 +1177,89 @@ class My_Account_Page():
             else :
                 #message box 
                 tk.messagebox.showerror("Error", "Please fill all the inputs")
-
+    #--------Admin---------#
     def Admin_Page(self):
         if Actual_Customer.AdminOrNot == True:
             if Actual_Customer.AdminPage==False: Actual_Customer.AdminPage=True
             elif Actual_Customer.AdminPage==True: Actual_Customer.AdminPage=False
             Actual_Customer.Page=0
+            Launch_My_Account()
+
+    def Create_Flight(self):
+        self.Departure=self.Departure_Input.get()
+        self.Departure_Date=self.Departure_Date_Input.get()
+        self.Departure_Time=self.Departure_Time_Input.get()
+        self.Arrival=self.Arrival_Input.get()
+        self.Arrival_Date=self.Arrival_Date_Input.get()
+        self.Arrival_Time=self.Arrival_Time_Input.get()
+        self.Price=int(self.Price_Input.get())
+        self.Discount=int(self.Discount_Input.get())
+        self.Seats=int(self.Seats_Input.get())
+        self.Economy=int(self.Economy_Input.get())
+        self.Business=int(self.Business_Input.get())
+        self.First=int(self.First_Input.get())
+        if (self.Departure=='') or (self.Departure_Date=='') or (self.Departure_Time=='') or (self.Arrival=='') or (self.Arrival_Date=='') or (self.Arrival_Time=='') or (self.Price=='') or (self.Discount=='') or (self.Economy=='') or (self.Business=='') or (self.First==''):
+            tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        elif self.Departure_Date>self.Arrival_Date:
+            tk.messagebox.showinfo('Error', 'The arrival date must be after the departure date')
+        #elif self.Departure_Date<datetime.datetime.now() or self.Arrival_Date<datetime.datetime.now():
+            #tk.messagebox.showinfo('Error', 'The departure or Arrival date must be after or today')
+        elif self.Price<=0:
+            tk.messagebox.showinfo('Error', 'The price must be positive')
+        elif self.Discount<0 or self.Discount>100:
+            tk.messagebox.showinfo('Error', 'The discount must be between 0 and 100')
+        elif self.Economy+self.Business+self.First<=0 or self.Economy+self.Business+self.First!=self.Seats:
+            tk.messagebox.showinfo('Error', 'The number of seats for classes must be positive and equal to the total number of seats')
+        else:
+            #Actual_Flight.Create_Flight(self.Departure, self.Departure_Date, self.Departure_Time, self.Arrival, self.Arrival_Date, self.Arrival_Time, self.Price, self.Discount, self.Economy, self.Business, self.First)
+            print("Create Flight")
+            Launch_My_Account()
+
+    def Create_Customer(self):
+        self.FirstName=self.First_Name_Input.get()
+        self.LastName=self.Last_Name_Input.get()
+        self.UserName=self.User_Name_Input.get()
+        self.Email=self.Email_Input.get()
+        self.Phone=self.Phone_Input.get()
+        self.Password=self.Password_Input.get()
+        self.Confirm_Password=self.Confirm_Password_Input.get()
+        if (self.FirstName=='') or (self.LastName=='') or (self.UserName=='') or (self.Email=='') or (self.Phone=='') or (self.Password=='') or (self.Confirm_Password==''):
+            tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        elif not re.match(r'^[0-9]*$', self.Phone):
+            # Invalid phone format, show an error message
+            tk.messagebox.showinfo('Error', 'Invalid phone format')
+        elif self.Password!=self.Confirm_Password:
+            tk.messagebox.showinfo('Error', 'The password and the confirmation password are not the same')
+        else:
+            #Actual_Customer.Create_Customer(self.Email, self.Password, self.FirstName, self.LastName, self.UserName,  self.Phone)
+            print("Create Customer")
+            Launch_My_Account()
+    
+    def browse_image(self):
+        file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg;*.jpeg")])
+        if file_path:
+            #self.Image.delete(0, tk.END)
+            #self.Image.insert(0, file_path)
+            pass
+
+    def Search_Flight(self):
+        self.Search=self.Search_Flight_Input.get()
+        if self.Search=='':
+            tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        elif len(self.Search) != 8 or not self.Search[:4].isalpha() or not self.Search[4:].isdigit():
+            tk.messagebox.showinfo('Error', 'Invalid Search format')
+        else:
+            #Actual_Flight.Search_Flight(self.Search)
+            Launch_My_Account()
+
+    def Search_Customer(self):
+        self.Search=self.Search_Customer_Input.get()
+        if self.Search=='':
+            tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        elif not self.Search.isdigit():
+            tk.messagebox.showinfo('Error', 'Invalid ID format')
+        else:
+            #Actual_Customer.Search_Customer(self.Search)
             Launch_My_Account()
 
 ##------------------------------------------------------------------------------------------------------##
