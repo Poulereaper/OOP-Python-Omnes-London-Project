@@ -2,6 +2,8 @@ import pymysql
 import dbconnect
 import datetime
 import Actual_Search as AS
+import random
+import string
 
 class Outbound_Flight():
     def __init__(self):
@@ -45,7 +47,7 @@ class Outbound_Flight():
     def Create_Flight(self, Departure_Airport, Departure_Date, Departure_Time, Arrival_Airport, Arrival_Date, Arrival_Time, Flight_Duration, Price, Discount, Seats, Economy_Class_Price, Business_Class_Price, First_Class_Price):
         #Create Flight ID
         sql1 = "SELECT MAX(FlightID) AS MaxFlightID FROM Flight"
-        result1=dbconnect.DBHelper().fetch(sql3)
+        result1=dbconnect.DBHelper().fetch(sql1)
         Flight_ID = result1[0]['MaxFlightID']+1
         #Create Flight Number
         sql2 = "SELECT DISTINCT FlightNumber FROM Flight;"
@@ -53,7 +55,7 @@ class Outbound_Flight():
         ListNumVols = [d['FlightNumber'] for d in result2]
         Flight_Number = self.generer_numero_vol(ListNumVols)
         #Create Flight in the database
-        sql3="INSERT INTO Flight (FlightID, FlightNumber, Departure, DepartureDate, DepartureTime, Arrival, ArrivalDate, ArrivalTime, Duration, Eco, Business, First, SeatsAvaible, Seats, Discount) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Flight_ID, Flight_Number, Departure_Airport, Departure_Date, Departure_Time, Arrival_Airport, Arrival_Date, Arrival_Time, Flight_Duration, Economy_Class_Price, Business_Class_Price, First_Class_Price, Seats_Left, Seats_Capacity, Discount)
+        sql3="INSERT INTO Flight (FlightID, FlightNumber, Departure, DepartureDate, DepartureTime, Arrival, ArrivalDate, ArrivalTime, Duration, Eco, Business, First, SeatsAvailable, Seats, Discount) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Flight_ID, Flight_Number, Departure_Airport, Departure_Date, Departure_Time, Arrival_Airport, Arrival_Date, Arrival_Time, Flight_Duration, Economy_Class_Price, Business_Class_Price, First_Class_Price, Seats, Seats, Discount)
         dbconnect.DBHelper().execute(sql3)
         print("Create Flight", Flight_Number," Succeed")
 

@@ -974,10 +974,12 @@ class My_Account_Page():
                 #Entries
                 self.Departure_Input = tk.Entry(self.rest_right_frame)
                 self.Departure_Date_Input = DateEntry(self.rest_right_frame, date_pattern='y-mm-dd')
-                self.Departure_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
+                self.Departure_Time_Input = ttk.Combobox(self.rest_right_frame, values=["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00","07:00", "08:00", "09:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00", "17:00", "18:00","19:00", "20:00", "21:00", "22:00", "23:00"])
+                #self.Departure_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
                 self.Arrival_Input = tk.Entry(self.rest_right_frame)
                 self.Arrival_Date_Input = DateEntry(self.rest_right_frame, date_pattern='y-mm-dd')
-                self.Arrival_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
+                self.Arrival_Time_Input = ttk.Combobox(self.rest_right_frame, values=["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00","07:00", "08:00", "09:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00", "17:00", "18:00","19:00", "20:00", "21:00", "22:00", "23:00"])
+                #self.Arrival_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
                 self.Price_Input = tk.Entry(self.rest_right_frame)
                 self.Seats_Input = tk.Entry(self.rest_right_frame)
                 self.Discount_Input = tk.Entry(self.rest_right_frame)
@@ -1231,16 +1233,18 @@ class My_Account_Page():
     def Create_Flight(self):
         self.Departure=self.Departure_Input.get()
         self.Departure_Date=self.Departure_Date_Input.get()
-        self.Departure_Time=self.Departure_Time_Input.get()
+        self.Departure_Time=datetime.datetime.strptime(self.Departure_Time_Input.get(), '%H:%M').time()
         self.Arrival=self.Arrival_Input.get()
         self.Arrival_Date=self.Arrival_Date_Input.get()
-        self.Arrival_Time=self.Arrival_Time_Input.get()
+        self.Arrival_Time=datetime.datetime.strptime(self.Arrival_Time_Input.get(), '%H:%M').time()
         self.Price=int(self.Price_Input.get())
         self.Discount=int(self.Discount_Input.get())
         self.Seats=int(self.Seats_Input.get())
         self.Economy=int(self.Economy_Input.get())
         self.Business=int(self.Business_Input.get())
         self.First=int(self.First_Input.get())
+        self.Duration=(datetime.datetime.combine(datetime.date(1,1,1),self.Arrival_Time)-datetime.datetime.combine(datetime.date(1,1,1),self.Departure_Time)).total_seconds()
+
         if (self.Departure=='') or (self.Departure_Date=='') or (self.Departure_Time=='') or (self.Arrival=='') or (self.Arrival_Date=='') or (self.Arrival_Time=='') or (self.Price=='') or (self.Discount=='') or (self.Economy=='') or (self.Business=='') or (self.First==''):
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
         elif self.Departure_Date>self.Arrival_Date:
@@ -1254,7 +1258,7 @@ class My_Account_Page():
         elif self.Economy+self.Business+self.First<=0 or self.Economy+self.Business+self.First!=self.Seats:
             tk.messagebox.showinfo('Error', 'The number of seats for classes must be positive and equal to the total number of seats')
         else:
-            #Actual_Flight.Create_Flight(self.Departure, self.Departure_Date, self.Departure_Time, self.Arrival, self.Arrival_Date, self.Arrival_Time, self.Price, self.Discount, self.Economy, self.Business, self.First)
+            Actual_Outbound_Flight.Create_Flight(self.Departure, self.Departure_Date, self.Departure_Time, self.Arrival, self.Arrival_Date, self.Arrival_Time, self.Duration, self.Price, self.Discount, self.Seats, self.Economy, self.Business, self.First)
             print("Create Flight")
             Launch_My_Account()
 
