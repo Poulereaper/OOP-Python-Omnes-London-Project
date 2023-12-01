@@ -191,7 +191,7 @@ class Actual_Customer():
         return result
 
     # Creat the Actual Customer in the DB
-    def Creat_Customer(self, Email, Password, FirstName, LastName, UserName, Phone, AdminOrNot):
+    def Create_Customer(self, Email, Password, FirstName, LastName, UserName, Phone, AdminOrNot):
         sql1 = "SELECT * FROM Customer WHERE Email='{}'".format(Email)
         result1 = dbconnect.DBHelper().fetch(sql1)
         sql2 = "SELECT * FROM Customer WHERE Phone='{}'".format(Phone)
