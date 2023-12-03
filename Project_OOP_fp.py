@@ -1336,11 +1336,13 @@ class My_Account_Page():
                     Arrive.append(i['Arrival'])  # Use the key 'Arrival'
                     NumberArrive.append(i['COUNT(*)'])  # Use the key 'COUNT(*)'
                 #maxNumberHC = max(NumberArrive + [0]) + 5
+                print(Arrive)
+                print(NumberArrive)
                 # Create and display the first plot
                 title = "Arrival Statistics"
                 xlabel = "Arrival"
                 ylabel = "Number of Flights"
-                self.create_plot(Arrive, NumberArrive, title, xlabel, ylabel, 'histogram', (300, 200))
+                self.create_plot(Arrive, NumberArrive, title, xlabel, ylabel, 'histogram', (600, 400))
     
                 sqlDCity="SELECT Departure, COUNT(*) FROM flight WHERE DepartureDate>'{}' AND DepartureDate<'{}' GROUP BY Departure;".format(Actual_Customer.AdminDateBegin, Actual_Customer.AdminDateEnd)
                 DCity=dbconnect.DBHelper().fetch(sqlDCity)
@@ -1353,7 +1355,7 @@ class My_Account_Page():
                 title = "Departure Statistics"
                 xlabel = "Departure"
                 ylabel = "Number of Flights"
-                self.create_plot(Depart, NumberDepart, title, xlabel, ylabel, 'histogram', (300, 200))
+                self.create_plot(Depart, NumberDepart, title, xlabel, ylabel, 'histogram', (600, 400))
 
                 sqlLON = """SELECT CASE WHEN CustomerID = 0 THEN 'Without Account' ELSE 'With Account' END AS GroupedCustomerID,
                         COUNT(*) 
@@ -1372,7 +1374,7 @@ class My_Account_Page():
                 title = "Reservation Statistics"
                 xlabel = "Reservation"
                 ylabel = "Number of Reservations"
-                self.create_plot(LONCategory, LONNumber, title, xlabel, ylabel, 'histogram', (300, 200))
+                self.create_plot(LONCategory, LONNumber, title, xlabel, ylabel, 'histogram', (600, 400))
 
     def Hide_Button(self, empty):
         Launch_Home_Page()
@@ -1775,11 +1777,15 @@ class My_Account_Page():
 
     def create_plot(self, x_data, y_data, title, xlabel, ylabel, plot_type, image_size):
         fig, ax = plt.subplots(figsize=(image_size[0]/100, image_size[1]/100))  # Convert pixels to inches
-        plt.xticks(rotation=70)
         if plot_type == 'line':
             ax.plot(x_data, y_data, marker='o', linestyle='-')
         elif plot_type == 'histogram':
-            ax.hist(x_data, bins='auto', alpha=0.7, rwidth=0.85)
+            #ax.hist(x_data bins='auto', alpha=0.7, rwidth=0.6)
+            ax.bar(x_data, y_data, color=second_color)
+            plt.xticks(rotation=70)
+            #plt.subplots_adjust(left=0.2, bottom=0.2, right=0.95, top=0.90)
+            ax.xaxis.set_label_coords(0.5, -0.50)
+            ax.yaxis.set_label_coords(-0.055, 0.5)
         else:
             raise ValueError("Invalid plot_type. Supported values: 'line' or 'histogram'.")
 
