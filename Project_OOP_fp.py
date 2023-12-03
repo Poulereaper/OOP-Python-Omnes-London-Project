@@ -1070,15 +1070,15 @@ class My_Account_Page():
                     self.Search_Flight_Button.place(x=350, y=150)
                 else :
                     sql = "SELECT * FROM Flight WHERE FlightNumber = '{}';".format(Actual_Customer.AdminFlight)
-                    Search_Flight_Result =dbconnect.DBHelper().fetch(sql)
-                    if Search_Flight_Result==None:
+                    self.Search_Flight_Result =dbconnect.DBHelper().fetch(sql)
+                    if self.Search_Flight_Result==None:
                         self.No_Flight_Title = tk.Label(self.rest_right_frame, text="No Flight Found", font=("Arial", 15), bg=main_color, fg=fourth_color)
                         self.Info_Noo_Flight = tk.Label(self.rest_right_frame, text="Unfortunately it seems that you have no Flights.", font=("Arial", 10), bg=main_color, fg=fourth_color)
                         self.No_Flight_Title.place(x=50, y=40)
                         self.Info_Noo_Flight.place(x=50, y=80)
                     else:
                         #Titles 
-                        self.Create_Flight_Title = tk.Label(self.rest_right_frame, text="Manage Flight "+str(Search_Flight_Result[0]['FlightNumber']), font=("Arial", 13), bg=main_color, fg=fourth_color)
+                        self.Create_Flight_Title = tk.Label(self.rest_right_frame, text="Manage Flight "+str(self.Search_Flight_Result[0]['FlightNumber']), font=("Arial", 13), bg=main_color, fg=fourth_color)
                         self.Departure_Title = tk.Label(self.rest_right_frame, text=" Departure", font=("Arial", 10), bg=main_color, fg=fourth_color)
                         self.Departure_Date_Title = tk.Label(self.rest_right_frame, text=" Departure Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
                         self.Departure_Time_Title = tk.Label(self.rest_right_frame, text=" Departure Time", font=("Arial", 10), bg=main_color, fg=fourth_color)
@@ -1095,39 +1095,42 @@ class My_Account_Page():
                         self.Image_Flight_Title = tk.Label(self.rest_right_frame, text="Flight's Image", font=("Arial", 13), bg=main_color, fg=fourth_color)
                         #Entries
                         self.Departure_Input = tk.Entry(self.rest_right_frame)
-                        self.Departure_Input.insert(0, Search_Flight_Result[0]['Departure'])
+                        self.Departure_Input.insert(0, self.Search_Flight_Result[0]['Departure'])
                         self.Departure_Date_Input = DateEntry(self.rest_right_frame, date_pattern='y-mm-dd')
                         self.Departure_Date_Input.delete(0, tk.END)
-                        self.Departure_Date_Input.insert(0, Search_Flight_Result[0]['DepartureDate'])
+                        self.Departure_Date_Input.insert(0, self.Search_Flight_Result[0]['DepartureDate'])
                         self.Departure_Time_Input = ttk.Combobox(self.rest_right_frame, values=["00:00:00", "01:00:00", "02:00:00", "03:00:00", "04:00:00", "05:00:00", "06:00:00","07:00:00", "08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00","13:00:00", "14:00:00", "15:00:00", "16:00:00", "17:00:00", "18:00:00","19:00:00", "20:00:00", "21:00:00", "22:00:00", "23:00:00"])
                         self.Departure_Time_Input.delete(0, tk.END)
-                        self.Departure_Time_Input.insert(0, Search_Flight_Result[0]['DepartureTime'])
+                        self.Departure_Time_Input.insert(0, self.Search_Flight_Result[0]['DepartureTime'])
                         #self.Departure_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
                         self.Arrival_Input = tk.Entry(self.rest_right_frame)
-                        self.Arrival_Input.insert(0, Search_Flight_Result[0]['Arrival'])
+                        self.Arrival_Input.insert(0, self.Search_Flight_Result[0]['Arrival'])
                         self.Arrival_Date_Input = DateEntry(self.rest_right_frame, date_pattern='y-mm-dd')
                         self.Arrival_Date_Input.delete(0, tk.END)
-                        self.Arrival_Date_Input.insert(0, Search_Flight_Result[0]['ArrivalDate'])
+                        self.Arrival_Date_Input.insert(0, self.Search_Flight_Result[0]['ArrivalDate'])
                         self.Arrival_Time_Input = ttk.Combobox(self.rest_right_frame, values=["00:00:00, 01:00:00", "02:00:00", "03:00:00", "04:00:00", "05:00:00", "06:00:00","07:00:00", "08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00","13:00:00", "14:00:00", "15:00:00", "16:00:00", "17:00:00", "18:00:00","19:00:00", "20:00:00", "21:00:00", "22:00:00", "23:00:00"])
                         self.Arrival_Time_Input.delete(0, tk.END)
-                        self.Arrival_Time_Input.insert(0, Search_Flight_Result[0]['ArrivalTime'])
+                        self.Arrival_Time_Input.insert(0, self.Search_Flight_Result[0]['ArrivalTime'])
                         #self.Arrival_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
                         self.Price_Input = tk.Entry(self.rest_right_frame)
-                        self.Price_Input.insert(0, int(Search_Flight_Result[0]['Price']))
+                        self.Price_Input.insert(0, int(self.Search_Flight_Result[0]['Price']))
                         self.Seats_Input = tk.Entry(self.rest_right_frame)
-                        self.Seats_Input.insert(0, Search_Flight_Result[0]['Seats'])
+                        self.Seats_Input.insert(0, self.Search_Flight_Result[0]['Seats'])
                         self.Discount_Input = tk.Entry(self.rest_right_frame)
-                        self.Discount_Input.insert(0, int(Search_Flight_Result[0]['Discount']))
+                        self.Discount_Input.insert(0, int(self.Search_Flight_Result[0]['Discount']))
                         self.Economy_Input = tk.Entry(self.rest_right_frame)
-                        self.Economy_Input.insert(0, int(Search_Flight_Result[0]['Eco']))
+                        self.Economy_Input.insert(0, int(self.Search_Flight_Result[0]['Eco']))
                         self.Business_Input = tk.Entry(self.rest_right_frame)
-                        self.Business_Input.insert(0, int(Search_Flight_Result[0]['Business']))
+                        self.Business_Input.insert(0, int(self.Search_Flight_Result[0]['Business']))
                         self.First_Input = tk.Entry(self.rest_right_frame)
-                        self.First_Input.insert(0, int(Search_Flight_Result[0]['First']))
+                        self.First_Input.insert(0, int(self.Search_Flight_Result[0]['First']))
                         self.Image_Flight_Input = tk.Entry(self.rest_right_frame)
                         #Button
                         self.Save_Button = tk.Button(self.rest_right_frame, text='Save', command=self.Save_Flight, bg=third_color, fg=main_color, width=15, height=2)
                         self.Delete_Button = tk.Button(self.rest_right_frame, text='Delete', command=self.Delete_Flight, bg=second_color, fg=main_color, width=15, height=2)
+                        self.Add_Image_Flight_Button = tk.Button(self.rest_right_frame, text='Add Image', command=self.Add_Image_Flight, bg=third_color, fg=main_color, width=15, height=1)
+                        #Usless var here
+                        self.Image_Flight_Check = False
                         #Display Stuff
                         self.Create_Flight_Title.place(x=50, y=20)
                         self.Departure_Title.place(x=50, y=80)
@@ -1150,6 +1153,7 @@ class My_Account_Page():
                         self.Business_Input.place(x=600, y=250)
                         self.First_Title.place(x=600, y=290)
                         self.First_Input.place(x=600, y=320)
+                        self.Add_Image_Flight_Button.place(x=50, y=310)
                         self.Price_Title.place(x=50, y=360)
                         self.Price_Input.place(x=50, y=390)
                         self.Discount_Title.place(x=350, y=360)
@@ -1596,6 +1600,10 @@ class My_Account_Page():
             tk.messagebox.showinfo('Error', 'Invalid Departure format')
         elif len(self.Arrival) <2 or len(self.Arrival) >30 or not self.Arrival.isalpha():
             tk.messagebox.showinfo('Error', 'Invalid Arrival format')
+        elif self.Arrival==self.Departure:
+            tk.messagebox.showinfo('Error', 'The arrival and the departure must be different')
+        elif self.Arrival!=self.Search_Flight_Result[0]['Arrival'] and self.Image_Flight_Check==False:
+            tk.messagebox.showinfo('Error', 'Please after changing the arrival, chnage the flight image')
         else:
             self.Discount=self.Discount/100
             Actual_Outbound_Flight.Update_Flight(Actual_Customer.AdminFlight, self.Departure, self.Departure_Date, self.Departure_Time, self.Arrival, self.Arrival_Date, self.Arrival_Time, self.Duration, self.Price_F, self.Discount, self.Seats, self.Economy, self.Business, self.First)
