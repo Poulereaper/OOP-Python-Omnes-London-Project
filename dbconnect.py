@@ -34,6 +34,11 @@ class DBHelper:
         self.cur.execute(sql)
         self.disconnect()
 
+    def excute_values(self, sql, param1, param2):
+        self.connection()
+        self.cur.execute(sql, (param1, param2))
+        self.disconnect()
+
     def execute_row(self, sql,param1):
         self.connection()
         self.cur.execute(sql,param1)

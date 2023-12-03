@@ -3,6 +3,7 @@ import pymysql
 import tkinter as tk
 from tkinter import ttk
 import tkinter.messagebox
+from tkinter import filedialog
 from tkcalendar import DateEntry
 import dbconnect
 import Actual_Customer as AC
@@ -14,6 +15,11 @@ import Mail as M
 import re
 from PIL import Image, ImageTk
 import datetime
+import base64
+from io import BytesIO
+import uuid
+import base64
+from PIL import Image
 
 #---------------------## ALL THE CLASSES ##---------------------#
 
@@ -654,12 +660,18 @@ class My_Account_Page():
         if (Actual_Customer.ProfilePicture==None) or (Actual_Customer.ProfilePicture=="") :
             bg_image_five = Image.open("./pp/user.png")
         else:
-            bg_image_five = Image.open(Actual_Customer.ProfilePicture)
-        bg_photo_five = ImageTk.PhotoImage(bg_image_five)
-        canvas_five = tk.Canvas(self.left_frame, width=bg_image_five.width, height=bg_image_five.height, bg=main_color,highlightthickness=0,borderwidth=0)
-        canvas_five.place(x=45,y=30)
-        canvas_five.create_image(0, 0, anchor=tk.NW, image=bg_photo_five)
-        canvas_five.image = bg_photo_five
+            # Open the image file and convert it to a Tkinter image object
+            # Decode the base64 image
+            decoded_image = base64.b64decode(Actual_Customer.ProfilePicture)
+            # Create a PIL image object from the decoded image data
+            image = Image.open(BytesIO(decoded_image))
+
+            bg_image_five = image
+            bg_photo_five = ImageTk.PhotoImage(bg_image_five)
+            canvas_five = tk.Canvas(self.left_frame, width=bg_image_five.width, height=bg_image_five.height, bg=main_color,highlightthickness=0,borderwidth=0)
+            canvas_five.place(x=45,y=30)
+            canvas_five.create_image(0, 0, anchor=tk.NW, image=bg_photo_five)
+            canvas_five.image = bg_photo_five
 
         #Title and Text
         self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
@@ -694,15 +706,15 @@ class My_Account_Page():
         #Display the title
         self.Home_Page_Title.place(x=580, y=10)
         #Display Profile Picture Button
-        self.Profile_Picture_Button.place(x=50, y=170)
+        self.Profile_Picture_Button.place(x=50, y=180)
         #Display the Name Title
-        self.Name_Title.place(x=50, y=210)
+        self.Name_Title.place(x=50, y=230)
         #Display the UserName Title
-        self.UserName_Title.place(x=50, y=235)
+        self.UserName_Title.place(x=50, y=255)
         #Display the Email Title
-        self.Email_Title.place(x=50, y=270)
+        self.Email_Title.place(x=50, y=290)
         #Display the Phone Title
-        self.Phone_Title.place(x=50, y=310)
+        self.Phone_Title.place(x=50, y=330)
         #Display the Purchase Button
         self.Purchase_Button.place(x=50, y=420)
         #Display the Admin Button
@@ -985,7 +997,6 @@ class My_Account_Page():
                 self.Business_Title = tk.Label(self.rest_right_frame, text=" Business Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
                 self.First_Title = tk.Label(self.rest_right_frame, text=" First Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
                 self.Info_Title = tk.Label(self.rest_right_frame, text="Please fill all the fields", font=("Arial", 8), bg=main_color, fg=fourth_color)
-                self.Image_Flight_Title = tk.Label(self.rest_right_frame, text="Flight's Image", font=("Arial", 13), bg=main_color, fg=fourth_color)
                 self.Info_Discount = tk.Label(self.rest_right_frame, text="Discount is in %", font=("Arial", 8), bg=main_color, fg=fourth_color)
                 #Entries
                 self.Departure_Input = tk.Entry(self.rest_right_frame)
@@ -1008,10 +1019,10 @@ class My_Account_Page():
                 self.Business_Input.insert(0, "0")
                 self.First_Input = tk.Entry(self.rest_right_frame)
                 self.First_Input.insert(0, "0")
-                self.Image_Flight_Input = tk.Entry(self.rest_right_frame)
+                self.Image_Flight_Check = False
                 #Button
                 self.Create_Button = tk.Button(self.rest_right_frame, text='Create', command=self.Create_Flight, bg=third_color, fg=main_color, width=15, height=2)
-
+                self.Add_Image_Flight_Button = tk.Button(self.rest_right_frame, text='Add Image', command=self.Add_Image_Flight, bg=third_color, fg=main_color, width=15, height=1)
                 #Display Stuff
                 self.Create_Flight_Title.place(x=50, y=20)
                 self.Departure_Title.place(x=50, y=80)
@@ -1034,6 +1045,7 @@ class My_Account_Page():
                 self.Business_Input.place(x=600, y=250)
                 self.First_Title.place(x=600, y=290)
                 self.First_Input.place(x=600, y=320)
+                self.Add_Image_Flight_Button.place(x=50, y=310)
                 self.Price_Title.place(x=50, y=360)
                 self.Price_Input.place(x=50, y=390)
                 self.Discount_Title.place(x=350, y=360)
@@ -1400,7 +1412,27 @@ class My_Account_Page():
                 tk.messagebox.showerror("Error", "Please fill all the inputs")
 
     def Change_Profile_Picture(self):
-        tk.messagebox.showinfo('Error', 'PP CHANGED')
+        chemin_image = filedialog.askopenfilename(title="Open your file", filetypes=[('image files', '.png'), ('image files', '.jpg'), ('image files', '.jpeg')])
+        image = Image.open(chemin_image)
+        image = image.resize((128, 128))
+        # Generate a random name for the image file
+        random_name = str(uuid.uuid4())
+        image_path = f"./pp/{random_name}.png"
+        #save it
+        image.save(image_path)  # Save the resized image with the random name
+        image = ImageTk.PhotoImage(image)
+        #encode the image
+        encode_image = base64.b64encode(open(image_path, 'rb').read())
+        #send to the database
+        #sqlPP = "UPDATE Customer SET ProfilePicture = '{}' WHERE CustomerID = '{}';".format(encode_image, Actual_Customer.CustomerID)
+        sqlPP = "UPDATE Customer SET ProfilePicture = %s WHERE CustomerID = %s" 
+        values = (encode_image, Actual_Customer.CustomerID)
+        dbconnect.DBHelper().execute_row(sqlPP, values)
+        Actual_Customer.ProfilePicture = encode_image
+        Launch_My_Account()
+        
+
+    # Inclure l'image dans la base de données (exemple pour MySQL)
 
     #--------Admin---------#
     def Admin_Page(self):
@@ -1446,10 +1478,13 @@ class My_Account_Page():
             tk.messagebox.showinfo('Error', 'Invalid Departure format')
         elif len(self.Arrival) <2 or len(self.Arrival) >30 or not self.Arrival.isalpha():
             tk.messagebox.showinfo('Error', 'Invalid Arrival format')
+        elif self.Image_Flight_Check==False:
+            tk.messagebox.showinfo('Error', 'Please add an image for the flight')
         else:
             self.Discount=self.Discount/100
             Actual_Outbound_Flight.Create_Flight(self.Departure, self.Departure_Date, self.Departure_Time, self.Arrival, self.Arrival_Date, self.Arrival_Time, self.Duration, self.Price_F, self.Discount, self.Seats, self.Economy, self.Business, self.First)
             tk.messagebox.showinfo('Succeed', 'Flight has been created')
+            self.Image_Flight_Check=False
             Launch_My_Account()
 
     def Create_Customer(self):
@@ -1495,12 +1530,19 @@ class My_Account_Page():
             else : 
                 tk.messagebox.showinfo('Error', 'Sorry, an error occured')
     
-    def browse_image(self):
-        file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg;*.jpeg")])
-        if file_path:
-            #self.Image.delete(0, tk.END)
-            #self.Image.insert(0, file_path)
-            pass
+    def Add_Image_Flight(self):
+        Arrival=self.Arrival_Input.get().replace(" ", "_")
+        if Arrival=='':
+            tk.messagebox.showinfo('Error', 'Please enter first the arrival')
+        else :
+            chemin_image = filedialog.askopenfilename(title="Open your file", filetypes=[('image files', '.png'), ('image files', '.jpg'), ('image files', '.jpeg')])
+            image = Image.open(chemin_image)
+            image = image.resize((320, 180))
+            # Generate a random name for the image file
+            image_path = f"./images/Flights_Images/{Arrival}.png"
+            #save it
+            image.save(image_path)
+            self.Image_Flight_Check=True
 
     def Search_Flight(self):
         self.Search=self.Search_Flight_Input.get()
