@@ -114,16 +114,21 @@ class Actual_Customer():
         self.UserName = ""
         self.Phone = 0
         self.AdminOrNot = False
+        self.AdminPage=False
+        self.AdminFlight=""
+        self.AdminCustomer=0
         self.ProfilePicture = None
         self.CardNumber = 0
         self.CardName = ""
         self.CardDate = 0
         self.CardCode = 0
+        self.Page = 0
 
     def Delete_Customer(self, CustomerID):
         sql = "DELETE FROM Customer WHERE CustomerID='{}'".format(CustomerID)
         dbconnect.DBHelper().execute(sql)
         print("Delete Customer Succeed")
+        self.AdminCustomer=0
 
     def Add_Card(self, CardNumber, CardName, CardDate, CardCode):
         sql = "UPDATE Customer SET CardNumber='{}', CardDate='{}', CardName='{}', CardCode='{}' WHERE CustomerID='{}'".format(CardNumber, CardDate, CardName, CardCode, self.CustomerID)
@@ -222,11 +227,11 @@ class Actual_Customer():
             print("Creat Customer Failed")
 
     def Update_Customer(self, CustomerID, Email, Password, FirstName, LastName, UserName, Phone, AdminOrNot):
-        sql1 = "SELECT * FROM Customer WHERE Email='{}'".format(Email)
+        sql1 = "SELECT * FROM Customer WHERE Email='{}' AND CustomerID!= '{}'".format(Email, CustomerID)
         result1 = dbconnect.DBHelper().fetch(sql1)
-        sql2 = "SELECT * FROM Customer WHERE Phone='{}'".format(Phone)
+        sql2 = "SELECT * FROM Customer WHERE Phone='{}' AND CustomerID!= '{}'".format(Phone, CustomerID)
         result2 = dbconnect.DBHelper().fetch(sql2)
-        sql3 = "SELECT * FROM Customer WHERE UserName='{}'".format(UserName)
+        sql3 = "SELECT * FROM Customer WHERE UserName='{}' AND CustomerID!= '{}'".format(UserName, CustomerID)
         result3 = dbconnect.DBHelper().fetch(sql3)
         if (len(result1)==0) & (len(result2)==0) & (len(result3)==0):
             sql = "UPDATE Customer SET Email='{}', Password='{}', FirstName='{}', LastName='{}', UserName='{}', Phone='{}', AdminOrNot='{}' WHERE CustomerID='{}'".format(Email, Password, FirstName, LastName, UserName, Phone, AdminOrNot, CustomerID)

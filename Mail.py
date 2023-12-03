@@ -242,3 +242,110 @@ def send_email(Mail, Name, Outbound_Flight_B, Inbound_Flight_B, Basket_Total_Pri
         smtp.login(email_sender, email_password)
         smtp.sendmail(email_sender, email_receiver, em.as_string())
         print("Email Sent")
+
+def send_email_password(Mail, Password, Name):
+    email_sender = "oop.air.line@gmail.com"
+    email_password = "hrkx jmpw yskb zbgf"
+    email_receiver = Mail
+
+    em = EmailMessage()
+    em['Subject'] = "Order Confirmation"
+    em['From'] = email_sender
+    em['To'] = email_receiver
+    # HTML Content
+    html_content=f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Order Confirmation</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                background-color: #fff7ea;
+                color: #722a39;
+            }}
+
+            h1 {{
+                color: #722a39;
+            }}
+
+            p {{
+                margin-bottom: 10px;
+            }}
+
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }}
+
+            th, td {{
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }}
+
+            th {{
+                background-color: #722a39;
+                color: white;
+            }}
+
+            .total {{
+                font-weight: bold;
+                font-size: 1.2em;
+                color: #722a39;
+            }}
+
+            .thank-you {{
+                margin-top: 20px;
+                font-style: italic;
+                color: #722a39;
+            }}
+
+            .best-regards {{
+                margin-top: 20px;
+            }}
+
+            .policy-section {{
+                margin-top: 30px;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Password Modification</h1>
+        <p>Dear {Name},</p>
+        <p>We hope this message finds you well.
+        We want to inform you that, as part of our routine security measures, an employee has updated your account password. 
+        This action was taken to ensure the ongoing protection of your account and sensitive information.</p>
+        
+        <p>Your new password is: <strong>{Password}</strong></p>
+
+        <p If you did not initiate this change or have any concerns about the security of your account, 
+        please contact our support team immediately at oop.air.line@gmail.com</p>
+        
+        <p We apologize for any inconvenience this may cause and appreciate your understanding as we prioritize the security of your account.</p>
+        
+        <p class="thank-you">Thank you for choosing OOP Air Line.</p>
+        
+        <div class="policy-section">
+            <h2>Privacy Policy</h2>
+            <p>Your privacy is important to us. We will handle your personal information securely and responsibly. For more details, please refer to our <a href="#">Privacy Policy</a>.</p>
+            <h2>Insurance Information</h2>
+            <p>All tickets purchased through OOP Air Line come with insurance coverage. In case of any unforeseen circumstances, your ticket is protected. For more details, please refer to our <a href="#">Insurance Policy</a>.</p>
+        </div>
+        <p class="best-regards">Best regards,<br>OOP Air Line</p>
+    </body>
+    </html>
+    """
+    em.add_alternative(html_content, subtype='html', charset='utf-8')
+
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
+        smtp.login(email_sender, email_password)
+        smtp.sendmail(email_sender, email_receiver, em.as_string())
+        print("Email Sent")

@@ -675,6 +675,7 @@ class My_Account_Page():
         if Actual_Customer.AdminOrNot == True:
             self.Admin_Button = tk.Button(self.left_frame, text='Employee Space', command=self.Admin_Page, bg=second_color, fg=main_color, width=15, height=2)
         self.Purchase_Button = tk.Button(self.left_frame, text=' Go Purchase', command=Launch_Purchase_Page, bg=second_color, fg=main_color, width=15, height=2)
+        self.Profile_Picture_Button = tk.Button(self.left_frame, text='Change Profile Picture', command=self.Change_Profile_Picture, bg=third_color, fg=main_color, width=18, height=1)
         # Pack all wigets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
@@ -692,6 +693,8 @@ class My_Account_Page():
         self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
         #Display the title
         self.Home_Page_Title.place(x=580, y=10)
+        #Display Profile Picture Button
+        self.Profile_Picture_Button.place(x=50, y=170)
         #Display the Name Title
         self.Name_Title.place(x=50, y=210)
         #Display the UserName Title
@@ -983,6 +986,7 @@ class My_Account_Page():
                 self.First_Title = tk.Label(self.rest_right_frame, text=" First Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
                 self.Info_Title = tk.Label(self.rest_right_frame, text="Please fill all the fields", font=("Arial", 8), bg=main_color, fg=fourth_color)
                 self.Image_Flight_Title = tk.Label(self.rest_right_frame, text="Flight's Image", font=("Arial", 13), bg=main_color, fg=fourth_color)
+                self.Info_Discount = tk.Label(self.rest_right_frame, text="Discount is in %", font=("Arial", 8), bg=main_color, fg=fourth_color)
                 #Entries
                 self.Departure_Input = tk.Entry(self.rest_right_frame)
                 self.Departure_Date_Input = DateEntry(self.rest_right_frame, date_pattern='y-mm-dd')
@@ -993,11 +997,17 @@ class My_Account_Page():
                 self.Arrival_Time_Input = ttk.Combobox(self.rest_right_frame, values=["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00","07:00", "08:00", "09:00", "10:00", "11:00", "12:00","13:00", "14:00", "15:00", "16:00", "17:00", "18:00","19:00", "20:00", "21:00", "22:00", "23:00"])
                 #self.Arrival_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
                 self.Price_Input = tk.Entry(self.rest_right_frame)
+                self.Price_Input.insert(0, "0")
                 self.Seats_Input = tk.Entry(self.rest_right_frame)
+                self.Seats_Input.insert(0, "0")
                 self.Discount_Input = tk.Entry(self.rest_right_frame)
+                self.Discount_Input.insert(0, "0")
                 self.Economy_Input = tk.Entry(self.rest_right_frame)
+                self.Economy_Input.insert(0, "0")
                 self.Business_Input = tk.Entry(self.rest_right_frame)
+                self.Business_Input.insert(0, "0")
                 self.First_Input = tk.Entry(self.rest_right_frame)
+                self.First_Input.insert(0, "0")
                 self.Image_Flight_Input = tk.Entry(self.rest_right_frame)
                 #Button
                 self.Create_Button = tk.Button(self.rest_right_frame, text='Create', command=self.Create_Flight, bg=third_color, fg=main_color, width=15, height=2)
@@ -1030,6 +1040,7 @@ class My_Account_Page():
                 self.Discount_Input.place(x=350, y=390)
                 self.Create_Button.place(x=600, y=380)
                 #self.Info_Title.place(x=600, y=440)
+                self.Info_Discount.place(x=350, y=440)
 
             elif Actual_Customer.Page==1:
                 if Actual_Customer.AdminFlight=="":
@@ -1233,7 +1244,7 @@ class My_Account_Page():
                         else:
                             self.Admin_Input.insert(0, "No")
                         #Button
-                        self.Save_Button = tk.Button(self.rest_right_frame, text='Save', command=self.Save, bg=third_color, fg=main_color, width=15, height=2)
+                        self.Save_Button = tk.Button(self.rest_right_frame, text='Save', command=self.Save_Customer, bg=third_color, fg=main_color, width=15, height=2)
                         self.Delete_Button = tk.Button(self.rest_right_frame, text='Delete Account', command=self.Delete_Customer, bg=second_color, fg=main_color, width=15, height=2)
                         
                         #Display Stuff
@@ -1387,6 +1398,10 @@ class My_Account_Page():
             else :
                 #message box 
                 tk.messagebox.showerror("Error", "Please fill all the inputs")
+
+    def Change_Profile_Picture(self):
+        tk.messagebox.showinfo('Error', 'PP CHANGED')
+
     #--------Admin---------#
     def Admin_Page(self):
         if Actual_Customer.AdminOrNot == True:
@@ -1413,12 +1428,12 @@ class My_Account_Page():
         arrival_datetime = datetime.datetime.strptime(f"{self.Arrival_Date} {self.Arrival_Time}", '%Y-%m-%d %H:%M:%S')
         self.Duration = arrival_datetime - departure_datetime
     
-        if (self.Departure=='') or (self.Departure_Date=='') or (self.Departure_Time=='') or (self.Arrival=='') or (self.Arrival_Date=='') or (self.Arrival_Time=='') or (self.Price_F=='') or (self.Discount=='') or (self.Economy=='') or (self.Business=='') or (self.First==''):
+        if (self.Departure=='') or (self.Departure_Date=='') or (self.Departure_Time=='') or (self.Arrival=='') or (self.Arrival_Date=='') or (self.Arrival_Time=='') or (self.Price_F==0) or (self.Seats==0) or ((self.Economy==0) and (self.Business==0) and (self.First==0)):
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
         elif self.Departure_Date>self.Arrival_Date:
             tk.messagebox.showinfo('Error', 'The arrival date must be after the departure date')
-        #elif self.Departure_Date<datetime.datetime.now() or self.Arrival_Date<datetime.datetime.now():
-            #tk.messagebox.showinfo('Error', 'The departure or Arrival date must be after or today')
+        elif datetime.datetime.strptime(self.Departure_Date, '%Y-%m-%d') < datetime.datetime.now() or datetime.datetime.strptime(self.Arrival_Date, '%Y-%m-%d') < datetime.datetime.now():
+            tk.messagebox.showinfo('Error', 'The departure or Arrival date must be after or today')
         elif self.Price_F<=0:
             tk.messagebox.showinfo('Error', 'The price must be positive')
         elif self.Discount<0 or self.Discount>100:
@@ -1525,8 +1540,8 @@ class My_Account_Page():
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
         elif self.Departure_Date>self.Arrival_Date:
             tk.messagebox.showinfo('Error', 'The arrival date must be after the departure date')
-        #elif self.Departure_Date<datetime.datetime.now() or self.Arrival_Date<datetime.datetime.now():
-            #tk.messagebox.showinfo('Error', 'The departure or Arrival date must be after or today')
+        elif datetime.datetime.strptime(self.Departure_Date, '%Y-%m-%d') < datetime.datetime.now() or datetime.datetime.strptime(self.Arrival_Date, '%Y-%m-%d') < datetime.datetime.now():
+            tk.messagebox.showinfo('Error', 'The departure or Arrival date must be after or today')
         elif self.Price_F<=0:
             tk.messagebox.showinfo('Error', 'The price must be positive')
         elif self.Discount<0 or self.Discount>100:
@@ -1577,12 +1592,13 @@ class My_Account_Page():
         self.UserName=self.User_Name_Input.get()
         self.Email=self.Email_Input.get()
         self.Phone=self.Phone_Input.get()
+        self.Old_Password=self.Old_Password_Input.get()
         self.Password=self.Password_Input.get()
         self.Confirm_Password=self.Confirm_Password_Input.get()
         self.Admin=self.Admin_Input.get()
         if self.Admin=="Yes": self.Admin=1
         else: self.Admin=0
-        if (self.FirstName=='') or (self.LastName=='') or (self.UserName=='') or (self.Email=='') or (self.Phone=='') or (self.Password=='') or (self.Confirm_Password==''):
+        if (self.FirstName=='') or (self.LastName=='') or (self.UserName=='') or (self.Email=='') or (self.Phone==''):
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
         elif not re.match(r'^[0-9]*$', self.Phone):
             # Invalid phone format, show an error message
@@ -1600,25 +1616,40 @@ class My_Account_Page():
             tk.messagebox.showinfo('Error', 'Invalid Last Name format')
         elif len(self.UserName) <2 or len(self.UserName) >30 or not self.UserName.isalnum():
             tk.messagebox.showinfo('Error', 'Invalid User Name format')
-        else:
-            res=Actual_Customer.Update_Customer(self.Email, self.Password, self.FirstName, self.LastName, self.UserName,  self.Phone, self.Admin)
-            if res=="Email":
-                tk.messagebox.showinfo('Error', 'The email already exist')
-            elif res=="UserName":
-                tk.messagebox.showinfo('Error', 'The username already exist')
-            elif res=="Phone":
-                tk.messagebox.showinfo('Error', 'The phone already exist')
-            elif res=="Succeed":
-                tk.messagebox.showinfo('Succeed', 'Customer has been created')
-                Launch_My_Account()
+        sqlMDP = "SELECT Password FROM Customer WHERE CustomerID = '{}';".format(Actual_Customer.AdminCustomer)
+        MDP = dbconnect.DBHelper().fetch(sqlMDP)[0]['Password']
+        if (self.Password!='') or (self.Confirm_Password!=''):
+            if (self.Old_Password=='') or (self.Password=='') or (self.Confirm_Password==''):
+                tk.messagebox.showinfo('Error', 'Please fill in all the information for the password')
+            elif self.Password!=self.Confirm_Password:
+                tk.messagebox.showinfo('Error', 'The new password and the confirmation password are not the same')
+            elif self.Old_Password!=MDP:
+                tk.messagebox.showinfo('Error', 'The old password is incorrect')
             else : 
-                tk.messagebox.showinfo('Error', 'Sorry, an error occured')
+                res=Actual_Customer.Update_Customer(Actual_Customer.AdminCustomer, self.Email, self.Password, self.FirstName, self.LastName, self.UserName,  self.Phone, self.Admin)
+                M.send_email_password(self.Email, self.Password, self.FirstName)
+                Launch_My_Account()
+        else:
+            res=Actual_Customer.Update_Customer(Actual_Customer.AdminCustomer, self.Email, MDP, self.FirstName, self.LastName, self.UserName,  self.Phone, self.Admin)
+        if res=="Email":
+            tk.messagebox.showinfo('Error', 'The email already exist')
+        elif res=="UserName":
+            tk.messagebox.showinfo('Error', 'The username already exist')
+        elif res=="Phone":
+            tk.messagebox.showinfo('Error', 'The phone already exist')
+        elif res=="Succeed":
+            tk.messagebox.showinfo('Succeed', 'Customer has been modified')
+            Actual_Customer.AdminCustomer = 0
+            Launch_My_Account()
+        else : 
+            tk.messagebox.showinfo('Error', 'Sorry, an error occured')
 
     def Delete_Customer(self):
         response = tk.messagebox.askquestion('Warning', 'Are you sure you want to delete your account?', icon='warning')
         if response == 'yes':
             Actual_Customer.Delete_Customer(self.Search_Customer_Result[0]['CustomerID'])
-            Launch_Home_Page()
+            Actual_Customer.AdminCustomer = 0
+            Launch_My_Account()
             print("Delete Account")
         else:
             print("Account deletion canceled")
