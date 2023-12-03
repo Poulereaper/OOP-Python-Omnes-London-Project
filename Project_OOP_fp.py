@@ -20,6 +20,8 @@ from io import BytesIO
 import uuid
 import base64
 from PIL import Image
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 #---------------------## ALL THE CLASSES ##---------------------#
 
@@ -1299,8 +1301,10 @@ class My_Account_Page():
                 self.top_display_frame.columnconfigure(1, weight=1)
                 self.top_display_frame.columnconfigure(2, weight=1)
                 self.top_display_frame.columnconfigure(3, weight=1)
+                self.bottom_display_frame = tk.Frame(self.display_frame, bg=main_color)
                 self.display_frame.pack(fill=tk.BOTH, expand=True)
                 self.top_display_frame.pack(side=tk.TOP, fill=tk.X)
+                self.bottom_display_frame.pack(side=tk.TOP, fill=tk.X)
                 
                 self.Begin_Date_Title = tk.Label(self.top_display_frame, text="Begin Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
                 self.End_Date_Title = tk.Label(self.top_display_frame, text="End Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
@@ -1319,7 +1323,56 @@ class My_Account_Page():
                 self.End_Date_Title.grid(row=0, column=1, padx=10, pady=5)
                 self.End_Date_Input.grid(row=1, column=1, padx=10, pady=5)
                 self.Analyse_Button.grid(row=1, column=3, padx=10, pady=5)
+                #Space after the plot
+                self.Space=tk.Label(self.bottom_display_frame, text=" ", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                self.Space.pack(side=tk.TOP)
+                if Actual_Customer.AdminDateBegin==None:
+                    self.Analyse()
+                sqlHCity="SELECT Arrival, COUNT(*) FROM flight WHERE ArrivalDate>'{}' AND ArrivalDate<'{}' GROUP BY Arrival;".format(Actual_Customer.AdminDateBegin, Actual_Customer.AdminDateEnd)
+                HCity=dbconnect.DBHelper().fetch(sqlHCity)
+                Arrive=[]
+                NumberArrive=[]
+                for i in HCity:
+                    Arrive.append(i['Arrival'])  # Use the key 'Arrival'
+                    NumberArrive.append(i['COUNT(*)'])  # Use the key 'COUNT(*)'
+                #maxNumberHC = max(NumberArrive + [0]) + 5
+                # Create and display the first plot
+                title = "Arrival Statistics"
+                xlabel = "Arrival"
+                ylabel = "Number of Flights"
+                self.create_plot(Arrive, NumberArrive, title, xlabel, ylabel, 'histogram', (300, 200))
+    
+                sqlDCity="SELECT Departure, COUNT(*) FROM flight WHERE DepartureDate>'{}' AND DepartureDate<'{}' GROUP BY Departure;".format(Actual_Customer.AdminDateBegin, Actual_Customer.AdminDateEnd)
+                DCity=dbconnect.DBHelper().fetch(sqlDCity)
+                Depart=[]
+                NumberDepart=[]
+                for i in DCity:
+                    Depart.append(i['Departure'])
+                    NumberDepart.append(i['COUNT(*)'])
+                #maxNumberDC = max(NumberDepart)+5
+                title = "Departure Statistics"
+                xlabel = "Departure"
+                ylabel = "Number of Flights"
+                self.create_plot(Depart, NumberDepart, title, xlabel, ylabel, 'histogram', (300, 200))
 
+                sqlLON = """SELECT CASE WHEN CustomerID = 0 THEN 'Without Account' ELSE 'With Account' END AS GroupedCustomerID,
+                        COUNT(*) 
+                    FROM 
+                        Reservations 
+                    WHERE 
+                        ReservationDate > '{}' AND ReservationDate < '{}' 
+                    GROUP BY 
+                        GroupedCustomerID;""".format(Actual_Customer.AdminDateBegin, Actual_Customer.AdminDateEnd)
+                LON=dbconnect.DBHelper().fetch(sqlLON)
+                LONCategory=[]
+                LONNumber=[]
+                for i in LON:
+                    LONCategory.append(i['GroupedCustomerID'])
+                    LONNumber.append(i['COUNT(*)'])
+                title = "Reservation Statistics"
+                xlabel = "Reservation"
+                ylabel = "Number of Reservations"
+                self.create_plot(LONCategory, LONNumber, title, xlabel, ylabel, 'histogram', (300, 200))
 
     def Hide_Button(self, empty):
         Launch_Home_Page()
@@ -1714,11 +1767,32 @@ class My_Account_Page():
             tk.messagebox.showinfo('Error', 'The end date must be after the begin date')
         #elif self.Begin_Date<datetime.datetime.now() or self.End_Date<datetime.datetime.now():
             #tk.messagebox.showinfo('Error', 'The begin or end date must be after or today')
-        elif self.Begin_Date<self.End_Date:
-            tk.messagebox.showinfo('Error', 'The begin date must be before the end date')
         else:
-            #Actual_Customer.Analyse(self.Begin_Date, self.End_Date)
+            Actual_Customer.AdminDateBegin=self.Begin_Date_Input.get()
+            Actual_Customer.AdminDateEnd=self.End_Date_Input.get()
             Launch_My_Account()
+
+
+    def create_plot(self, x_data, y_data, title, xlabel, ylabel, plot_type, image_size):
+        fig, ax = plt.subplots(figsize=(image_size[0]/100, image_size[1]/100))  # Convert pixels to inches
+        plt.xticks(rotation=70)
+        if plot_type == 'line':
+            ax.plot(x_data, y_data, marker='o', linestyle='-')
+        elif plot_type == 'histogram':
+            ax.hist(x_data, bins='auto', alpha=0.7, rwidth=0.85)
+        else:
+            raise ValueError("Invalid plot_type. Supported values: 'line' or 'histogram'.")
+
+        ax.set_title(title)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+
+        canvas = FigureCanvasTkAgg(fig, master=self.bottom_display_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=tk.TOP)
+        #Space after the plot
+        self.Space=tk.Label(self.bottom_display_frame, text=" ", font=("Arial", 10), bg=main_color, fg=fourth_color)
+        self.Space.pack(side=tk.TOP)
 
 ##------------------------------------------------------------------------------------------------------##
 ##----------------------------------------------Purchase Page-------------------------------------------##
