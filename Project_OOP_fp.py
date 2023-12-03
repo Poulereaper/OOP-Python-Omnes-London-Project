@@ -458,8 +458,20 @@ class SignUp_Second_Page():
         elif not re.match(r'^[0-9]*$', self.Phone):
             # Invalid phone format, show an error message
             tk.messagebox.showinfo('Error', 'Invalid phone format')
+        elif len(self.Phone)!=10:
+            # Invalid phone format, show an error message
+            tk.messagebox.showinfo('Error', 'Invalid phone format')
+        elif len(self.UserName)>25 or len(self.UserName)<2:
+            # Invalid UserName format, show an error message
+            tk.messagebox.showinfo('Error', 'UserName must be between 2 and 25 characters')
+        elif len(self.FirstName)>25 or len(self.FirstName)<2:
+            # Invalid FirstName format, show an error message
+            tk.messagebox.showinfo('Error', 'FirstName must be between 2 and 25 characters')
+        elif len(self.LastName)>25 or len(self.LastName)<2:
+            # Invalid LastName format, show an error message
+            tk.messagebox.showinfo('Error', 'LastName must be between 2 and 25 characters')
         else :
-            Actual_Customer.Complet_Actual_Customer(self.Email, self.Password, self.FirstName, self.LastName, self.UserName, self.Phone)
+            Actual_Customer.Complet_Actual_Customer(self.Email, self.Password, self.FirstName, self.LastName, self.UserName, self.Phone, None)
             Creat=Actual_Customer.Creat_Actual_Customer()
             if Creat=="Email":
                 tk.messagebox.showinfo('Error', 'This Email has already been used')
@@ -955,7 +967,7 @@ class My_Account_Page():
             #Display the Statistics Title
             self.Statistics_Title.place(x=690, y=15)
             if Actual_Customer.Page==0:
-                #Titles 
+                #Titles
                 self.Create_Flight_Title = tk.Label(self.rest_right_frame, text="Create Flight", font=("Arial", 13), bg=main_color, fg=fourth_color)
                 self.Departure_Title = tk.Label(self.rest_right_frame, text=" Departure", font=("Arial", 10), bg=main_color, fg=fourth_color)
                 self.Departure_Date_Title = tk.Label(self.rest_right_frame, text=" Departure Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
@@ -1034,9 +1046,94 @@ class My_Account_Page():
                     self.Search_Flight_Input.place(x=50, y=170)
                     self.Search_Flight_Button.place(x=350, y=150)
                 else :
-                    #sql = "SELECT * FROM Flight WHERE FlightNumber = '{}';".format(Actual_Customer.AdminFlight)
-                    
-                    pass
+                    sql = "SELECT * FROM Flight WHERE FlightNumber = '{}';".format(Actual_Customer.AdminFlight)
+                    Search_Flight_Result =dbconnect.DBHelper().fetch(sql)
+                    if Search_Flight_Result==None:
+                        self.No_Flight_Title = tk.Label(self.rest_right_frame, text="No Flight Found", font=("Arial", 15), bg=main_color, fg=fourth_color)
+                        self.Info_Noo_Flight = tk.Label(self.rest_right_frame, text="Unfortunately it seems that you have no Flights.", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.No_Flight_Title.place(x=50, y=40)
+                        self.Info_Noo_Flight.place(x=50, y=80)
+                    else:
+                        #Titles 
+                        self.Create_Flight_Title = tk.Label(self.rest_right_frame, text="Manage Flight "+str(Search_Flight_Result[0]['FlightNumber']), font=("Arial", 13), bg=main_color, fg=fourth_color)
+                        self.Departure_Title = tk.Label(self.rest_right_frame, text=" Departure", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Departure_Date_Title = tk.Label(self.rest_right_frame, text=" Departure Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Departure_Time_Title = tk.Label(self.rest_right_frame, text=" Departure Time", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Arrival_Title = tk.Label(self.rest_right_frame, text=" Arrival", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Arrival_Date_Title = tk.Label(self.rest_right_frame, text=" Arrival Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Arrival_Time_Title = tk.Label(self.rest_right_frame, text=" Arrival Time", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Price_Title = tk.Label(self.rest_right_frame, text=" Price (Adulte)", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Discount_Title = tk.Label(self.rest_right_frame, text=" Discount", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Seats_Title = tk.Label(self.rest_right_frame, text=" Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Economy_Title = tk.Label(self.rest_right_frame, text=" Economy Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Business_Title = tk.Label(self.rest_right_frame, text=" Business Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.First_Title = tk.Label(self.rest_right_frame, text=" First Seats", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Info_Title = tk.Label(self.rest_right_frame, text="Please fill all the fields", font=("Arial", 8), bg=main_color, fg=fourth_color)
+                        self.Image_Flight_Title = tk.Label(self.rest_right_frame, text="Flight's Image", font=("Arial", 13), bg=main_color, fg=fourth_color)
+                        #Entries
+                        self.Departure_Input = tk.Entry(self.rest_right_frame)
+                        self.Departure_Input.insert(0, Search_Flight_Result[0]['Departure'])
+                        self.Departure_Date_Input = DateEntry(self.rest_right_frame, date_pattern='y-mm-dd')
+                        self.Departure_Date_Input.delete(0, tk.END)
+                        self.Departure_Date_Input.insert(0, Search_Flight_Result[0]['DepartureDate'])
+                        self.Departure_Time_Input = ttk.Combobox(self.rest_right_frame, values=["00:00:00", "01:00:00", "02:00:00", "03:00:00", "04:00:00", "05:00:00", "06:00:00","07:00:00", "08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00","13:00:00", "14:00:00", "15:00:00", "16:00:00", "17:00:00", "18:00:00","19:00:00", "20:00:00", "21:00:00", "22:00:00", "23:00:00"])
+                        self.Departure_Time_Input.delete(0, tk.END)
+                        self.Departure_Time_Input.insert(0, Search_Flight_Result[0]['DepartureTime'])
+                        #self.Departure_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
+                        self.Arrival_Input = tk.Entry(self.rest_right_frame)
+                        self.Arrival_Input.insert(0, Search_Flight_Result[0]['Arrival'])
+                        self.Arrival_Date_Input = DateEntry(self.rest_right_frame, date_pattern='y-mm-dd')
+                        self.Arrival_Date_Input.delete(0, tk.END)
+                        self.Arrival_Date_Input.insert(0, Search_Flight_Result[0]['ArrivalDate'])
+                        self.Arrival_Time_Input = ttk.Combobox(self.rest_right_frame, values=["00:00:00, 01:00:00", "02:00:00", "03:00:00", "04:00:00", "05:00:00", "06:00:00","07:00:00", "08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00","13:00:00", "14:00:00", "15:00:00", "16:00:00", "17:00:00", "18:00:00","19:00:00", "20:00:00", "21:00:00", "22:00:00", "23:00:00"])
+                        self.Arrival_Time_Input.delete(0, tk.END)
+                        self.Arrival_Time_Input.insert(0, Search_Flight_Result[0]['ArrivalTime'])
+                        #self.Arrival_Time_Input = DateEntry(self.rest_right_frame, time_pattern='HH:mm')
+                        self.Price_Input = tk.Entry(self.rest_right_frame)
+                        self.Price_Input.insert(0, int(Search_Flight_Result[0]['Price']))
+                        self.Seats_Input = tk.Entry(self.rest_right_frame)
+                        self.Seats_Input.insert(0, Search_Flight_Result[0]['Seats'])
+                        self.Discount_Input = tk.Entry(self.rest_right_frame)
+                        self.Discount_Input.insert(0, int(Search_Flight_Result[0]['Discount']))
+                        self.Economy_Input = tk.Entry(self.rest_right_frame)
+                        self.Economy_Input.insert(0, int(Search_Flight_Result[0]['Eco']))
+                        self.Business_Input = tk.Entry(self.rest_right_frame)
+                        self.Business_Input.insert(0, int(Search_Flight_Result[0]['Business']))
+                        self.First_Input = tk.Entry(self.rest_right_frame)
+                        self.First_Input.insert(0, int(Search_Flight_Result[0]['First']))
+                        self.Image_Flight_Input = tk.Entry(self.rest_right_frame)
+                        #Button
+                        self.Save_Button = tk.Button(self.rest_right_frame, text='Save', command=self.Save_Flight, bg=third_color, fg=main_color, width=15, height=2)
+                        self.Delete_Button = tk.Button(self.rest_right_frame, text='Delete', command=self.Delete_Flight, bg=second_color, fg=main_color, width=15, height=2)
+                        #Display Stuff
+                        self.Create_Flight_Title.place(x=50, y=20)
+                        self.Departure_Title.place(x=50, y=80)
+                        self.Departure_Input.place(x=50, y=110)
+                        self.Departure_Date_Title.place(x=50, y=150)
+                        self.Departure_Date_Input.place(x=50, y=180)
+                        self.Departure_Time_Title.place(x=50, y=220)
+                        self.Departure_Time_Input.place(x=50, y=250)
+                        self.Arrival_Title.place(x=350, y=80)
+                        self.Arrival_Input.place(x=350, y=110)
+                        self.Arrival_Date_Title.place(x=350, y=150)
+                        self.Arrival_Date_Input.place(x=350, y=180)
+                        self.Arrival_Time_Title.place(x=350, y=220)
+                        self.Arrival_Time_Input.place(x=350, y=250)
+                        self.Seats_Title.place(x=600, y=80)
+                        self.Seats_Input.place(x=600, y=110)
+                        self.Economy_Title.place(x=600, y=150)
+                        self.Economy_Input.place(x=600, y=180)
+                        self.Business_Title.place(x=600, y=220)
+                        self.Business_Input.place(x=600, y=250)
+                        self.First_Title.place(x=600, y=290)
+                        self.First_Input.place(x=600, y=320)
+                        self.Price_Title.place(x=50, y=360)
+                        self.Price_Input.place(x=50, y=390)
+                        self.Discount_Title.place(x=350, y=360)
+                        self.Discount_Input.place(x=350, y=390)
+                        self.Save_Button.place(x=600, y=380)
+                        self.Delete_Button.place(x=600, y=20)
+                        
             
             elif Actual_Customer.Page==2:
                 #Titles 
@@ -1096,8 +1193,73 @@ class My_Account_Page():
                     self.Search_Customer_Input.place(x=50, y=170)
                     self.Search_Customer_Button.place(x=350, y=150)
                 else :
-                    #sql = "SELECT * FROM Customer WHERE CustomerID = '{}';".format(Actual_Customer.AdminCustomer)
-                    pass
+                    sql = "SELECT * FROM Customer WHERE CustomerID = '{}';".format(Actual_Customer.AdminCustomer)
+                    self.Search_Customer_Result =dbconnect.DBHelper().fetch(sql)
+                    if self.Search_Customer_Result==None:
+                        self.No_Customer_Title = tk.Label(self.rest_right_frame, text="No Customer Found", font=("Arial", 15), bg=main_color, fg=fourth_color)
+                        self.Info_Noo_Customer = tk.Label(self.rest_right_frame, text="Unfortunately it seems that you have no Customers.", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.No_Customer_Title.place(x=50, y=40)
+                        self.Info_Noo_Customer.place(x=50, y=80)
+                    else:
+                        #Titles 
+                        self.Personal_Info_Title = tk.Label(self.rest_right_frame, text=str(self.Search_Customer_Result[0]['FirstName'])+"Information", font=("Arial", 13), bg=main_color, fg=fourth_color)
+                        self.First_Name_Title = tk.Label(self.rest_right_frame, text=" First Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Last_Name_Title = tk.Label(self.rest_right_frame, text=" Last Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.User_Name_Title = tk.Label(self.rest_right_frame, text=" User Name", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Email_Title = tk.Label(self.rest_right_frame, text=" Email", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Phone_Title = tk.Label(self.rest_right_frame, text=" Phone", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Old_Password_Title = tk.Label(self.rest_right_frame, text="Old Password", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Password_Title = tk.Label(self.rest_right_frame, text="Password", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Confirm_Password_Title = tk.Label(self.rest_right_frame, text=" Confirm Password", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        self.Admin_Title = tk.Label(self.rest_right_frame, text="Admin", font=("Arial", 10), bg=main_color, fg=fourth_color)
+                        #Entries
+                        self.First_Name_Input = tk.Entry(self.rest_right_frame)
+                        self.First_Name_Input.insert(0, self.Search_Customer_Result[0]['FirstName'])
+                        self.Last_Name_Input = tk.Entry(self.rest_right_frame)
+                        self.Last_Name_Input.insert(0, self.Search_Customer_Result[0]['LastName'])
+                        self.User_Name_Input = tk.Entry(self.rest_right_frame)
+                        self.User_Name_Input.insert(0,  self.Search_Customer_Result[0]['UserName'])
+                        self.Email_Input = tk.Entry(self.rest_right_frame)
+                        self.Email_Input.insert(0, self.Search_Customer_Result[0]['Email'])
+                        self.Phone_Input = tk.Entry(self.rest_right_frame)
+                        self.Phone_Input.insert(0, int(self.Search_Customer_Result[0]['Phone']))
+                        self.Old_Password_Input = tk.Entry(self.rest_right_frame, show="*")
+                        self.Old_Password_Input.insert(0, self.Search_Customer_Result[0]['Password'])
+                        self.Password_Input = tk.Entry(self.rest_right_frame)
+                        self.Confirm_Password_Input = tk.Entry(self.rest_right_frame, show="*")
+                        self.Admin_Input = ttk.Combobox(self.rest_right_frame, values=["Yes", "No"])
+                        if self.Search_Customer_Result[0]['AdminOrNot']==1:
+                            self.Admin_Input.insert(0, "Yes")
+                        else:
+                            self.Admin_Input.insert(0, "No")
+                        #Button
+                        self.Save_Button = tk.Button(self.rest_right_frame, text='Save', command=self.Save, bg=third_color, fg=main_color, width=15, height=2)
+                        self.Delete_Button = tk.Button(self.rest_right_frame, text='Delete Account', command=self.Delete_Customer, bg=second_color, fg=main_color, width=15, height=2)
+                        
+                        #Display Stuff
+                        self.Personal_Info_Title.place(x=50, y=40)
+                        self.First_Name_Title.place(x=50, y=100)
+                        self.First_Name_Input.place(x=50, y=130)
+                        self.Last_Name_Title.place(x=50, y=170)
+                        self.Last_Name_Input.place(x=50, y=200)
+                        self.User_Name_Title.place(x=50, y=240)
+                        self.User_Name_Input.place(x=50, y=270)
+                        self.Email_Title.place(x=50, y=310)
+                        self.Email_Input.place(x=50, y=340)
+                        self.Phone_Title.place(x=50, y=380)
+                        self.Phone_Input.place(x=50, y=410)
+                        self.Old_Password_Title.place(x=350, y=100)
+                        self.Old_Password_Input.place(x=350, y=130)
+                        self.Password_Title.place(x=350, y=170)
+                        self.Password_Input.place(x=350, y=200)
+                        self.Confirm_Password_Title.place(x=350, y=240)
+                        self.Confirm_Password_Input.place(x=350, y=270)
+                        self.Admin_Title.place(x=350, y=310)
+                        self.Admin_Input.place(x=350, y=340)
+                        self.Save_Button.place(x=600, y=130)
+                        self.Delete_Button.place(x=600, y=200)
+
+
             elif Actual_Customer.Page==4:
                 self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
                 self.yscrollbar = tk.Scrollbar(self.rest_right_frame, orient="vertical", command=self.scroll_canva.yview)
@@ -1193,7 +1355,7 @@ class My_Account_Page():
     def Delete_Account(self):
         response = tk.messagebox.askquestion('Warning', 'Are you sure you want to delete your account?', icon='warning')
         if response == 'yes':
-            Actual_Customer.Delete_Customer()
+            Actual_Customer.Delete_Customer(Actual_Customer.CustomerID)
             Launch_Home_Page()
             print("Delete Account")
         else:
@@ -1250,8 +1412,7 @@ class My_Account_Page():
         departure_datetime = datetime.datetime.strptime(f"{self.Departure_Date} {self.Departure_Time}", '%Y-%m-%d %H:%M:%S')
         arrival_datetime = datetime.datetime.strptime(f"{self.Arrival_Date} {self.Arrival_Time}", '%Y-%m-%d %H:%M:%S')
         self.Duration = arrival_datetime - departure_datetime
-        
-
+    
         if (self.Departure=='') or (self.Departure_Date=='') or (self.Departure_Time=='') or (self.Arrival=='') or (self.Arrival_Date=='') or (self.Arrival_Time=='') or (self.Price_F=='') or (self.Discount=='') or (self.Economy=='') or (self.Business=='') or (self.First==''):
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
         elif self.Departure_Date>self.Arrival_Date:
@@ -1264,9 +1425,16 @@ class My_Account_Page():
             tk.messagebox.showinfo('Error', 'The discount must be between 0 and 100')
         elif self.Economy+self.Business+self.First<=0 or self.Economy+self.Business+self.First!=self.Seats:
             tk.messagebox.showinfo('Error', 'The number of seats for classes must be positive and equal to the total number of seats')
+        elif self.Economy<0 or self.Business<0 or self.First<0:
+            tk.messagebox.showinfo('Error', 'The number of seats for classes must be positive')
+        elif len(self.Departure) <2 or len(self.Departure) >30 or not self.Departure.isalpha():
+            tk.messagebox.showinfo('Error', 'Invalid Departure format')
+        elif len(self.Arrival) <2 or len(self.Arrival) >30 or not self.Arrival.isalpha():
+            tk.messagebox.showinfo('Error', 'Invalid Arrival format')
         else:
             self.Discount=self.Discount/100
             Actual_Outbound_Flight.Create_Flight(self.Departure, self.Departure_Date, self.Departure_Time, self.Arrival, self.Arrival_Date, self.Arrival_Time, self.Duration, self.Price_F, self.Discount, self.Seats, self.Economy, self.Business, self.First)
+            tk.messagebox.showinfo('Succeed', 'Flight has been created')
             Launch_My_Account()
 
     def Create_Customer(self):
@@ -1292,6 +1460,12 @@ class My_Account_Page():
             tk.messagebox.showinfo('Error', 'The password and the confirmation password are not the same')
         elif self.Admin!=1 and self.Admin!=0:
             tk.messagebox.showinfo('Error', 'Please choose if the customer is an admin or not')
+        elif len(self.FirstName) <2 or len(self.FirstName) >30 or not self.FirstName.isalpha():
+            tk.messagebox.showinfo('Error', 'Invalid First Name format')
+        elif len(self.LastName) <2 or len(self.LastName) >30 or not self.LastName.isalpha():
+            tk.messagebox.showinfo('Error', 'Invalid Last Name format')
+        elif len(self.UserName) <2 or len(self.UserName) >30 or not self.UserName.isalnum():
+            tk.messagebox.showinfo('Error', 'Invalid User Name format')
         else:
             res=Actual_Customer.Create_Customer(self.Email, self.Password, self.FirstName, self.LastName, self.UserName,  self.Phone, self.Admin)
             if res=="Email":
@@ -1301,6 +1475,7 @@ class My_Account_Page():
             elif res=="Phone":
                 tk.messagebox.showinfo('Error', 'The phone already exist')
             elif res=="Succeed":
+                tk.messagebox.showinfo('Succeed', 'Customer has been created')
                 Launch_My_Account()
             else : 
                 tk.messagebox.showinfo('Error', 'Sorry, an error occured')
@@ -1316,31 +1491,138 @@ class My_Account_Page():
         self.Search=self.Search_Flight_Input.get()
         if self.Search=='':
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
-        elif len(self.Search) != 8 or not self.Search[:4].isalpha() or not self.Search[4:].isdigit():
+        elif len(self.Search) != 6 or not self.Search[:3].isalpha() or not self.Search[3:].isdigit():
             tk.messagebox.showinfo('Error', 'Invalid Search format')
         else:
-            sql = "SELECT COUNT AS Here FROM Flight WHERE FlightNumber = %s"
-            Here = dbconnect.DBHelper().fetch(sql)
+            sql = "SELECT COUNT(*) AS Here FROM Flight WHERE FlightNumber = '{}';".format(self.Search)
+            Here = dbconnect.DBHelper().fetch(sql)[0]['Here']
             if Here == 0:
                 tk.messagebox.showinfo('Error', 'The flight does not exist')
             else:
                 Actual_Customer.AdminFlight=self.Search
                 Launch_My_Account()
+    
+    def Save_Flight(self):
+        self.Departure=self.Departure_Input.get()
+        self.Departure_Date=self.Departure_Date_Input.get()
+        self.Departure_Time=datetime.datetime.strptime(self.Departure_Time_Input.get(), '%H:%M:%S').time()
+        self.Arrival=self.Arrival_Input.get()
+        self.Arrival_Date=self.Arrival_Date_Input.get()
+        self.Arrival_Time=datetime.datetime.strptime(self.Arrival_Time_Input.get(), '%H:%M:%S').time()
+        self.Price_F=int(self.Price_Input.get())
+        print("Price_F : ", self.Price_F)
+        self.Discount=int(self.Discount_Input.get())
+        self.Seats=int(self.Seats_Input.get())
+        self.Economy=int(self.Economy_Input.get())
+        self.Business=int(self.Business_Input.get())
+        self.First=int(self.First_Input.get())
+        # Duration
+        departure_datetime = datetime.datetime.strptime(f"{self.Departure_Date} {self.Departure_Time}", '%Y-%m-%d %H:%M:%S')
+        arrival_datetime = datetime.datetime.strptime(f"{self.Arrival_Date} {self.Arrival_Time}", '%Y-%m-%d %H:%M:%S')
+        self.Duration = arrival_datetime - departure_datetime
+    
+        if (self.Departure=='') or (self.Departure_Date=='') or (self.Departure_Time=='') or (self.Arrival=='') or (self.Arrival_Date=='') or (self.Arrival_Time=='') or (self.Price_F=='') or (self.Discount=='') or (self.Economy=='') or (self.Business=='') or (self.First==''):
+            tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        elif self.Departure_Date>self.Arrival_Date:
+            tk.messagebox.showinfo('Error', 'The arrival date must be after the departure date')
+        #elif self.Departure_Date<datetime.datetime.now() or self.Arrival_Date<datetime.datetime.now():
+            #tk.messagebox.showinfo('Error', 'The departure or Arrival date must be after or today')
+        elif self.Price_F<=0:
+            tk.messagebox.showinfo('Error', 'The price must be positive')
+        elif self.Discount<0 or self.Discount>100:
+            tk.messagebox.showinfo('Error', 'The discount must be between 0 and 100')
+        elif self.Economy+self.Business+self.First<=0 or self.Economy+self.Business+self.First!=self.Seats:
+            tk.messagebox.showinfo('Error', 'The number of seats for classes must be positive and equal to the total number of seats')
+        elif self.Economy<0 or self.Business<0 or self.First<0:
+            tk.messagebox.showinfo('Error', 'The number of seats for classes must be positive')
+        elif len(self.Departure) <2 or len(self.Departure) >30 or not self.Departure.isalpha():
+            tk.messagebox.showinfo('Error', 'Invalid Departure format')
+        elif len(self.Arrival) <2 or len(self.Arrival) >30 or not self.Arrival.isalpha():
+            tk.messagebox.showinfo('Error', 'Invalid Arrival format')
+        else:
+            self.Discount=self.Discount/100
+            Actual_Outbound_Flight.Update_Flight(Actual_Customer.AdminFlight, self.Departure, self.Departure_Date, self.Departure_Time, self.Arrival, self.Arrival_Date, self.Arrival_Time, self.Duration, self.Price_F, self.Discount, self.Seats, self.Economy, self.Business, self.First)
+            Actual_Customer.AdminFlight = ""
+            tk.messagebox.showinfo('Succeed', 'Flight has been updated')
+            Launch_My_Account()
+
+    def Delete_Flight(self):
+        response = tk.messagebox.askquestion('Warning', 'Are you sure you want to delete this Flight?', icon='warning')
+        if response == 'yes':
+            Actual_Outbound_Flight.Delete_Flight(Actual_Customer.AdminFlight)
+            Actual_Customer.AdminFlight = ""
+            print("Delete Flight")
+            Launch_My_Account()
+        else:
+            print("Flight deletion canceled")
 
     def Search_Customer(self):
-        self.Search=self.Search_Customer_Input.get()
-        if self.Search=='':
+        self.Search_Customer=self.Search_Customer_Input.get()
+        if self.Search_Customer=='':
             tk.messagebox.showinfo('Error', 'Please fill in all the information')
-        elif not self.Search.isdigit():
+        elif not self.Search_Customer.isdigit():
             tk.messagebox.showinfo('Error', 'Invalid ID format')
         else:
-            sql = "SELECT COUNT AS Here FROM Customer WHERE CustomerID = %s"
-            Here = dbconnect.DBHelper().fetch(sql)
+            sql = "SELECT COUNT(*) AS Here FROM Customer WHERE CustomerID = '{}';".format(self.Search_Customer)
+            Here = dbconnect.DBHelper().fetch(sql)[0]['Here']
             if Here == 0:
                 tk.messagebox.showinfo('Error', 'The customer does not exist')
             else:
-                Actual_Customer.AdminCustomer=self.Search
+                Actual_Customer.AdminCustomer=self.Search_Customer
                 Launch_My_Account()
+
+    def Save_Customer(self):
+        self.FirstName=self.First_Name_Input.get()
+        self.LastName=self.Last_Name_Input.get()
+        self.UserName=self.User_Name_Input.get()
+        self.Email=self.Email_Input.get()
+        self.Phone=self.Phone_Input.get()
+        self.Password=self.Password_Input.get()
+        self.Confirm_Password=self.Confirm_Password_Input.get()
+        self.Admin=self.Admin_Input.get()
+        if self.Admin=="Yes": self.Admin=1
+        else: self.Admin=0
+        if (self.FirstName=='') or (self.LastName=='') or (self.UserName=='') or (self.Email=='') or (self.Phone=='') or (self.Password=='') or (self.Confirm_Password==''):
+            tk.messagebox.showinfo('Error', 'Please fill in all the information')
+        elif not re.match(r'^[0-9]*$', self.Phone):
+            # Invalid phone format, show an error message
+            tk.messagebox.showinfo('Error', 'Invalid phone format')
+        elif not re.match(r'^[\w\.-]+@[\w\.-]+$', self.Email):
+            # Invalid email format, show an error message
+            tk.messagebox.showinfo('Error', 'Invalid email format')
+        elif self.Password!=self.Confirm_Password:
+            tk.messagebox.showinfo('Error', 'The password and the confirmation password are not the same')
+        elif self.Admin!=1 and self.Admin!=0:
+            tk.messagebox.showinfo('Error', 'Please choose if the customer is an admin or not')
+        elif len(self.FirstName) <2 or len(self.FirstName) >30 or not self.FirstName.isalpha():
+            tk.messagebox.showinfo('Error', 'Invalid First Name format')
+        elif len(self.LastName) <2 or len(self.LastName) >30 or not self.LastName.isalpha():
+            tk.messagebox.showinfo('Error', 'Invalid Last Name format')
+        elif len(self.UserName) <2 or len(self.UserName) >30 or not self.UserName.isalnum():
+            tk.messagebox.showinfo('Error', 'Invalid User Name format')
+        else:
+            res=Actual_Customer.Update_Customer(self.Email, self.Password, self.FirstName, self.LastName, self.UserName,  self.Phone, self.Admin)
+            if res=="Email":
+                tk.messagebox.showinfo('Error', 'The email already exist')
+            elif res=="UserName":
+                tk.messagebox.showinfo('Error', 'The username already exist')
+            elif res=="Phone":
+                tk.messagebox.showinfo('Error', 'The phone already exist')
+            elif res=="Succeed":
+                tk.messagebox.showinfo('Succeed', 'Customer has been created')
+                Launch_My_Account()
+            else : 
+                tk.messagebox.showinfo('Error', 'Sorry, an error occured')
+
+    def Delete_Customer(self):
+        response = tk.messagebox.askquestion('Warning', 'Are you sure you want to delete your account?', icon='warning')
+        if response == 'yes':
+            Actual_Customer.Delete_Customer(self.Search_Customer_Result[0]['CustomerID'])
+            Launch_Home_Page()
+            print("Delete Account")
+        else:
+            print("Account deletion canceled")
+
     
     def Analyse(self):
         self.Begin_Date=self.Begin_Date_Input.get()

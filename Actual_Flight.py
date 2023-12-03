@@ -59,10 +59,10 @@ class Outbound_Flight():
         dbconnect.DBHelper().execute(sql3)
         print("Create Flight", Flight_Number," Succeed")
 
-    def Update_Flight(self, Flight_Number, Departure_Airport, Departure_Date, Departure_Time, Arrival_Airport, Arrival_Date, Arrival_Time, Flight_Duration, Price, Discount, Seats, Economy_Class_Price, Business_Class_Price, First_Class_Price):
+    def Update_Flight(self, Flight_Number, Departure_Airport, Departure_Date, Departure_Time, Arrival_Airport, Arrival_Date, Arrival_Time, Flight_Duration, Price, Discount, Seats, Economy_Class_Seats, Business_Class_Seats, First_Class_Seats):
         #Update Flight in the database
-        sql3="UPDATE Flight SET Departure = '{}', DepartureDate = '{}', DepartureTime = '{}', Arrival = '{}', ArrivalDate = '{}', ArrivalTime = '{}', Duration = '{}', Eco = '{}', Business = '{}', First = '{}', SeatsAvaible = '{}', Seats = '{}', Discount = '{}' WHERE FlightNumber = '{}';".format(Departure_Airport, Departure_Date, Departure_Time, Arrival_Airport, Arrival_Date, Arrival_Time, Flight_Duration, Economy_Class_Price, Business_Class_Price, First_Class_Price, Seats_Left, Seats_Capacity, Discount, Flight_Number)
-        dbconnect.DBHelper().execute(sql3)
+        sql="UPDATE Flight SET Departure = '{}', DepartureDate = '{}', DepartureTime = '{}', Arrival = '{}', ArrivalDate = '{}', ArrivalTime = '{}', Duration = '{}', Eco = '{}', Business = '{}', First = '{}', Seats = '{}', Price = '{}', Discount = '{}' WHERE FlightNumber = '{}';".format(Departure_Airport, Departure_Date, Departure_Time, Arrival_Airport, Arrival_Date, Arrival_Time, Flight_Duration, Economy_Class_Seats, Business_Class_Seats, First_Class_Seats, Seats, Price, Discount, Flight_Number)
+        dbconnect.DBHelper().fetch(sql)
         print("Update Flight", Flight_Number," Succeed")
 
     def Delete_Flight(self, Flight_Number):
