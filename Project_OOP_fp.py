@@ -721,7 +721,7 @@ class My_Account_Page():
         self.Purchase_Button.place(x=50, y=420)
         #Display the Admin Button
         if Actual_Customer.AdminOrNot == True:
-            self.Employment_Title.place(x=50, y=345)
+            self.Employment_Title.place(x=50, y=360)
             self.Admin_Button.place(x=50, y=480)
                 #draw Line right of left frame
         self.line_canvas_right = tk.Canvas(self.left_frame, width=3, height=self.left_frame.winfo_screenheight()-220, bg=second_color)
@@ -1386,31 +1386,68 @@ class My_Account_Page():
                 xlabel = "Reservation"
                 ylabel = "Number of Reservations"
                 self.create_plot(LONCategory, LONNumber, title, xlabel, ylabel, 'histogram', (700, 450))
+                #Stat Flight per day 
+                sqlFPD = """SELECT DepartureDate, COUNT(*)
+                        FROM Flight
+                        WHERE DepartureDate > '{}' AND DepartureDate < '{}'
+                        GROUP BY DepartureDate;""".format(Actual_Customer.AdminDateBegin, Actual_Customer.AdminDateEnd)
+                FPD=dbconnect.DBHelper().fetch(sqlFPD)
+                FPDDate=[]
+                FPDNumber=[]
+                for i in FPD:
+                    FPDDate.append(i['DepartureDate'])
+                    FPDNumber.append(i['COUNT(*)'])
+                title = "Flight per day"
+                xlabel = "Date"
+                ylabel = "Number of Flights"
+                self.create_plot(FPDDate, FPDNumber, title, xlabel, ylabel, 'line', (700, 450))
+                #Stat Reservation per day
+                sqlRPD = """SELECT ReservationDate, COUNT(*)
+                        FROM Reservations
+                        WHERE ReservationDate > '{}' AND ReservationDate < '{}'
+                        GROUP BY ReservationDate;""".format(Actual_Customer.AdminDateBegin, Actual_Customer.AdminDateEnd)
+                RPD=dbconnect.DBHelper().fetch(sqlRPD)
+                RPDDate=[]
+                RPDNumber=[]
+                for i in RPD:
+                    RPDDate.append(i['ReservationDate'])
+                    RPDNumber.append(i['COUNT(*)'])
+                title = "Reservation per day"
+                xlabel = "Date"
+                ylabel = "Number of Reservations"
+                self.create_plot(RPDDate, RPDNumber, title, xlabel, ylabel, 'line', (700, 450))
 
     def Hide_Button(self, empty):
+        plt.close('all')
         Launch_Home_Page()
 
     def Hide_Button_1(self, empty):
+        plt.close('all')
         Launch_Basket_Page()
 
     def UpComFlights(self, empty):
         Actual_Customer.Page=0
+        plt.close('all')
         Launch_My_Account()
     
     def PastFlights(self, empty):
         Actual_Customer.Page=1
+        plt.close('all')
         Launch_My_Account()
     
     def Settings(self, empty):
         Actual_Customer.Page=2
+        plt.close('all')
         Launch_My_Account()
     
     def Cards(self, empty):
         Actual_Customer.Page=3
+        plt.close('all')
         Launch_My_Account()
     
     def Statistics(self, empty):
         Actual_Customer.Page=4
+        plt.close('all')
         Launch_My_Account()
 
     #--------Customer---------#
@@ -1789,7 +1826,10 @@ class My_Account_Page():
     def create_plot(self, x_data, y_data, title, xlabel, ylabel, plot_type, image_size):
         fig, ax = plt.subplots(figsize=(image_size[0]/100, image_size[1]/100))  # Convert pixels to inches
         if plot_type == 'line':
-            ax.plot(x_data, y_data, marker='o', linestyle='-')
+            ax.plot(x_data, y_data, marker='o', linestyle=' ', color=second_color)
+            plt.xticks(rotation=70)
+            plt.subplots_adjust(bottom=0.3)
+            #, linestyle='-'
         elif plot_type == 'histogram':
             ax.bar(x_data, y_data, color=second_color)
             plt.xticks(rotation=70)
@@ -3264,6 +3304,7 @@ def Launch_Home_Page():
 def Launch_LogIn_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
+        plt.close('all')
     LogIn_Page(main_window)
 
 def Launch_SignUp_First_Page():
@@ -3279,11 +3320,13 @@ def Launch_SignUp_Second_Page(Email, Password):
 def Launch_Menu_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
+        plt.close('all')
     Menu_Page(main_window)
 
 def Launch_Purchase_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
+        plt.close('all')
     Purchase_Page(main_window)
 
 def Launch_Info_Passengers():
@@ -3294,6 +3337,7 @@ def Launch_Info_Passengers():
 def Launch_Purchase_Results_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
+        plt.close('all')
     Purchase_Results_Page(main_window)
 
 def Launch_Flight_Results_Page():
@@ -3305,6 +3349,7 @@ def Launch_Flight_Results_Page():
 def Launch_Basket_Page():
     for widget in main_window.winfo_children():
         widget.destroy()
+        plt.close('all')
     Basket_Page(main_window)
 
 def Launch_Payment_Page():
@@ -3315,6 +3360,7 @@ def Launch_Payment_Page():
 def Launch_My_Account():
     for widget in main_window.winfo_children():
         widget.destroy()
+        plt.close('all')
     My_Account_Page(main_window)
 
 def Change_Theme():
