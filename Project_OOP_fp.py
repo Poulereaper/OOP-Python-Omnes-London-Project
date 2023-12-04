@@ -1722,6 +1722,10 @@ class My_Account_Page():
             tk.messagebox.showinfo('Error', 'Please after changing the arrival, chnage the flight image')
         else:
             self.Discount=self.Discount/100
+            if self.Arrival!=self.Search_Flight_Result[0]['Arrival'] and self.Image_Flight_Check==True:
+                Arrival=self.Search_Flight_Result[0]['Arrival'].replace(" ", "_")
+                image_path = f"./images/Flights_Images/{Arrival}.png"
+                os.remove(image_path)
             Actual_Outbound_Flight.Update_Flight(Actual_Customer.AdminFlight, self.Departure, self.Departure_Date, self.Departure_Time, self.Arrival, self.Arrival_Date, self.Arrival_Time, self.Duration, self.Price_F, self.Discount, self.Seats, self.Economy, self.Business, self.First)
             Actual_Customer.AdminFlight = ""
             tk.messagebox.showinfo('Succeed', 'Flight has been updated')
