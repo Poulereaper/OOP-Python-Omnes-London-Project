@@ -1290,31 +1290,42 @@ class My_Account_Page():
 
 
             elif Actual_Customer.Page==4:
-                self.scroll_canva.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+                self.scroll_canva = tk.Canvas(self.rest_right_frame, bd=0, highlightthickness=0, bg=main_color)
                 self.yscrollbar = tk.Scrollbar(self.rest_right_frame, orient="vertical", command=self.scroll_canva.yview)
                 self.yscrollbar.pack(side=tk.RIGHT, fill='y')
                 self.scroll_canva.configure(yscrollcommand=self.yscrollbar.set)
-                self.scroll_canva.bind('<Configure>', lambda e: self.scroll_canva.configure(scrollregion = self.scroll_canva.bbox("all")))
-                self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
+
+                self.display_frame = tk.Frame(self.scroll_canva, bg=main_color)
+                self.display_frame.bind("<Configure>", lambda e: self.scroll_canva.configure(scrollregion=self.scroll_canva.bbox("all")))
+                self.scroll_canva.create_window((0, 0), window=self.display_frame, anchor="nw")
+
                 self.top_display_frame = tk.Frame(self.display_frame, bg=main_color, height=100)
                 self.top_display_frame.columnconfigure(0, weight=1)
                 self.top_display_frame.columnconfigure(1, weight=1)
                 self.top_display_frame.columnconfigure(2, weight=1)
                 self.top_display_frame.columnconfigure(3, weight=1)
                 self.bottom_display_frame = tk.Frame(self.display_frame, bg=main_color)
-                self.display_frame.pack(fill=tk.BOTH, expand=True)
                 self.top_display_frame.pack(side=tk.TOP, fill=tk.X)
                 self.bottom_display_frame.pack(side=tk.TOP, fill=tk.X)
+
+                #self.scroll_canva.create_window((0,0), window=self.display_frame, anchor="nw")
+                self.scroll_canva.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
                 
                 self.Begin_Date_Title = tk.Label(self.top_display_frame, text="Begin Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
                 self.End_Date_Title = tk.Label(self.top_display_frame, text="End Date", font=("Arial", 10), bg=main_color, fg=fourth_color)
                 #Inputs
                 self.Begin_Date_Input = DateEntry(self.top_display_frame, date_pattern='y-mm-dd')
-                self.Begin_Date_Input.delete(0, tk.END)
-                self.Begin_Date_Input.insert(0, datetime.date.today())
                 self.End_Date_Input = DateEntry(self.top_display_frame, date_pattern='y-mm-dd')
-                self.End_Date_Input.delete(0, tk.END)
-                self.End_Date_Input.insert(0, datetime.date.today())
+                if Actual_Customer.AdminDateBegin==None:
+                    self.Begin_Date_Input.delete(0, tk.END)
+                    self.Begin_Date_Input.insert(0, datetime.date.today())
+                    self.End_Date_Input.delete(0, tk.END)
+                    self.End_Date_Input.insert(0, datetime.date.today() + datetime.timedelta(days=1))
+                else:
+                    self.Begin_Date_Input.delete(0, tk.END)
+                    self.Begin_Date_Input.insert(0, Actual_Customer.AdminDateBegin)
+                    self.End_Date_Input.delete(0, tk.END)
+                    self.End_Date_Input.insert(0, Actual_Customer.AdminDateEnd)
                 #Button 
                 self.Analyse_Button = tk.Button(self.top_display_frame, text='Analyse', command=self.Analyse, bg=third_color, fg=main_color, width=15, height=2)
                 #Display Stuff
@@ -1342,7 +1353,7 @@ class My_Account_Page():
                 title = "Arrival Statistics"
                 xlabel = "Arrival"
                 ylabel = "Number of Flights"
-                self.create_plot(Arrive, NumberArrive, title, xlabel, ylabel, 'histogram', (600, 400))
+                self.create_plot(Arrive, NumberArrive, title, xlabel, ylabel, 'histogram', (700, 450))
     
                 sqlDCity="SELECT Departure, COUNT(*) FROM flight WHERE DepartureDate>'{}' AND DepartureDate<'{}' GROUP BY Departure;".format(Actual_Customer.AdminDateBegin, Actual_Customer.AdminDateEnd)
                 DCity=dbconnect.DBHelper().fetch(sqlDCity)
@@ -1355,7 +1366,7 @@ class My_Account_Page():
                 title = "Departure Statistics"
                 xlabel = "Departure"
                 ylabel = "Number of Flights"
-                self.create_plot(Depart, NumberDepart, title, xlabel, ylabel, 'histogram', (600, 400))
+                self.create_plot(Depart, NumberDepart, title, xlabel, ylabel, 'histogram', (700, 450))
 
                 sqlLON = """SELECT CASE WHEN CustomerID = 0 THEN 'Without Account' ELSE 'With Account' END AS GroupedCustomerID,
                         COUNT(*) 
@@ -1374,7 +1385,7 @@ class My_Account_Page():
                 title = "Reservation Statistics"
                 xlabel = "Reservation"
                 ylabel = "Number of Reservations"
-                self.create_plot(LONCategory, LONNumber, title, xlabel, ylabel, 'histogram', (600, 400))
+                self.create_plot(LONCategory, LONNumber, title, xlabel, ylabel, 'histogram', (700, 450))
 
     def Hide_Button(self, empty):
         Launch_Home_Page()
@@ -1780,12 +1791,11 @@ class My_Account_Page():
         if plot_type == 'line':
             ax.plot(x_data, y_data, marker='o', linestyle='-')
         elif plot_type == 'histogram':
-            #ax.hist(x_data bins='auto', alpha=0.7, rwidth=0.6)
             ax.bar(x_data, y_data, color=second_color)
             plt.xticks(rotation=70)
-            #plt.subplots_adjust(left=0.2, bottom=0.2, right=0.95, top=0.90)
-            ax.xaxis.set_label_coords(0.5, -0.50)
-            ax.yaxis.set_label_coords(-0.055, 0.5)
+            plt.subplots_adjust(bottom=0.3)
+            #ax.xaxis.set_label_coords(0.5, -0.50)
+            #ax.yaxis.set_label_coords(-0.055, 0.5)
         else:
             raise ValueError("Invalid plot_type. Supported values: 'line' or 'histogram'.")
 
