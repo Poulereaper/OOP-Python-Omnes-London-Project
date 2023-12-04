@@ -1,6 +1,11 @@
 import pymysql
 import dbconnect
 import datetime
+from PIL import Image, ImageTk, ImageDraw
+import base64
+from io import BytesIO
+import uuid
+import base64
 
 class Actual_Customer():
     def __init__(self):
@@ -74,6 +79,22 @@ class Actual_Customer():
                     #self.CustomerID = (dbconnect.DBHelper().fetch(sql3))+1
                     sql5 = "INSERT INTO `customer` (`CustomerID`, `Email`, `Password`, `FirstName`, `LastName`, `UserName`, `Phone`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(self.CustomerID, self.Email, self.Password, self.FirstName, self.LastName, self.UserName, self.Phone)
                     dbconnect.DBHelper().execute(sql5)
+                    image = Image.open("./pp/user.png")
+                    image = image.resize((128, 128))
+
+                    # Generate a random name for the image file
+                    random_name = str(uuid.uuid4())
+                    image_path = f"./pp/{random_name}.png"
+                    #save it
+                    image.save(image_path)  # Save the resized image with the random name
+                    image = ImageTk.PhotoImage(image)
+                    #encode the image
+                    encode_image = base64.b64encode(open(image_path, 'rb').read())
+                    #send to the database
+                    #sqlPP = "UPDATE Customer SET ProfilePicture = '{}' WHERE CustomerID = '{}';".format(encode_image, Actual_Customer.CustomerID)
+                    sqlPP = "UPDATE Customer SET ProfilePicture = %s WHERE CustomerID = %s" 
+                    values = (encode_image, self.CustomerID)
+                    dbconnect.DBHelper().execute_row(sqlPP, values)
                     print("Creat Actual Customer Succeed")
                     return "Succeed"
                 elif len(result1) != 0:

@@ -13,13 +13,12 @@ import My_Basket as AB
 import Mail as M
 #import LogInPage as LP
 import re
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw
 import datetime
 import base64
 from io import BytesIO
 import uuid
 import base64
-from PIL import Image
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -1535,6 +1534,13 @@ class My_Account_Page():
         chemin_image = filedialog.askopenfilename(title="Open your file", filetypes=[('image files', '.png'), ('image files', '.jpg'), ('image files', '.jpeg')])
         image = Image.open(chemin_image)
         image = image.resize((128, 128))
+
+        # Crop the image into a circular shape
+        mask = Image.new("L", (128, 128), 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse((0, 0) + (128, 128), fill=255)
+        image = Image.composite(image, Image.new('RGB', image.size, main_color), mask)
+
         # Generate a random name for the image file
         random_name = str(uuid.uuid4())
         image_path = f"./pp/{random_name}.png"
