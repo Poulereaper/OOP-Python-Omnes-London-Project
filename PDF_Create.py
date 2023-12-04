@@ -1,6 +1,7 @@
 import jinja2
 import pdfkit
 from datetime import datetime
+import os
 
 def bill_pdf(client_name, client_mail, Outbound, Inbound, Out_Price, In_Price, Res_ID):
     total = Out_Price + In_Price
@@ -26,7 +27,8 @@ def bill_pdf(client_name, client_mail, Outbound, Inbound, Out_Price, In_Price, R
 
     config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
     output_pdf = 'bill/bill_'+str(Res_ID)+'.pdf'
-    pdfkit.from_string(output_text, output_pdf, configuration=config, css='bill.css')
+    #css_path = os.path.join(os.path.dirname(__file__), 'bill.css')
+    pdfkit.from_string(output_text, output_pdf, configuration=config, css="bill.css")
     
 
-#bill_pdf("Mathis GRAS", "trashcan.ma@gmail.com", None, None, 2500, 3000, 14)
+bill_pdf("Mathis GRAS", "trashcan.ma@gmail.com", None, None, 2500, 3000, 14)
