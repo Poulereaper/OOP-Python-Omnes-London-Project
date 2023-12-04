@@ -1347,8 +1347,6 @@ class My_Account_Page():
                     Arrive.append(i['Arrival'])  # Use the key 'Arrival'
                     NumberArrive.append(i['COUNT(*)'])  # Use the key 'COUNT(*)'
                 #maxNumberHC = max(NumberArrive + [0]) + 5
-                print(Arrive)
-                print(NumberArrive)
                 # Create and display the first plot
                 title = "Arrival Statistics"
                 xlabel = "Arrival"
@@ -1416,6 +1414,21 @@ class My_Account_Page():
                 xlabel = "Date"
                 ylabel = "Number of Reservations"
                 self.create_plot(RPDDate, RPDNumber, title, xlabel, ylabel, 'line', (700, 450))
+                #Money Eared per day
+                sqlMPD = """SELECT ReservationDate, SUM(Price)
+                        FROM Reservations
+                        WHERE ReservationDate > '{}' AND ReservationDate < '{}'
+                        GROUP BY ReservationDate;""".format(Actual_Customer.AdminDateBegin, Actual_Customer.AdminDateEnd)
+                MPD=dbconnect.DBHelper().fetch(sqlMPD)
+                MPDDate=[]
+                MPDNumber=[]
+                for i in MPD:
+                    MPDDate.append(i['ReservationDate'])
+                    MPDNumber.append(i['SUM(Price)'])
+                title = "Money Earned per day"
+                xlabel = "Date"
+                ylabel = "Money Earned"
+                self.create_plot(MPDDate, MPDNumber, title, xlabel, ylabel, 'line', (700, 450))
 
     def Hide_Button(self, empty):
         plt.close('all')
@@ -1506,7 +1519,7 @@ class My_Account_Page():
             if (self.CardNumber!="")&(self.CardDate!="")&(self.CardCode!="")&(self.CardName!=""):
                 if(int(self.CardNumber)>999999999999999)&(int(self.CardNumber)<10000000000000000):
                     if(int(self.CardCode)>99)&(int(self.CardCode)<1000):
-                        Actual_Customer.Add_Card(self.CardNumber, self.CardDate, self.CardName, self.CardCode)
+                        Actual_Customer.Add_Card(self.CardNumber, self.CardName, self.CardDate, self.CardCode)
                         Launch_My_Account()
                     else :
                         #message box 
@@ -2438,9 +2451,20 @@ class Purchase_Results_Page():
                     self.Price_display=round(self.Price_display, 2)
                     self.canvas.create_text(760, 40, anchor='ne', text=str(self.Total_Price_display)+"£", font=("Arial", 15))
                     self.Price_display=round(float(self.Search_Results_Outbound[i]['Price'])*Actual_Search.Class_Type,2)
-                    self.canvas.create_text(760, 70, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
+        
                     self.canvas.create_text(380, 120, anchor='nw', text="Departure Time: "+str(self.Search_Results_Outbound[i]['DepartureTime']), font=("Arial", 10))
                     self.canvas.create_text(580, 120, anchor='nw', text="Arrival Time: "+str(self.Search_Results_Outbound[i]['ArrivalTime']), font=("Arial", 10))
+                    if (self.Search_Results_Outbound[i]['Discount'] != 0) & Actual_Customer.LogOrNot==True:
+                        if Actual_Search.Passengers == 1:
+                            self.Total_Price_display=float(self.Search_Results_Outbound[i]['Price'])*Actual_Search.Class_Type*(1-(self.Search_Results_Outbound[i]['Discount']))
+                        else :
+                            for j in range(Actual_Search.Passengers):
+                                self.Total_Price_display+=(float(self.Search_Results_Outbound[i]['Price'])*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-(self.Search_Results_Outbound[i]['Discount']))
+                        #Draw red Line on the first Total Price
+                        self.canvas.create_line(690, 40, 760, 65, fill='red', width=2)
+                        self.canvas.create_text(840, 40, anchor='ne', text=str(self.Total_Price_display)+"£", font=("Arial", 15), fill='red')
+                        self.Price_display=round(float(self.Search_Results_Outbound[i]['Price'])*Actual_Search.Class_Type*(1-(self.Search_Results_Outbound[i]['Discount'])),2)
+                    self.canvas.create_text(760, 70, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
                     image_name = "./images/Flights_Images/"+(str(self.Search_Results_Outbound[i]['Arrival']).replace(' ', '_'))+".png"
                     bg_image_rep = Image.open(image_name)
                     bg_photo_rep = ImageTk.PhotoImage(bg_image_rep)
@@ -2625,7 +2649,17 @@ class Flight_Results_Page():
             for j in range(Actual_Search.Passengers):
                 self.Total_Price+=(float(Flight_Result.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type
         self.Total_Price_Title = tk.Label(self.right_frame, text="Total Price: "+str(self.Total_Price)+"£", font=("Arial", 15), bg=main_color)
-
+        #Discount 
+        if (Flight_Result.Discount != 0) & Actual_Customer.LogOrNot==True:
+            if Actual_Search.Passengers == 1:
+                self.Total_Price=float(Flight_Result.Price*Actual_Search.Class_Type*(1-Flight_Result.Discount))
+            else :
+                for j in range(Actual_Search.Passengers):
+                    self.Total_Price+=(float(Flight_Result.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-Flight_Result.Discount)
+            self.Total_Price_Title = tk.Label(self.right_frame, text="Total Price: "+str(self.Total_Price)+"£", font=("Arial", 15), bg=main_color, fg='red')
+            self.Price_Title = tk.Label(self.right_frame, text="Adult Price: "+str(round(float(Flight_Result.Price)*Actual_Search.Class_Type*(1-Flight_Result.Discount),2))+"£", font=("Arial", 11), bg=main_color)
+            self.Total_Price_Title.place(x=40, y=220)
+            self.Price_Title.place(x=40, y=170)
         # Pack all wigets
         #Frame
         self.top_frame.pack(side=tk.TOP, fill=tk.X)
@@ -2824,8 +2858,15 @@ class Basket_Page():
                     else :
                         for j in range(Actual_Search.Passengers):
                             self.Total_Price_display+=(float(self.Display_Flight.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type
-                    self.canvas.create_text(660, 30, anchor='ne', text=str(self.Total_Price_display)+"£", font=("Arial", 15))
                     self.Price_display=round(float(self.Display_Flight.Price)*Actual_Search.Class_Type,2)
+                    if (self.Display_Flight.Discount != 0) & Actual_Customer.LogOrNot==True:
+                        if Actual_Search.Passengers == 1:
+                            self.Total_Price_display=float(self.Display_Flight.Price)*Actual_Search.Class_Type*(1-self.Display_Flight.Discount)
+                        else :
+                            for j in range(Actual_Search.Passengers):
+                                self.Total_Price_display+=(float(self.Display_Flight.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-self.Display_Flight.Discount)
+                        self.Price_display=round(float(self.Display_Flight.Price)*Actual_Search.Class_Type*(1-self.Display_Flight.Discount),2)
+                    self.canvas.create_text(660, 30, anchor='ne', text=str(self.Total_Price_display)+"£", font=("Arial", 15))
                     self.canvas.create_text(660, 60, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
                     self.canvas.create_text(280, 110, anchor='nw', text="Departure Time: "+str(self.Display_Flight.Departure_Time), font=("Arial", 10))
                     self.canvas.create_text(480, 110, anchor='nw', text="Arrival Time: "+str(self.Display_Flight.Arrival_Time), font=("Arial", 10))
@@ -2868,6 +2909,18 @@ class Basket_Page():
                 else : 
                     for j in range(Actual_Search.Passengers):
                         self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type+((Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type)
+            if (Actual_Basket.Outbound_Flight_B.Discount != 0) & Actual_Customer.LogOrNot==True:
+                if Actual_Search.Passengers == 1:
+                    if Actual_Basket.Inbound_Flight_B==None: self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount))
+                    else : self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount)+(Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Class_Type*(1-Actual_Basket.Inbound_Flight_B.Discount))
+                else :
+                    if Actual_Basket.Inbound_Flight_B==None:
+                        for j in range(Actual_Search.Passengers):
+                            self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount))
+                    else : 
+                        for j in range(Actual_Search.Passengers):
+                            self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount)+((Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-Actual_Basket.Inbound_Flight_B.Discount))
+                
             self.Total_Price_B = round(self.Total_Price_display,2)
             self.Total_Price_B_Label = tk.Label(self.right_frame, text=str(self.Total_Price_B)+"£", font=("Arial", 15), bg=main_color, fg=fourth_color)
             self.Total_Basket_Price = tk.Label(self.right_frame, text="Total Basket Price :", font=("Arial", 11), bg=main_color, fg=fourth_color)
@@ -2909,8 +2962,15 @@ class Basket_Page():
                 else :
                     for j in range(Actual_Search.Passengers):
                         self.Total_Price_display+=(float(self.Display_Flight.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type
-                self.canvas.create_text(660, 30, anchor='ne', text=str(self.Total_Price_display)+"£", font=("Arial", 15))
                 self.Price_display=round(float(self.Display_Flight.Price)*Actual_Search.Class_Type,2)
+                if (self.Display_Flight.Discount != 0) & Actual_Customer.LogOrNot==True:
+                    if Actual_Search.Passengers == 1:
+                        self.Total_Price_display=float(self.Display_Flight.Price)*Actual_Search.Class_Type*(1-self.Display_Flight.Discount)
+                    else :
+                        for j in range(Actual_Search.Passengers):
+                            self.Total_Price_display+=(float(self.Display_Flight.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-self.Display_Flight.Discount)
+                    self.Price_display=round(float(self.Display_Flight.Price)*Actual_Search.Class_Type*(1-self.Display_Flight.Discount),2)
+                self.canvas.create_text(660, 30, anchor='ne', text=str(self.Total_Price_display)+"£", font=("Arial", 15))
                 self.canvas.create_text(660, 60, anchor='ne', text="Adult Price: "+str(self.Price_display)+"£", font=("Arial", 10))
                 self.canvas.create_text(280, 110, anchor='nw', text="Departure Time: "+str(self.Display_Flight.Departure_Time), font=("Arial", 10))
                 self.canvas.create_text(480, 110, anchor='nw', text="Arrival Time: "+str(self.Display_Flight.Arrival_Time), font=("Arial", 10))
@@ -2945,6 +3005,17 @@ class Basket_Page():
                 else : 
                     for j in range(Actual_Search.Passengers):
                         self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type+((Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type)
+            if (Actual_Basket.Outbound_Flight_B.Discount != 0) & Actual_Customer.LogOrNot==True:
+                if Actual_Search.Passengers == 1:
+                    if Actual_Basket.Inbound_Flight_B==None: self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount))
+                    else : self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount)+(Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Class_Type*(1-Actual_Basket.Inbound_Flight_B.Discount))
+                else :
+                    if Actual_Basket.Inbound_Flight_B==None:
+                        for j in range(Actual_Search.Passengers):
+                            self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount))
+                    else : 
+                        for j in range(Actual_Search.Passengers):
+                            self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount)+((Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-Actual_Basket.Inbound_Flight_B.Discount))
             self.Total_Price_B = round(self.Total_Price_display,2)
             self.Total_Price_B_Label = tk.Label(self.right_frame, text=str(self.Total_Price_B)+"£", font=("Arial", 15), bg=main_color, fg=fourth_color)
             self.Total_Basket_Price = tk.Label(self.right_frame, text="Total Basket Price :", font=("Arial", 11), bg=main_color, fg=fourth_color)
@@ -3140,6 +3211,17 @@ class Payment_Page():
             else : 
                 for j in range(Actual_Search.Passengers):
                     self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type+((Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type)
+        if (Actual_Basket.Outbound_Flight_B.Discount != 0) & Actual_Customer.LogOrNot==True:
+            if Actual_Search.Passengers == 1:
+                if Actual_Basket.Inbound_Flight_B==None: self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount))
+                else : self.Total_Price_display=float((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount)+(Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Class_Type*(1-Actual_Basket.Inbound_Flight_B.Discount))
+            else :
+                if Actual_Basket.Inbound_Flight_B==None:
+                    for j in range(Actual_Search.Passengers):
+                        self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount))
+                else : 
+                    for j in range(Actual_Search.Passengers):
+                        self.Total_Price_display+=float(((Actual_Basket.Outbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-Actual_Basket.Outbound_Flight_B.Discount)+((Actual_Basket.Inbound_Flight_B.Price)*Actual_Search.Passengers_Type_Number[j])*Actual_Search.Class_Type*(1-Actual_Basket.Inbound_Flight_B.Discount))
         self.Total_Price = round(self.Total_Price_display,2)
         self.Total_Price_Label = tk.Label(self.canvas_right, text=str(self.Total_Price)+"£", font=("Arial", 15), bg=main_color, fg=fourth_color)
         self.Total_Basket_Price = tk.Label(self.canvas_right, text="Total Basket Price", font=("Arial", 11), bg=main_color, fg=fourth_color)
@@ -3260,13 +3342,14 @@ class Payment_Page():
                         # Invalid email format, show an error message
                         tk.messagebox.showinfo('Error', 'Invalid email format')
                     else: 
-                        #if(self.Card_Date.get()<=datetime.date.today()):
+                        #if(self.Card_Date.get()<str(datetime.date.today())):
                             #message box 
                             #tk.messagebox.showerror("Error", "Please enter a valid date")
                         #else :
-                        if (self.Card_Code.get() != Actual_Customer.CardCode) & (Actual_Customer.CardCode != 0):
-                            #message box 
-                            tk.messagebox.showerror("Error", "Please enter a valid card code")
+                        if (int(self.Card_Code.get())!=int(Actual_Customer.CardCode)) & (Actual_Customer.CardCode != 0):
+                            #message box
+                            print("ACtual : "+str(Actual_Customer.CardCode)+"\nInput : "+self.Card_Code.get()+"\n")
+                            tk.messagebox.showerror("Error", "WRONG card code")
                         else :
                             print("Pay")
                             print(Actual_Customer.CustomerID)
@@ -3275,7 +3358,7 @@ class Payment_Page():
                             Actual_Outbound_Flight.Reset_Outbound_Flight()
                             Actual_Inbound_Flight.Reset_Inbound_Flight()
                             Actual_Search.Reset_Search()
-                            #Launch_Basket_Page()
+                            Launch_Thanks_Page()
                 else :
                     #message box 
                     tk.messagebox.showerror("Error", "Please enter a valid card code")
@@ -3287,7 +3370,71 @@ class Payment_Page():
             tk.messagebox.showerror("Error", "Please fill all the inputs")
 
 
+##------------------------------------------------------------------------------------------------------##
+##----------------------------------------------Thanks Page-----------------------------------------##
+##------------------------------------------------------------------------------------------------------##
 
+class Thanks_Page():
+    def __init__(self, main_window):
+        self.top_frame = tk.Frame(main_window, bg=main_color)
+        self.second_top_frame = tk.Frame(main_window, bg=main_color)
+        self.third_top_frame = tk.Frame(main_window, bg=main_color)
+        self.fourth_top_frame = tk.Frame(main_window, bg=main_color)
+
+        #Logo
+        bg_image_two = Image.open("./images/photologo_re.png")
+        bg_photo_two = ImageTk.PhotoImage(bg_image_two)
+        # Créer un canevas pour afficher l'image du logo
+        canvas_two = tk.Canvas(self.top_frame, width=bg_image_two.width, height=bg_image_two.height, bg=main_color,highlightthickness=0,borderwidth=0)
+        canvas_two.place(x=410,y=-5)
+        canvas_two.create_image(0, 0, anchor=tk.NW, image=bg_photo_two)
+        canvas_two.image = bg_photo_two
+
+        #Title
+        self.Home_Page_Title = tk.Label(self.top_frame, text="OOP Air Line", font=("Arial", 20), bg=main_color, fg=fourth_color)
+        self.Home_Page_Title.bind("<Button-1>", self.Hide_Button_1)
+        self.Page_Title= tk.Label(self.second_top_frame, text=" Thanks for your order!", font=("Arial", 18), bg=main_color, fg=third_color)
+        self.Info_Payment= tk.Label(self.third_top_frame, text="You will recieve an e-mail with your recap order and your Tickets", font=("Arial", 13), bg=main_color, fg=fourth_color)
+        self.Info_Payment_2= tk.Label(self.fourth_top_frame, text="We hope to see you again soon", font=("Arial", 13), bg=main_color, fg=fourth_color)
+
+        # Buttons
+        if Actual_Customer.LogOrNot == False:
+            self.LogIn_Button = tk.Button(self.top_frame, text='Sign In or Sign Up', command=Launch_LogIn_Page, bg=second_color)
+        else :
+            self.LogIn_Button = tk.Button(self.top_frame, text='My Account', command=Launch_My_Account, bg=second_color)
+        self.Menu_Button = tk.Button(self.top_frame, text='Menu', command=Launch_Menu_Page, bg=second_color)
+        self.Home_Button = tk.Button(self.fourth_top_frame, text='Home', command=Launch_Home_Page, bg=third_color)
+
+        # Pack all wigets
+        #Frame
+        self.top_frame.pack(side=tk.TOP, fill=tk.X)
+        # Pack the 'Sign In or Sign Up' button to the left (west)
+        self.LogIn_Button.pack(ipadx=5, ipady=5, side=tk.LEFT, padx=15, pady=12)
+        # Pack the 'Advanced Search' button to the right (east)
+        self.Menu_Button.pack(ipadx=5, ipady=5, side=tk.RIGHT, padx=15, pady=12)
+        #Display the title
+        self.Home_Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        # Add a Canvas widget for drawing the line
+        self.line_canvas = tk.Canvas(main_window, height=3, bg=second_color)
+        self.line_canvas.config(highlightthickness=0, borderwidth=0)
+        self.line_canvas.pack(fill=tk.X)
+        # Create a line under top_frame
+        self.line_canvas.create_line(5, 2, main_window.winfo_screenwidth(), 2, fill=second_color)
+        self.second_top_frame.pack(side=tk.TOP, fill=tk.X)
+        self.third_top_frame.pack(side=tk.TOP, fill=tk.X)
+        self.fourth_top_frame.pack(side=tk.TOP, fill=tk.X)
+        #Display the title
+        #Display the Page Title
+        self.Page_Title.pack(ipadx=5, ipady=5, padx=0, pady=50)
+        #Display the Info Title
+        self.Info_Payment.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Info_Payment_2.pack(ipadx=5, ipady=5, padx=0, pady=10)
+        self.Total_Price_display=0
+        # Home Button
+        self.Home_Button.pack(ipadx=5, ipady=5, padx=0, pady=10)
+
+    def Hide_Button_1(self, empty):
+        Launch_Home_Page()
 
 ##------------------------------------------------------------------------------------------------------##
 ##---------------------------------------------End Of Class Part----------------------------------------##
@@ -3362,6 +3509,11 @@ def Launch_My_Account():
         widget.destroy()
         plt.close('all')
     My_Account_Page(main_window)
+
+def Launch_Thanks_Page():
+    for widget in main_window.winfo_children():
+        widget.destroy()
+    Thanks_Page(main_window)
 
 def Change_Theme():
     global main_color

@@ -69,7 +69,10 @@ class Basket():
                 for i in range(self.Outbound_Flight_B.Passengers):
                     Number=self.generer_numero_billet(ListNumTickets, ListNumTicketsNew)
                     ListNumTicketsNew.append(Number)
-                    Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type)**(1-(self.Outbound_Flight_B.Discount/100)))
+                    if CustomerID != 0:
+                        Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type)*(1-(self.Outbound_Flight_B.Discount)))
+                    else:
+                        Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type))
                     Flight_Total += Ticket_Price
                     sql_4="INSERT INTO `reservations` (`ReservationID`, `ReservationGrpID`, `ReservationDate`, `NumTicket`, `FlightID`, `CustomerID`, `Price`, `Class`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Last_ID, Res_ID, self.Basket_date, Number, Flight_ID, CustomerID, Ticket_Price, Class)
                     dbconnect.DBHelper().execute(sql_4)
@@ -87,7 +90,10 @@ class Basket():
             Price = self.Outbound_Flight_B.Price
             if self.Outbound_Flight_B.Passengers==1:
                 Number=self.generer_numero_billet(ListNumTickets, None)
-                Ticket_Price = float((Price*self.Outbound_Flight_B.Class_Type)*(1-(self.Outbound_Flight_B.Discount/100)))
+                if CustomerID != 0:
+                    Ticket_Price = float((Price*self.Outbound_Flight_B.Class_Type)*(1-(self.Outbound_Flight_B.Discount)))
+                else:
+                    Ticket_Price = float((Price*self.Outbound_Flight_B.Class_Type))
                 Class=self.Outbound_Flight_B.Class_Type
                 sql_3="INSERT INTO `reservations` (`ReservationID`, `ReservationGrpID`, `ReservationDate`, `NumTicket`, `FlightID`, `CustomerID`, `Price`, `Class`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Last_ID, Res_ID, self.Basket_date, Number, Flight_ID, CustomerID, Ticket_Price, Class)
                 dbconnect.DBHelper().execute(sql_3)
@@ -99,7 +105,10 @@ class Basket():
                 for i in range(self.Outbound_Flight_B.Passengers):
                     Number=self.generer_numero_billet(ListNumTickets, ListNumTicketsNew)
                     ListNumTicketsNew.append(Number)
-                    Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type)*(1-(self.Outbound_Flight_B.Discount/100)))
+                    if CustomerID != 0:
+                        Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type)*(1-(self.Outbound_Flight_B.Discount/100)))
+                    else :
+                        Ticket_Price = float(((Price*self.Outbound_Flight_B.Passengers_Type_Number[i])*self.Outbound_Flight_B.Class_Type))
                     Flight_Total += Ticket_Price
                     Class=self.Outbound_Flight_B.Class_Type
                     sql_3="INSERT INTO `reservations` (`ReservationID`, `ReservationGrpID`, `ReservationDate`, `NumTicket`, `FlightID`, `CustomerID`, `Price`, `Class`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(Last_ID, Res_ID, self.Basket_date, Number, Flight_ID, CustomerID, Ticket_Price, Class)
